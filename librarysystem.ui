@@ -16,14 +16,14 @@
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>10</y>
      <width>711</width>
      <height>451</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -193,7 +193,7 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>200</x>
+       <x>210</x>
        <y>20</y>
        <width>91</width>
        <height>20</height>
@@ -206,14 +206,14 @@
     <widget class="QStackedWidget" name="stackedWidget_2">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>120</x>
        <y>60</y>
        <width>581</width>
        <height>371</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_9">
       <widget class="QLabel" name="label_11">
@@ -424,7 +424,7 @@
     <widget class="QPushButton" name="pushButton_14">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>110</y>
        <width>81</width>
        <height>23</height>
@@ -480,14 +480,27 @@
       <widget class="QLabel" name="label_16">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>160</y>
+         <x>250</x>
+         <y>30</y>
          <width>101</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
         <string>增加管理员界面</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_8">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>150</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>PushButton</string>
        </property>
       </widget>
      </widget>
