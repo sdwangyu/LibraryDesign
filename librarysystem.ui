@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>736</width>
-    <height>475</height>
+    <width>842</width>
+    <height>554</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -213,7 +213,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_9">
       <widget class="QLabel" name="label_11">
@@ -230,18 +230,41 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="page_6">
+     <widget class="QWidget" name="SearchWindow">
       <widget class="QLabel" name="label_8">
        <property name="geometry">
         <rect>
-         <x>170</x>
-         <y>120</y>
+         <x>160</x>
+         <y>110</y>
          <width>171</width>
          <height>91</height>
         </rect>
        </property>
        <property name="text">
         <string>用户搜索界面</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_12">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>50</y>
+         <width>113</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>确定</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="lineEdit_3">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>50</y>
+         <width>221</width>
+         <height>41</height>
+        </rect>
        </property>
       </widget>
      </widget>
@@ -279,27 +302,14 @@
     <widget class="QPushButton" name="pushButton_2">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>100</y>
-       <width>75</width>
-       <height>23</height>
+       <width>101</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>修改个人信息</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_4">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>160</y>
-       <width>75</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>搜索</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_5">
@@ -318,10 +328,10 @@
     <widget class="QPushButton" name="pushButton_6">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>340</y>
-       <width>75</width>
-       <height>23</height>
+       <x>10</x>
+       <y>330</y>
+       <width>91</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
@@ -331,10 +341,10 @@
     <widget class="QPushButton" name="pushButton_7">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>270</y>
-       <width>75</width>
-       <height>23</height>
+       <x>10</x>
+       <y>280</y>
+       <width>101</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
@@ -365,6 +375,19 @@
      </property>
      <property name="text">
       <string>预约信息</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>400</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>查询</string>
      </property>
     </widget>
    </widget>
