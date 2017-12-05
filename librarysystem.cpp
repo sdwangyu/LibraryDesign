@@ -18,3 +18,8 @@ void LibrarySystem::on_userwindowinformation_clicked()
 {
     ui->stackedWidget_2->setCurrentIndex(0);
 }
+
+void LibrarySystem::on_userRegister_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
