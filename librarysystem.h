@@ -15,6 +15,9 @@ public:
     explicit LibrarySystem(QWidget *parent = 0);
     ~LibrarySystem();
 
+private slots:
+    void on_userwindowinformation_clicked();
+
 private:
     Ui::LibrarySystem *ui;
 };
