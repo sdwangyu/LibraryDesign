@@ -25,10 +25,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        librarysystem.cpp
+        librarysystem.cpp \
+    allx.cpp \
+    bookclass.cpp \
+    cardclass.cpp \
+    recordclass.cpp
 
 HEADERS += \
-        librarysystem.h
+        librarysystem.h \
+    allx.h \
+    bookclass.h \
+    cardclass.h \
+    recordclass.h
 
 FORMS += \
         librarysystem.ui

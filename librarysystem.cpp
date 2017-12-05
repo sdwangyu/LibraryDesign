@@ -6,7 +6,7 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     ui(new Ui::LibrarySystem)
 {
     ui->setupUi(this);
-    ui->stackedWidget->setCurrentIndex(0);
+    //ui->stackedWidget->setCurrentIndex(0);
 }
 
 LibrarySystem::~LibrarySystem()
