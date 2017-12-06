@@ -512,12 +512,12 @@
       <rect>
        <x>130</x>
        <y>50</y>
-       <width>671</width>
-       <height>481</height>
+       <width>670</width>
+       <height>480</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="label_11">
@@ -535,7 +535,7 @@
       </widget>
      </widget>
      <widget class="QWidget" name="searchwindow">
-      <widget class="QPushButton" name="searchokbutton">
+      <widget class="QPushButton" name="okbutton">
        <property name="geometry">
         <rect>
          <x>370</x>
@@ -685,18 +685,109 @@
        </property>
       </widget>
      </widget>
+     <widget class="QWidget" name="ordercanclewindow">
+      <widget class="QLabel" name="label_27">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>40</y>
+         <width>70</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;预约信息&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="orderInfotable">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>70</y>
+         <width>302</width>
+         <height>250</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>编号</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>书名</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>预约日期</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QPushButton" name="ordercancleBtn">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>340</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>取消预约</string>
+       </property>
+      </widget>
+     </widget>
      <widget class="QWidget" name="bookreturnwindow">
       <widget class="QLabel" name="label_9">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>200</y>
-         <width>101</width>
+         <x>290</x>
+         <y>40</y>
+         <width>71</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>用户还书界面</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;借阅信息&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="lendInfotable">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>70</y>
+         <width>302</width>
+         <height>250</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>编号</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>书名</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>应还日期</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QPushButton" name="returnbookBtn">
+       <property name="geometry">
+        <rect>
+         <x>290</x>
+         <y>340</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>还书</string>
        </property>
       </widget>
      </widget>
@@ -704,14 +795,76 @@
       <widget class="QLabel" name="label_10">
        <property name="geometry">
         <rect>
+         <x>130</x>
+         <y>110</y>
+         <width>130</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;请输入充值金额：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="chargetext">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>110</y>
+         <width>200</width>
+         <height>19</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_8">
+       <property name="geometry">
+        <rect>
          <x>210</x>
-         <y>170</y>
-         <width>141</width>
+         <y>140</y>
+         <width>171</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>用户充值界面</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt; color:#ff0000;&quot;&gt;提示：充值金额范围为1-9999元&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="chargeokBtn">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>190</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>确认</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="chargecancleBtn">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>190</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>取消</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_26">
+       <property name="geometry">
+        <rect>
+         <x>480</x>
+         <y>110</y>
+         <width>54</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;元&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </widget>
@@ -729,7 +882,7 @@
       <string>修改个人信息</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_5">
+    <widget class="QPushButton" name="lendInfoBtn">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -755,7 +908,7 @@
       <string>注销</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_7">
+    <widget class="QPushButton" name="chargeBtn">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -781,7 +934,7 @@
       <string>主页</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_8">
+    <widget class="QPushButton" name="orderInfoBtn">
      <property name="geometry">
       <rect>
        <x>10</x>

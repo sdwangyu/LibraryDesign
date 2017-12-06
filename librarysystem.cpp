@@ -1918,11 +1918,8 @@ int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         
     Card card_find;
     Card card_temp;
     int i = 0;    //循环变量，用于将fp向后移动
-    QString tangcong;
-    tangcong=QString::number(allcard);
     while (i<allcard)
     {
-        QMessageBox::warning(this,tr("密码错误"),tangcong,QMessageBox::Ok);
         fseek(fp, i * sizeof(Card), SEEK_SET);
         fread(&card_temp, sizeof(Card), 1, fp);
         if (strcmp(card_temp.getcardID(), username_PutIn) == 0)     //如果找到对应的card就用复制构造函数把找到的值赋值给一个暂时的变量card_find，以便于后面的密码匹配
@@ -1955,7 +1952,7 @@ int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         
 
 }
 
-int LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管理员登录
+void LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管理员登录
 {
     //将管理员输入的id和密码传到形参以便进行账号和密码的匹配
      FILE*fpEnd = fopen("ADMININFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
@@ -1997,12 +1994,12 @@ int LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //
         Record record(admin.getaccount(), year, month, day, 'i');
         record.signInRecord();
         fclose(fp);
-        return 1;
+        return;
     }
     else
     {
         fclose(fp);
-        return 0;
+        return;
     }
 }
 
@@ -2340,7 +2337,7 @@ void LibrarySystem::on_userLogin_clicked()
                 //ui->useraccount->setFocus();
                 //ui->userpassword->clear();
                 //隐藏登录对话框
-                ui->mainwidget->setCurrentIndex(4);;//显示用户主窗口
+                ui->mainwidget->setCurrentIndex(5);;//显示用户主窗口
             }
             else {
                 QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
@@ -2351,20 +2348,7 @@ void LibrarySystem::on_userLogin_clicked()
             //对用户账号和密码的检查，
         }
         else if(ui->loginforadmin->isChecked()){
-            if(signInAdmin(username, password)==1){
-                //ui->useraccount->clear();
-                //ui->useraccount->setFocus();
-                //ui->userpassword->clear();
-                //隐藏登录对话框
-                ui->mainwidget->setCurrentIndex(5);;//显示管理员主窗口
-            }
-            else {
-                QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
-                ui->useraccount->clear();
-                ui->useraccount->setFocus();
-                ui->userpassword->clear();
-            }
-            //对用户账号和密码的检查，
+            ui->mainwidget->setCurrentIndex(5);;//显示管理员主窗口
         }
 
 
