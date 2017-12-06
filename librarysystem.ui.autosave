@@ -13,19 +13,19 @@
   <property name="windowTitle">
    <string>LibrarySystem</string>
   </property>
-  <widget class="QStackedWidget" name="mainwidget">
+  <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>10</y>
+     <x>10</x>
+     <y>0</y>
      <width>811</width>
      <height>531</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>5</number>
    </property>
-   <widget class="QWidget" name="signinwindow">
+   <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
@@ -154,7 +154,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="signupwindow">
+   <widget class="QWidget" name="page_2">
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
@@ -313,7 +313,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="findkeywindow">
+   <widget class="QWidget" name="page_3">
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
@@ -403,7 +403,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="setkeywindow">
+   <widget class="QWidget" name="page_4">
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
@@ -493,7 +493,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="userwindow">
+   <widget class="QWidget" name="page_5">
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
@@ -507,19 +507,19 @@
       <string>用户主界面</string>
      </property>
     </widget>
-    <widget class="QStackedWidget" name="userwidget">
+    <widget class="QStackedWidget" name="stackedWidget_2">
      <property name="geometry">
       <rect>
        <x>130</x>
-       <y>50</y>
+       <y>40</y>
        <width>671</width>
        <height>481</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="userinforwindow">
+     <widget class="QWidget" name="page_9">
       <widget class="QLabel" name="label_11">
        <property name="geometry">
         <rect>
@@ -534,158 +534,55 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="searchwindow">
-      <widget class="QPushButton" name="okbutton">
+     <widget class="QWidget" name="SearchWindow">
+      <widget class="QPushButton" name="pushButton_12">
        <property name="geometry">
         <rect>
-         <x>370</x>
-         <y>10</y>
-         <width>121</width>
-         <height>41</height>
+         <x>540</x>
+         <y>40</y>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <property name="text">
         <string>确定</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="searchtext">
+      <widget class="QLineEdit" name="lineEdit_3">
        <property name="geometry">
         <rect>
-         <x>50</x>
-         <y>10</y>
+         <x>220</x>
+         <y>40</y>
          <width>291</width>
          <height>31</height>
         </rect>
        </property>
       </widget>
-      <widget class="QTableWidget" name="searchresult">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>651</width>
-         <height>331</height>
-        </rect>
-       </property>
-       <column>
-        <property name="text">
-         <string>编号</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>书名</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>作者</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>出版社</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>库存</string>
-        </property>
-       </column>
-      </widget>
-      <widget class="QRadioButton" name="bookname1">
+      <widget class="QTableWidget" name="tableWidget">
        <property name="geometry">
         <rect>
          <x>40</x>
-         <y>60</y>
+         <y>140</y>
+         <width>621</width>
+         <height>311</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>40</y>
          <width>100</width>
-         <height>20</height>
+         <height>30</height>
         </rect>
        </property>
        <property name="text">
-        <string>书名前方一致</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="bookname2">
-       <property name="geometry">
-        <rect>
-         <x>150</x>
-         <y>60</y>
-         <width>100</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>书名模糊查询</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="author">
-       <property name="geometry">
-        <rect>
-         <x>260</x>
-         <y>60</y>
-         <width>100</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>作者</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="publisher">
-       <property name="geometry">
-        <rect>
-         <x>320</x>
-         <y>60</y>
-         <width>100</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>出版社</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="booklendbutton">
-       <property name="geometry">
-        <rect>
-         <x>40</x>
-         <y>430</y>
-         <width>113</width>
-         <height>32</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>借阅</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="bookorderbutton">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>430</y>
-         <width>113</width>
-         <height>32</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>预约</string>
-       </property>
-      </widget>
-      <widget class="QRadioButton" name="ISBN">
-       <property name="geometry">
-        <rect>
-         <x>390</x>
-         <y>60</y>
-         <width>100</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>ISBN</string>
+        <string>搜索</string>
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="bookreturnwindow">
+     <widget class="QWidget" name="page_7">
       <widget class="QLabel" name="label_9">
        <property name="geometry">
         <rect>
@@ -700,7 +597,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="chargewindow">
+     <widget class="QWidget" name="page_8">
       <widget class="QLabel" name="label_10">
        <property name="geometry">
         <rect>
@@ -720,35 +617,22 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>430</y>
-       <width>101</width>
-       <height>31</height>
+       <y>320</y>
+       <width>100</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
       <string>修改个人信息</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_12">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>210</y>
-       <width>81</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>搜索</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButton_5">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>290</y>
-       <width>81</width>
-       <height>23</height>
+       <y>200</y>
+       <width>100</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
@@ -759,9 +643,9 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>390</y>
-       <width>91</width>
-       <height>31</height>
+       <y>280</y>
+       <width>100</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
@@ -771,10 +655,10 @@
     <widget class="QPushButton" name="pushButton_7">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>150</y>
-       <width>101</width>
-       <height>31</height>
+       <x>20</x>
+       <y>120</y>
+       <width>100</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
@@ -786,8 +670,8 @@
       <rect>
        <x>20</x>
        <y>80</y>
-       <width>81</width>
-       <height>23</height>
+       <width>100</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
@@ -797,10 +681,10 @@
     <widget class="QPushButton" name="pushButton_8">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>250</y>
-       <width>101</width>
-       <height>31</height>
+       <x>20</x>
+       <y>160</y>
+       <width>100</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
@@ -810,10 +694,10 @@
     <widget class="QPushButton" name="pushButton_4">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>340</y>
-       <width>91</width>
-       <height>31</height>
+       <x>20</x>
+       <y>240</y>
+       <width>100</width>
+       <height>30</height>
       </rect>
      </property>
      <property name="text">
@@ -821,7 +705,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="adminwindow">
+   <widget class="QWidget" name="page_10">
     <widget class="QLabel" name="label_12">
      <property name="geometry">
       <rect>
@@ -890,7 +774,7 @@
     <widget class="QPushButton" name="pushButton_14">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>20</x>
        <y>110</y>
        <width>81</width>
        <height>23</height>
@@ -900,19 +784,19 @@
       <string>主页</string>
      </property>
     </widget>
-    <widget class="QStackedWidget" name="adminwidget">
+    <widget class="QStackedWidget" name="stackedWidget_3">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>70</y>
+       <x>120</x>
+       <y>50</y>
        <width>581</width>
        <height>391</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
-     <widget class="QWidget" name="looklogwindow">
+     <widget class="QWidget" name="page_11">
       <widget class="QLabel" name="label_14">
        <property name="geometry">
         <rect>
@@ -927,7 +811,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="addbookwindow">
+     <widget class="QWidget" name="page_13">
       <widget class="QLabel" name="label_15">
        <property name="geometry">
         <rect>
@@ -942,7 +826,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="addadminwindow">
+     <widget class="QWidget" name="page_14">
       <widget class="QLabel" name="label_16">
        <property name="geometry">
         <rect>
@@ -959,10 +843,10 @@
       <widget class="QPushButton" name="pushButton_8">
        <property name="geometry">
         <rect>
-         <x>90</x>
-         <y>120</y>
-         <width>131</width>
-         <height>41</height>
+         <x>70</x>
+         <y>150</y>
+         <width>75</width>
+         <height>23</height>
         </rect>
        </property>
        <property name="text">
@@ -970,7 +854,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="admininforwindow">
+     <widget class="QWidget" name="page_12">
       <widget class="QLabel" name="label_13">
        <property name="geometry">
         <rect>
