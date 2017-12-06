@@ -1425,7 +1425,7 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
     {
         std::vector<so_1> sou_1;
         sou_1.reserve(10000);
-        while (n != 20000)
+        while (n != allbook)
         {
             fread(&tc, sizeof(Book), 1, fp1);
             size_t position;
@@ -2290,6 +2290,15 @@ void LibrarySystem::setbook(Book book1)
 
 void LibrarySystem::on_searchokbutton_clicked()
 {
+    FILE *fp;
+    if (NULL == (fp_card = fopen("ALLNUM", "rb")))
+    {
+        fprintf(stderr, "Can not open file");
+        exit(1);
+    }
+    fread(&allcard, sizeof(int), 1, fp);
+    fread(&allbook, sizeof(int), 1, fp);
+    fread(&alladmin, sizeof(int), 1, fp);
     ui->searchresult->setRowCount(0);
     ui->searchresult->clearContents();
     if(ui->searchtext->text().isEmpty())
