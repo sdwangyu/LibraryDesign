@@ -517,8 +517,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
-
+      <number>0</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="label_11">
@@ -536,7 +535,7 @@
       </widget>
      </widget>
      <widget class="QWidget" name="searchwindow">
-      <widget class="QPushButton" name="searchokbutton">
+      <widget class="QPushButton" name="okbutton">
        <property name="geometry">
         <rect>
          <x>370</x>
