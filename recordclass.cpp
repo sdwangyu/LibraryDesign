@@ -90,20 +90,6 @@
         flag1 = R.flag1;
     }
 
-    void bookLendRecord(int flag);//借书记录
-    void bookReturnRecord();//还书记录
-    void bookOrderRecord();//预约记录
-    void bookRenewRecord();//续借记录
-    void bookOrderCancelRecord();//取消预约记录
-    void bookOrderNoRecord_new();//失效情况下取消预约记录，专门用于update_order函数里
-    void bookOrderNoRecord();//预约失效记录
-    void signInRecord();//登陆记录
-    void signOutRecord();//注销记录
-    void signUpRecord();//注册记录
-    void admininchangestorage();//管理员改变库存记录
-    void admininaddbook();//管理员增加新书记录
-    void alter_Date(int addday);//增加一个日期变化的函数
-
     char Record::getflag1()
     {
         return flag1;
