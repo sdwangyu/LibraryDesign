@@ -2302,3 +2302,9 @@ void Library::setbook(Book book1)
 }
 
 */
+
+
+void LibrarySystem::on_lendInfoBtn_clicked()
+{
+    ui->userwidget->setCurrentIndex(3);
+}
