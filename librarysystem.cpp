@@ -11,7 +11,7 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     ui(new Ui::LibrarySystem)
 {
     ui->setupUi(this);
-    //ui->stackedWidget->setCurrentIndex(0);
+    //ui->mainwidget->setCurrentIndex(0);
 }
 
 LibrarySystem::~LibrarySystem()
@@ -1900,26 +1900,29 @@ void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的�
     if (rename("bufferzone_ordernew", "BUFFERZONE_ORDER") != 0)exit(1);
 }
 
-void LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         //用户登录
+int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         //用户登录
 {
     //将用户输入的id和密码传到形参以便进行账号和密码的匹配
     FILE*fpEnd = fopen("BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
      if (fpEnd == NULL) {
-     printf("file error\n");
+     //printf("file error\n");
      exit(1);
      }
      fseek(fpEnd, 0, SEEK_END);        //把fpEnd指针移到文件末尾
     FILE *fp = fopen("CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
     if (fp == NULL)
     {
-        printf("file error\n");
+        //printf("file error\n");
         exit(1);
     }
     Card card_find;
     Card card_temp;
     int i = 0;    //循环变量，用于将fp向后移动
+    QString tangcong;
+    tangcong=QString::number(allcard);
     while (i<allcard)
     {
+        QMessageBox::warning(this,tr("密码错误"),tangcong,QMessageBox::Ok);
         fseek(fp, i * sizeof(Card), SEEK_SET);
         fread(&card_temp, sizeof(Card), 1, fp);
         if (strcmp(card_temp.getcardID(), username_PutIn) == 0)     //如果找到对应的card就用复制构造函数把找到的值赋值给一个暂时的变量card_find，以便于后面的密码匹配
@@ -1939,20 +1942,20 @@ void LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)        
         int year = t_tm->tm_year + 1900;
         int month = month = t_tm->tm_mon + 1;
         int day = t_tm->tm_mday;
-        Record record(card.getcardID(), year, month, day, 'i');
-        record.signInRecord();
+        //Record record(card.getcardID(), year, month, day, 'i');
+        //record.signInRecord();
         fclose(fp);
-        return;
+        return 1;
     }
     else
     {
         fclose(fp);
-        return;
+        return 0;
     }
 
 }
 
-void LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管理员登录
+int LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管理员登录
 {
     //将管理员输入的id和密码传到形参以便进行账号和密码的匹配
      FILE*fpEnd = fopen("ADMININFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
@@ -1994,12 +1997,12 @@ void LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     /
         Record record(admin.getaccount(), year, month, day, 'i');
         record.signInRecord();
         fclose(fp);
-        return;
+        return 1;
     }
     else
     {
         fclose(fp);
-        return;
+        return 0;
     }
 }
 
@@ -2300,4 +2303,96 @@ void LibrarySystem::on_searchokbutton_clicked()
     else if(ui->publisher->isChecked())Search(4);
     else QMessageBox::warning(this, "Warning", "请选择查询类型！");
     ui->searchtext->clear();
+}
+
+void LibrarySystem::on_userLogin_clicked()
+{
+    if(ui->useraccount->text().isEmpty()||ui->userpassword->text().isEmpty()){
+        QMessageBox::information(this,"登录","用户名和密码不能为空.");
+        ui->useraccount->clear();
+        ui->useraccount->setFocus();
+        ui->userpassword->clear();
+        return;
+    }
+
+    //对用户账号和密码的检查，*/
+    FILE *fp1 = fopen("ALLNUM", "rb");
+        fread(&allcard, sizeof(int), 1, fp1);
+        fread(&allbook, sizeof(int), 1, fp1);
+        fread(&alladmin, sizeof(int), 1, fp1);
+        fclose(fp1);
+        //Library library1;
+        //cout << "请输入账号：";
+        //char username[10];
+        //cin >> username;
+        //cout << "请输入密码：";
+        //char password[20];
+        //cin >> password;
+        QString username1=ui->useraccount->text();
+        QByteArray ba=username1.toLatin1();
+        char *username=ba.data();
+        QString password1=ui->userpassword->text();
+        QByteArray be=password1.toLatin1();
+        char *password=be.data();
+        if(ui->loginforuser->isChecked()){
+            if(signInUser(username, password)==1){
+                //ui->useraccount->clear();
+                //ui->useraccount->setFocus();
+                //ui->userpassword->clear();
+                //隐藏登录对话框
+                ui->mainwidget->setCurrentIndex(4);;//显示用户主窗口
+            }
+            else {
+                QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
+                ui->useraccount->clear();
+                ui->useraccount->setFocus();
+                ui->userpassword->clear();
+            }
+            //对用户账号和密码的检查，
+        }
+        else if(ui->loginforadmin->isChecked()){
+            if(signInAdmin(username, password)==1){
+                //ui->useraccount->clear();
+                //ui->useraccount->setFocus();
+                //ui->userpassword->clear();
+                //隐藏登录对话框
+                ui->mainwidget->setCurrentIndex(5);;//显示管理员主窗口
+            }
+            else {
+                QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
+                ui->useraccount->clear();
+                ui->useraccount->setFocus();
+                ui->userpassword->clear();
+            }
+            //对用户账号和密码的检查，
+        }
+
+
+}
+
+void LibrarySystem::on_registerAchieve_clicked()
+{
+    /*QString usernamegets1=ui->usernameget->text();
+    string usernamegets2;
+    usernamegets2=usernamegets1.toStdString();
+    char usernamegets[10];
+    strcpy(usernamegets, usernamegets2.c_str());*/
+
+    QString usernamegets1=ui->usernameget->text();
+    QByteArray ba=usernamegets1.toLatin1();
+    char *usernamegets=ba.data();
+    QString userpasswordgets1=ui->userpasswordget->text();
+    QByteArray ba1=userpasswordgets1.toLatin1();
+    char *userpasswordgets=ba1.data();
+    QString usersfznumblegets1=ui->usersfznumbleget->text();
+    QByteArray ba2=usersfznumblegets1.toLatin1();
+    char *usersfznumblegets=ba2.data();
+    QString userphonenumblegets1=ui->userphonenumbleget->text();
+    QByteArray ba3=userphonenumblegets1.toLatin1();
+    char *userphonenumblegets=ba3.data();
+    signUp(userpasswordgets,usernamegets,usersfznumblegets,userphonenumblegets);
+    QMessageBox::information(this,"注册","注册成功.");
+    //隐藏注册窗口
+    ui->mainwidget->setCurrentIndex(0);;//显示用户主窗口//发射显示登录对话框信号
+    //注意判断是否为空,存储数据，转至登录界面
 }

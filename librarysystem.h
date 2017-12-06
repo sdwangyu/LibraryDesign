@@ -212,8 +212,8 @@ class Library
 {
 public:
     Library();
-    void signInUser(char*username_PutIn, char*password_PutIn);//用户登陆
-    void signInAdmin(char*adminname_PutIn, char*password_PutIn);//管理员登陆
+    int signInUser(char*username_PutIn, char*password_PutIn);//用户登陆
+    int signInAdmin(char*adminname_PutIn, char*password_PutIn);//管理员登陆
     void signUp(char*password, char*cardHolder, char*CID, char*CPhone);//用户注册
     void signOut();//用户注销
     void signOut_Admin();//管理员注销
@@ -258,8 +258,8 @@ public:
     explicit LibrarySystem(QWidget *parent = 0);
     ~LibrarySystem();
 
-    void signInUser(char*username_PutIn, char*password_PutIn);//用户登陆
-    void signInAdmin(char*adminname_PutIn, char*password_PutIn);//管理员登陆
+    int signInUser(char*username_PutIn, char*password_PutIn);//用户登陆
+    int signInAdmin(char*adminname_PutIn, char*password_PutIn);//管理员登陆
     void signUp(char*password, char*cardHolder, char*CID, char*CPhone);//用户注册
     void signOut();//用户注销
     void signOut_Admin();//管理员注销
@@ -287,6 +287,10 @@ public:
 
 private slots:
     void on_searchokbutton_clicked();
+
+    void on_userLogin_clicked();
+
+    void on_registerAchieve_clicked();
 
 private:
     Ui::LibrarySystem *ui;
