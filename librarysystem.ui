@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -88,7 +88,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton">
+    <widget class="QRadioButton" name="loginforuser">
      <property name="geometry">
       <rect>
        <x>110</x>
@@ -101,7 +101,7 @@
       <string>用户</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_2">
+    <widget class="QRadioButton" name="loginforadmin">
      <property name="geometry">
       <rect>
        <x>250</x>
