@@ -1,6 +1,10 @@
 #include "librarysystem.h"
 #include "ui_librarysystem.h"
 
+int allbook;
+int allcard;
+int alladmin;
+
 LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
@@ -653,7 +657,7 @@ void Administrator::searchLog()
 
 }
 
-/*
+
 //11.2管理员新加书函数
 void Administrator::addBook(Book book)
 {
@@ -699,7 +703,7 @@ void Administrator::addBook(Book book)
         printf("file write error\n");
     fclose(fp_num);
 }
-*/
+
 
 void Administrator::newStorage(short addstor) //addstor是要增加的库存数目
 {
@@ -708,7 +712,7 @@ void Administrator::newStorage(short addstor) //addstor是要增加的库存数�
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month  = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Book book;
     char bookid[10];  //qt中向此处传入bookid表示要修改哪本书的库存

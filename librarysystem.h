@@ -4,29 +4,9 @@
 #include <QWidget>
 
 
-#define ALLNUM allNum//存放allcard和allbook
-#define BOOKINFORMATION bookInformation//全部图书信息
-#define CARDINFORMATION cardInformation//全部用户信息
-#define ADMININFORMATION adminInformation//全部管理员信息
-#define BOOK_LEND_RECORD bookLendRecord//10.30 Record借书记录对应文件
-#define BOOK_RENEW_RECORD bookRenewRecord//10.30 .Record续借记录对应文件
-#define BOOK_ORDER_RECORD bookOrderRecord//预约记录
-#define BOOK_ORDER_CANCEL_RECORD bookOrderCancelRecord//10.30 取消预约预约到期记录对应文件
-#define SIGN_IN_RECORD signInRecord//10.30 Record登陆记录对应文件
-#define SIGN_UP_RECORD signUpRecord//注册记录文件
-#define SIGN_OUT_RECORD signOutRecord//注销记录文件
-#define BUFFERZONE_ORDER bufferOrderZone//预约缓冲区文件
-#define BUFFERZONE_LEND bufferLendZone//借书缓冲区文件
-#define SEARCHRESULT searchResult//查询结果文件
-#define SEARCHRESULTTEMP searchResultTmp//查询结果临时文件
-#define LOG log;//图书馆大日志
-#define ADMININ_ADD_BOOK admininAddBook //11.7管理员增加书记录
-#define ADMININ_CHANGE_STORAGE admininChangeStorage//11.7管理员改变库存记录文件
-#define BOOK_RETURN_RECORD bookReturnRecord //11.1还书记录对应文件
 
-extern int allbook;
-extern int allcard;
-extern int alladmin;
+
+
 
 struct so_1
 {
