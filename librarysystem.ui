@@ -535,7 +535,7 @@
       </widget>
      </widget>
      <widget class="QWidget" name="searchwindow">
-      <widget class="QPushButton" name="okbutton">
+      <widget class="QPushButton" name="searchokbutton">
        <property name="geometry">
         <rect>
          <x>370</x>

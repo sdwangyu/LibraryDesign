@@ -3,11 +3,6 @@
 
 #include <QWidget>
 
-
-
-
-
-
 struct so_1
 {
     int a;//记录长度or相似度
@@ -243,6 +238,7 @@ public:
     void bookRenew(Record record1);//续借
 
     Administrator getAdmin();
+
 private:
     Book book;
     Card card;
@@ -262,8 +258,41 @@ public:
     explicit LibrarySystem(QWidget *parent = 0);
     ~LibrarySystem();
 
+    void signInUser(char*username_PutIn, char*password_PutIn);//用户登陆
+    void signInAdmin(char*adminname_PutIn, char*password_PutIn);//管理员登陆
+    void signUp(char*password, char*cardHolder, char*CID, char*CPhone);//用户注册
+    void signOut();//用户注销
+    void signOut_Admin();//管理员注销
+    // void matchCid();//身份证ID匹配
+    void ResetPassword(char*oldpassword, char*newpassword1, char*newpassword2);//输入新密码后重设密码写入原位置
+    void update_Order();//函数用于用户进入系统时 对缓冲区进行更新
+    void update_book();//函数用于在登陆后判断用户的已借书籍是否已经超期
+
+    void charge(double money);//充值函数
+    void Rcharge();//处理用户违约金
+    // void resetCard();//更新修改卡信息 手机
+
+    void Search(int select);//查询书本函数
+
+    void deleteOrderFail();//删除orderbuffer中失效的预约记录
+    void setbook(Book book1); //对需要操作的书进行赋值
+    void bookLend();//直接进行的借书
+    void bookLendOrder();//通过预约成功借书
+    void bookReturn(Record record1);//还书
+    void bookOrder();//预约
+    void bookOrderCancel();//未到期的取消预约
+    void bookRenew(Record record1);//续借
+
+    Administrator getAdmin();
+
+private slots:
+    void on_searchokbutton_clicked();
+
 private:
     Ui::LibrarySystem *ui;
+    Book book;
+    Card card;
+    Administrator admin;
 };
 
 #endif // LIBRARYSYSTEM_H

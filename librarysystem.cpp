@@ -1,5 +1,6 @@
 #include "librarysystem.h"
 #include "ui_librarysystem.h"
+#include<QMessageBox>
 
 int allbook;
 int allcard;
@@ -1400,9 +1401,7 @@ void Record::signUpRecord()
     fclose(fp_log);
 }
 
-/*
- *
-void Library::Search(int select) //select 1表示前方一致（书名） 2表示模糊查询（书名）3表示作者 4表示出版社
+void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 2表示模糊查询（书名）3表示作者 4表示出版社
 {
     FILE *fp1;
     FILE *fp2;
@@ -1639,13 +1638,15 @@ void Library::Search(int select) //select 1表示前方一致（书名） 2表�
         fclose(fp2);
     }
 }
-void Library::bookLend() { //借书 1.直接借书
+void LibrarySystem::bookLend() { //借书 1.直接借书
     if (card.getlendedCount() == 10) {//已借本数超过上限
-        cout << "可借本书已达到上限，无法再进行借阅！" << endl;
+        //cout << "可借本书已达到上限，无法再进行借阅！" << endl;
+        QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");
     }
     else{//可借本数没有超过上限
         if (book.getstorage() >= 2) { //库存允许
-            cout << "借阅成功" << endl;
+            //cout << "借阅成功" << endl;
+            QMessageBox::information(this, "Sucess", "借阅成功");
             int order = 1;//标识第几本书
             char *q = book.getBooks();
             while (!(*(q + order) == '1')) {//从第一本书开始检索而不是第0本
@@ -1680,33 +1681,18 @@ void Library::bookLend() { //借书 1.直接借书
             fclose(fp_book);
         }
         else { //库存不够
-            int choice;
-            cout << "库存不够，借阅失败！" << endl;//借阅失败
-            cout << "是否进行预约？" << endl;
-            cout << "1.是   2.否" << endl;//提示框①
-            cin >> choice;
-            while (1) {
-                if (choice == 1) {
-                    bookOrder();
-                    break;
-                }
-                else if (choice == 2) {
-                    //关闭提示框①返回查询界面
-                    break;
-                }
-                else {
-                    cout << "输入有误，请重新输入！" << endl;
-                    cout << "是否进行预约？" << endl;
-                    cout << "1.是   2.否" << endl;//提示框②
-                    cin >> choice;
-                    //关闭提示框②
-                }
-            }
+            //cout << "库存不够，借阅失败！" << endl;//借阅失败
+            QMessageBox::information(this, "Warning", "库存不够，借阅失败");
+            //cout << "是否进行预约？" << endl;
+            //cout << "1.是   2.否" << endl;//提示框①
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "Notice", "是否进行预约", QMessageBox::Yes | QMessageBox::No);
+            if(reply == QMessageBox::Yes)bookOrder();
         }
     }
 }
 
-void Library::bookLendOrder() {//2.通过预约成功借书
+void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
     time_t timer;
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
@@ -1744,8 +1730,9 @@ void Library::bookLendOrder() {//2.通过预约成功借书
     fclose(fp_book);
 }
 
-void Library::bookReturn(Record record1){ //还书（需要用到qt）
-    cout << "还书成功！" << endl;
+void LibrarySystem::bookReturn(Record record1){ //还书（需要用到qt）
+    //cout << "还书成功！" << endl;
+    QMessageBox::information(this, "Success", "还书成功");
     time_t timer;
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
@@ -1792,17 +1779,20 @@ void Library::bookReturn(Record record1){ //还书（需要用到qt）
           double money = 0.5*compareDate(year, month, day, record1.getyear(), record1.getmonth(), record1.getday());
           card.setbalance(card.getbalance()-money);
           card.setoweMoney(card.getoweMoney()-money);
-          cout << "扣除" << money <<"元违约金" <<endl;
+          //cout << "扣除" << money <<"元违约金" <<endl;
+          //QMessageBox::information(this, "Notice", "库存不够，借阅失败");
     }
 }
 
-void Library::bookOrder(){//预约
+void LibrarySystem::bookOrder(){//预约
     //预约记录就记录预约时间即可，因为为了方便在update_order里使用
     if (card.getbookedCount() == 5) {//预约本数已达上限
-        cout << "您的预约本数已达上限，无法进行预约！" << endl;
+        //cout << "您的预约本数已达上限，无法进行预约！" << endl;
+        QMessageBox::information(this, "Warning", "您的预约本数已达上限，无法进行预约！");
     }
     else{
-        cout << "预约成功！" << endl;//提示预约成功
+        //cout << "预约成功！" << endl;//提示预约成功
+        QMessageBox::information(this, "Success", "借阅成功！");
         book.setbookMan(book.getbookMan() + 1);//书的预约人数+1
         card.setbookedCount(card.getbookedCount() + 1);//人的预约本数+1
         //写回book文件
@@ -1830,70 +1820,59 @@ void Library::bookOrder(){//预约
     }
 }
 
-void Library::bookOrderCancel(){//取消预约 1.未到期取消预约
+void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
     // Record record(book.getBookID(), card.getcardID(), year, month, day, 'e', '0');
-    int choice;
-    cout << "确定取消预约吗？" << endl;
-    cout << "1.是 2.否" << endl;
-    cin >> choice;
-    while (1) {
-        if (choice == 1) {//1.
-            cout << "成功取消预约！" << endl;
-            if (book.getbookMan() == book.gettStorage()) { //若取消预约时临时库存等于预约人数
-                book.settStorage(book.gettStorage() - 1);//临时库存-1
-                book.setstorage(book.getstorage() + 1);//库存+1
-            }
-            book.setbookMan(book.getbookMan() - 1);//此书的预约人数-1
-            card.setbookedCount(card.getbookedCount() - 1);//此人的预约数量-1
-            //生成一条取消预约的记录
-            time_t timer;
-            time(&timer);
-            tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
-            int year = t_tm->tm_year + 1900;
-            int month = month = t_tm->tm_mon + 1;
-            int day = t_tm->tm_mday;
-            Record record(book.getbookID(), card.getcardID(), year, month, day, 'e', '0');
-            record.bookOrderCancelRecord();
-            //写回book文件
-            FILE *fp_book;
-            if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
-            {
-                fprintf(stderr, "Can not open file");
-                exit(1);
-            }
-            int position = atoi(book.getbookID()) - 100000000 - 1;
-            fseek(fp_book, position*sizeof(book), 0);
-            if (fwrite(&book, sizeof(Book), 1, fp_book) != 1) {
-                printf("file write error\n");
-            }
-            fclose(fp_book);
-            break;
+    //cout << "确定取消预约吗？" << endl;
+    //cout << "1.是 2.否" << endl;
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Notice", "确定取消预约吗？", QMessageBox::Yes | QMessageBox::No);
+    if(reply == QMessageBox::Yes)
+    {
+        QMessageBox::information(this, "Success", "取消预约成功！");
+        if (book.getbookMan() == book.gettStorage()) { //若取消预约时临时库存等于预约人数
+            book.settStorage(book.gettStorage() - 1);//临时库存-1
+            book.setstorage(book.getstorage() + 1);//库存+1
         }
-        else if (choice == 2) {//2.否
-            //返回借阅信息界面
-            break;
+        book.setbookMan(book.getbookMan() - 1);//此书的预约人数-1
+        card.setbookedCount(card.getbookedCount() - 1);//此人的预约数量-1
+        //生成一条取消预约的记录
+        time_t timer;
+        time(&timer);
+        tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
+        int year = t_tm->tm_year + 1900;
+        int month = month = t_tm->tm_mon + 1;
+        int day = t_tm->tm_mday;
+        Record record(book.getbookID(), card.getcardID(), year, month, day, 'e', '0');
+        record.bookOrderCancelRecord();
+        //写回book文件
+        FILE *fp_book;
+        if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
+        {
+            fprintf(stderr, "Can not open file");
+            exit(1);
         }
-        else {//输入有误
-            cout << "输入有误，请重新输入！" << endl;
-            cout << "确定取消预约吗？" << endl;
-            cout << "1.是   2.否" << endl;
-            cin >> choice;
+        int position = atoi(book.getbookID()) - 100000000 - 1;
+        fseek(fp_book, position*sizeof(book), 0);
+        if (fwrite(&book, sizeof(Book), 1, fp_book) != 1) {
+            printf("file write error\n");
         }
+        fclose(fp_book);
     }
 }
 
-void Library::bookRenew(Record record1){//图书续借（需要用到qt）
+void LibrarySystem::bookRenew(Record record1){//图书续借（需要用到qt）
    //获取借书的应还书时间
     int year = record1.getyear();
     int month = record1.getmonth();
     int day = record1.getday();
     Record record(book.getbookID(), card.getcardID(), year, month, day, 'd', '1',record1.getorder());
-    cout << "续借成功" << endl;
+    //cout << "续借成功" << endl;
+    QMessageBox::information(this, "Success", "续借成功！");
     record.alter_Date(30);        //加上30天，将应还日期写进记录
     record.bookRenewRecord();//生成一条续借记录
 }
 
-void Library::deleteOrderFail() {//将预约缓冲区里已标记为1的记录删除
+void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的记录删除
     FILE *fp_buffer;
     FILE *fp_new_buffer_order;
     if (NULL == (fp_buffer = fopen("BUFFERZONE_ORDER", "rb+")))
@@ -1910,7 +1889,7 @@ void Library::deleteOrderFail() {//将预约缓冲区里已标记为1的记录�
     while (!feof(fp_buffer))
     {
         fread(&record_temp, sizeof(Record), 1, fp_buffer);
-        if (record_temp.getflag2()=='1' && (string)record_temp.getCardid() == (string)card.getcardID()) {        //只能删除当前用户失效的预约记录，所以应该判断这条记录的cardID和当前用户的cardID是否一致
+        if (record_temp.getflag2()=='1' && (std::string)record_temp.getCardid() == (std::string)card.getcardID()) {        //只能删除当前用户失效的预约记录，所以应该判断这条记录的cardID和当前用户的cardID是否一致
             continue;
         }
         fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_order);
@@ -1921,10 +1900,10 @@ void Library::deleteOrderFail() {//将预约缓冲区里已标记为1的记录�
     if (rename("bufferzone_ordernew", "BUFFERZONE_ORDER") != 0)exit(1);
 }
 
-void Library::signInUser(char*username_PutIn, char*password_PutIn)         //用户登录
+void LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         //用户登录
 {
     //将用户输入的id和密码传到形参以便进行账号和密码的匹配
-    //FILE*fpEnd = fopen("BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
+    FILE*fpEnd = fopen("BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
      if (fpEnd == NULL) {
      printf("file error\n");
      exit(1);
@@ -1973,10 +1952,10 @@ void Library::signInUser(char*username_PutIn, char*password_PutIn)         //用
 
 }
 
-void Library::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管理员登录
+void LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管理员登录
 {
     //将管理员输入的id和密码传到形参以便进行账号和密码的匹配
-     //FILE*fpEnd = fopen("ADMININFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
+     FILE*fpEnd = fopen("ADMININFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
      if (fpEnd == NULL) {
      printf("file error\n");
      exit(1);
@@ -2024,9 +2003,9 @@ void Library::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管�
     }
 }
 
-void Library::signUp(char*password, char*cardHolder, char*CID, char*CPhone)     //用户注册
+void LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone)     //用户注册
 {
-    string account_str = to_string(10000 + allcard + 1);
+    std::string account_str = std::to_string(10000 + allcard + 1);
     char account[10];
     strcpy(account,account_str.c_str());
     Card newcard(account, password, cardHolder, 0, CID, CPhone);
@@ -2065,7 +2044,7 @@ void Library::signUp(char*password, char*cardHolder, char*CID, char*CPhone)     
     return;
 }
 
-void Library::signOut()         //用户注销
+void LibrarySystem::signOut()         //用户注销
 {
     //把刚刚登录时获取的card写回文件原来的位置
     FILE*fp_card;
@@ -2106,7 +2085,7 @@ void Library::signOut()         //用户注销
     fclose(fp_num);
 }
 
-void Library::signOut_Admin()         //管理员注销
+void LibrarySystem::signOut_Admin()         //管理员注销
 {
     //把刚刚登录时获取的admin写回文件原来的位置
     FILE*fp_admin;
@@ -2148,17 +2127,17 @@ void Library::signOut_Admin()         //管理员注销
 }
 
 
-void Library::ResetPassword(char*oldpassword, char*newpassword1, char*newpassword2)     //输入新密码后重设密码写入原位置
+void LibrarySystem::ResetPassword(char*oldpassword, char*newpassword1, char*newpassword2)     //输入新密码后重设密码写入原位置
 {
-    if ((string)oldpassword == (string)card.getcPassword())
+    if ((std::string)oldpassword == (std::string)card.getcPassword())
     {
-        if ((string)newpassword1 == (string)newpassword2)
+        if ((std::string)newpassword1 == (std::string)newpassword2)
             card.setcPassword(newpassword1);
     }
     return;
 }
 
-void Library::update_Order()             //函数用于用户进入系统时 对缓冲区进行更新
+void LibrarySystem::update_Order()             //函数用于用户进入系统时 对缓冲区进行更新
 {
 
     FILE *fp_buffer_order;
@@ -2242,8 +2221,14 @@ void Library::update_Order()             //函数用于用户进入系统时 对
     //cout << "更新成功！" << endl;
 }
 
-void Library::update_book()         //函数用于在登录后判断用户的已借书籍是否已经超期
+void LibrarySystem::update_book()         //函数用于在登录后判断用户的已借书籍是否已经超期
 {
+    FILE*fp_lendbuffer;
+    if ((fp_lendbuffer = fopen("BUFFERZONE_LEND", "rb+")) == NULL)
+    {
+        fprintf(stderr, "Can not open file");
+        exit(1);
+    }
     Record record_temp;        //用于读取借书buffer中的每一条记录
     int i = 0;
     fseek(fp_lendbuffer, i * sizeof(Record), SEEK_SET);
@@ -2251,10 +2236,10 @@ void Library::update_book()         //函数用于在登录后判断用户的已
     while (!feof(fp_lendbuffer))
     {
         if (fread(&record_temp, sizeof(Record), 1, fp_lendbuffer)){
-            if ((string)record_temp.getCardid() == (string)card.getcardID())
+            if ((std::string)record_temp.getCardid() == (std::string)card.getcardID())
             {
                 //确实是当前用户借阅并且未还的书籍
-                cout << record_temp.getBookid() << " " << record_temp.getCardid() << " " << record_temp.getyear() << " " << record_temp.getmonth() << " " << record_temp.getday() << " " << record_temp.getflag1() << " " << record_temp.getorder() << endl;
+                //cout << record_temp.getBookid() << " " << record_temp.getCardid() << " " << record_temp.getyear() << " " << record_temp.getmonth() << " " << record_temp.getday() << " " << record_temp.getflag1() << " " << record_temp.getorder() << endl;
                 time_t timer;
                 time(&timer);
                 tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
@@ -2268,20 +2253,20 @@ void Library::update_book()         //函数用于在登录后判断用户的已
 
                     card.setoweMoney(card.getoweMoney() + 0.5*compareDate(year, month, day, record_temp.getyear(), record_temp.getmonth(), record_temp.getday()));//按超期一天0.5元计算
                     if (card.getbalance() < card.getoweMoney())card.setcardState('0');        //余额不足冻结账号
-                    cout << "违约金为：" << card.getoweMoney() << endl;
+                    //cout << "违约金为：" << card.getoweMoney() << endl;
                 }
             }
             //i++;
             //fseek(fp_lendbuffer, i * sizeof(Record), SEEK_SET);
-            cout << endl;
+            //cout << endl;
         }
     }
     fclose(fp_lendbuffer);
     //fclose(fp_End);
-    cout << "更新结束" << endl;
+    //cout << "更新结束" << endl;
 }
 
-void Library::charge(double money)             //充值函数
+void LibrarySystem::charge(double money)             //充值函数
 {
     card.setbalance(card.getbalance() + money);
     if (card.getbalance() > card.getoweMoney() && card.getcardState() == '0'){
@@ -2290,15 +2275,29 @@ void Library::charge(double money)             //充值函数
     }
 }
 
-void Library::Rcharge()         //处理用户违约金
+void LibrarySystem::Rcharge()         //处理用户违约金
 {
     double owemoney = card.getoweMoney();
     card.setbalance(card.getbalance() - owemoney);
 }
 
-void Library::setbook(Book book1)
+void LibrarySystem::setbook(Book book1)
 {//对需要操作的书进行赋值
     book = book1;
 }
 
-*/
+
+
+void LibrarySystem::on_searchokbutton_clicked()
+{
+    ui->searchresult->setRowCount(0);
+    ui->searchresult->clearContents();
+    if(ui->searchtext->text().isEmpty())
+            QMessageBox::warning(this, "Warning", "请输入查询内容！");
+    else if(ui->bookname1->isChecked())Search(1);
+    else if(ui->bookname2->isChecked())Search(2);
+    else if(ui->author->isChecked())Search(3);
+    else if(ui->publisher->isChecked())Search(4);
+    else QMessageBox::warning(this, "Warning", "请选择查询类型！");
+    ui->searchtext->clear();
+}
