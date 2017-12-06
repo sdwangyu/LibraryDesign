@@ -18,6 +18,8 @@ public:
 private slots:
     void on_userwindowinformation_clicked();
 
+    void on_userRegister_clicked();
+
 private:
     Ui::LibrarySystem *ui;
 };
