@@ -603,7 +603,7 @@
     <widget class="QPushButton" name="pushButton_2">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>370</y>
        <width>101</width>
        <height>31</height>
@@ -617,7 +617,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>200</y>
+       <y>210</y>
        <width>81</width>
        <height>23</height>
       </rect>
@@ -629,7 +629,7 @@
     <widget class="QPushButton" name="pushButton_5">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>260</y>
        <width>81</width>
        <height>23</height>
@@ -643,7 +643,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>330</y>
+       <y>310</y>
        <width>91</width>
        <height>31</height>
       </rect>
@@ -657,8 +657,7 @@
       <rect>
        <x>10</x>
        <y>150</y>
-       <width>101</width>
-       <height>31</height>
+       <width>91</width>
        <height>31</height>
       </rect>
      </property>
@@ -677,32 +676,6 @@
      </property>
      <property name="text">
       <string>主页</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_8">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>210</y>
-       <width>101</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>预约信息</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>270</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>查询</string>
      </property>
     </widget>
    </widget>
