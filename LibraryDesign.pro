@@ -25,7 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        librarysystem.cpp
+    librarysystem.cpp
 
 HEADERS += \
         librarysystem.h

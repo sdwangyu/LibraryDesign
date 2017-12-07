@@ -1952,7 +1952,7 @@ int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         
 
 }
 
-void LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管理员登录
+int LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //管理员登录
 {
     //将管理员输入的id和密码传到形参以便进行账号和密码的匹配
      FILE*fpEnd = fopen("ADMININFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
@@ -1994,12 +1994,12 @@ void LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     /
         Record record(admin.getaccount(), year, month, day, 'i');
         record.signInRecord();
         fclose(fp);
-        return;
+        return 1;
     }
     else
     {
         fclose(fp);
-        return;
+        return 0;
     }
 }
 
@@ -2380,7 +2380,6 @@ void LibrarySystem::on_registerAchieve_clicked()
     ui->mainwidget->setCurrentIndex(0);;//显示用户主窗口//发射显示登录对话框信号
     //注意判断是否为空,存储数据，转至登录界面
 }
-
 
 //充值界面
 void LibrarySystem::on_chargeBtn_clicked()
