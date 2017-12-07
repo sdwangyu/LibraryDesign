@@ -286,11 +286,13 @@ public:
     Administrator getAdmin();
 
 private slots:
-    void on_searchokbutton_clicked();
 
     void on_userLogin_clicked();
 
     void on_registerAchieve_clicked();
+
+
+    void on_searchokbutton_clicked();
 
 private:
     Ui::LibrarySystem *ui;

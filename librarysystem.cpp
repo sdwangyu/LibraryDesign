@@ -1413,11 +1413,11 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
     unsigned int i;
     int n = 0;
     unsigned int num = 0;
-    if (NULL == (fp1 = fopen("/Users/wangzhengtao/SearchDesign/bookInformation", "rb")))
+    if (NULL == (fp1 = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb")))
     {
         fprintf(stderr, "Can not open file bookInformation");
     }
-    if (NULL == (fp2 = fopen("/Users/wangzhengtao/SearchDesign/searchResult", "wb+")))
+    if (NULL == (fp2 = fopen("searchResult", "wb+")))
     {
         fprintf(stderr, "Can not open file searchResult");
     }
@@ -1903,16 +1903,18 @@ void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的�
 int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         //用户登录
 {
     //将用户输入的id和密码传到形参以便进行账号和密码的匹配
-    FILE*fpEnd = fopen("BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
+    FILE*fpEnd = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
+    //FILE *fp = fopen("BOOKINFORMATION", "rb+");
      if (fpEnd == NULL) {
-     //printf("file error\n");
+     printf("file error bookinformation\n");
      exit(1);
      }
      fseek(fpEnd, 0, SEEK_END);        //把fpEnd指针移到文件末尾
-    FILE *fp = fopen("CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
+    FILE *fp = fopen("/Users/wangzhengtao/CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
+    //FILE *fp = fopen("CARDINFORMATION", "rb+");
     if (fp == NULL)
     {
-        //printf("file error\n");
+        printf("file error cardinformation\n");
         exit(1);
     }
     Card card_find;
@@ -2287,21 +2289,6 @@ void LibrarySystem::setbook(Book book1)
 }
 
 
-
-void LibrarySystem::on_searchokbutton_clicked()
-{
-    ui->searchresult->setRowCount(0);
-    ui->searchresult->clearContents();
-    if(ui->searchtext->text().isEmpty())
-            QMessageBox::warning(this, "Warning", "请输入查询内容！");
-    else if(ui->bookname1->isChecked())Search(1);
-    else if(ui->bookname2->isChecked())Search(2);
-    else if(ui->author->isChecked())Search(3);
-    else if(ui->publisher->isChecked())Search(4);
-    else QMessageBox::warning(this, "Warning", "请选择查询类型！");
-    ui->searchtext->clear();
-}
-
 void LibrarySystem::on_userLogin_clicked()
 {
     if(ui->useraccount->text().isEmpty()||ui->userpassword->text().isEmpty()){
@@ -2314,9 +2301,10 @@ void LibrarySystem::on_userLogin_clicked()
     //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
     //对用户账号和密码的检查，*/
     FILE *fp1; //= fopen("ALLNUM", "rb");
-    if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
+    if ((fp1 = fopen("/Users/wangzhengtao/ALLNUM", "rb")) == NULL)
+    //if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open file allnum");
         exit(1);
     }
         fread(&allcard, sizeof(int), 1, fp1);
@@ -2399,4 +2387,18 @@ void LibrarySystem::on_registerAchieve_clicked()
     //隐藏注册窗口
     ui->mainwidget->setCurrentIndex(0);;//显示用户主窗口//发射显示登录对话框信号
     //注意判断是否为空,存储数据，转至登录界面
+}
+
+void LibrarySystem::on_searchokbutton_clicked()
+{
+    ui->searchresult->setRowCount(0);
+    ui->searchresult->clearContents();
+    if(ui->searchtext->text().isEmpty())
+            QMessageBox::warning(this, "Warning", "请输入查询内容！");
+    else if(ui->bookname1->isChecked())Search(1);
+    else if(ui->bookname2->isChecked())Search(2);
+    else if(ui->author->isChecked())Search(3);
+    else if(ui->publisher->isChecked())Search(4);
+    else QMessageBox::warning(this, "Warning", "请选择查询类型！");
+    ui->searchtext->clear();
 }
