@@ -2314,7 +2314,7 @@ void LibrarySystem::on_userLogin_clicked()
     //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
     //对用户账号和密码的检查，*/
     FILE *fp1; //= fopen("ALLNUM", "rb");
-    if ((fp1 = fopen("/Users/wangzhengtao/build-librarydesign-Desktop_Qt_5_9_3_clang_64bit-Debug/ALLNUM", "rb")) == NULL)
+    if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
         fprintf(stderr, "Can not open file");
         exit(1);
@@ -2344,12 +2344,7 @@ void LibrarySystem::on_userLogin_clicked()
                 //ui->useraccount->setFocus();
                 //ui->userpassword->clear();
                 //隐藏登录对话框
-<<<<<<< HEAD
-
-                ui->mainwidget->setCurrentIndex(5);;//显示用户主窗口
-=======
                 ui->mainwidget->setCurrentIndex(4);;//显示用户主窗口
->>>>>>> 036cef2d980cdea2583326c59b8510a9d4c24258
             }
             else {
                 QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
