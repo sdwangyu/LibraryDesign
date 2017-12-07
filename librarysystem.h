@@ -292,6 +292,12 @@ private slots:
 
     void on_registerAchieve_clicked();
 
+    void on_chargeBtn_clicked();
+
+    void on_chargeokBtn_clicked();
+
+    void on_orderInfoBtn_clicked();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;
