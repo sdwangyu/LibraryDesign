@@ -241,7 +241,9 @@ public:
 
 private:
     Book book;
-    Card card;
+    void on_userRegister_clicked();
+
+Card card;
     Administrator admin;
 };
 */
@@ -291,6 +293,8 @@ private slots:
     void on_userLogin_clicked();
 
     void on_registerAchieve_clicked();
+
+    void on_userRegister_clicked();
 
 private:
     Ui::LibrarySystem *ui;

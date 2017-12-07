@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -270,7 +270,7 @@
      <property name="geometry">
       <rect>
        <x>210</x>
-       <y>260</y>
+       <y>310</y>
        <width>113</width>
        <height>20</height>
       </rect>
@@ -280,7 +280,7 @@
      <property name="geometry">
       <rect>
        <x>210</x>
-       <y>310</y>
+       <y>260</y>
        <width>113</width>
        <height>20</height>
       </rect>

@@ -2340,9 +2340,9 @@ void LibrarySystem::on_userLogin_clicked()
         char *password=be.data();
         if(ui->loginforuser->isChecked()){
             if(signInUser(username, password)==1){
-                //ui->useraccount->clear();
-                //ui->useraccount->setFocus();
-                //ui->userpassword->clear();
+                ui->useraccount->clear();
+                ui->useraccount->setFocus();
+                ui->userpassword->clear();
                 //隐藏登录对话框
                 ui->mainwidget->setCurrentIndex(4);;//显示用户主窗口
             }
@@ -2381,7 +2381,31 @@ void LibrarySystem::on_registerAchieve_clicked()
     usernamegets2=usernamegets1.toStdString();
     char usernamegets[10];
     strcpy(usernamegets, usernamegets2.c_str());*/
-
+    ui->useraccount->setFocus();
+    if(ui->usernameget->text().isEmpty()){
+        QMessageBox::information(this,"输入错误","请输入用户名.");
+        return;
+    }
+    else if(ui->userpasswordget->text().isEmpty()){
+        QMessageBox::information(this,"输入错误","请输入密码.");
+        ui->userpasswordget->setFocus();
+        return;
+    }
+    else if(ui->userpasswordtwice->text().isEmpty()){
+        QMessageBox::information(this,"输入错误","请确认密码.");
+        ui->userpasswordtwice->setFocus();
+        return;
+    }
+    else if(ui->usersfznumbleget->text().isEmpty()){
+        QMessageBox::information(this,"输入错误","请输入身份证号.");
+        ui->usersfznumbleget->setFocus();
+        return;
+    }
+    else if(ui->userphonenumbleget->text().isEmpty()){
+        QMessageBox::information(this,"输入错误","请输入手机号.");
+        ui->userphonenumbleget->setFocus();
+        return;
+    }
     QString usernamegets1=ui->usernameget->text();
     QByteArray ba=usernamegets1.toLatin1();
     char *usernamegets=ba.data();
@@ -2397,6 +2421,14 @@ void LibrarySystem::on_registerAchieve_clicked()
     signUp(userpasswordgets,usernamegets,usersfznumblegets,userphonenumblegets);
     QMessageBox::information(this,"注册","注册成功.");
     //隐藏注册窗口
-    ui->mainwidget->setCurrentIndex(0);;//显示用户主窗口//发射显示登录对话框信号
+    ui->mainwidget->setCurrentIndex(0);//显示用户主窗口//发射显示登录对话框信号
     //注意判断是否为空,存储数据，转至登录界面
+}
+
+void LibrarySystem::on_userRegister_clicked()
+{
+    ui->useraccount->clear();
+    ui->useraccount->setFocus();
+    ui->userpassword->clear();
+    ui->mainwidget->setCurrentIndex(1);
 }
