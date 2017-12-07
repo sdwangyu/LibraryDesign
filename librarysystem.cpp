@@ -2311,13 +2311,20 @@ void LibrarySystem::on_userLogin_clicked()
         ui->userpassword->clear();
         return;
     }
-
+    //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
     //对用户账号和密码的检查，*/
-    FILE *fp1 = fopen("ALLNUM", "rb");
+    FILE *fp1; //= fopen("ALLNUM", "rb");
+    if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
+    {
+        fprintf(stderr, "Can not open file");
+        exit(1);
+    }
         fread(&allcard, sizeof(int), 1, fp1);
         fread(&allbook, sizeof(int), 1, fp1);
         fread(&alladmin, sizeof(int), 1, fp1);
+
         fclose(fp1);
+        //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
         //Library library1;
         //cout << "请输入账号：";
         //char username[10];
@@ -2337,7 +2344,7 @@ void LibrarySystem::on_userLogin_clicked()
                 //ui->useraccount->setFocus();
                 //ui->userpassword->clear();
                 //隐藏登录对话框
-                ui->mainwidget->setCurrentIndex(5);;//显示用户主窗口
+                ui->mainwidget->setCurrentIndex(4);;//显示用户主窗口
             }
             else {
                 QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
@@ -2348,7 +2355,20 @@ void LibrarySystem::on_userLogin_clicked()
             //对用户账号和密码的检查，
         }
         else if(ui->loginforadmin->isChecked()){
-            ui->mainwidget->setCurrentIndex(5);;//显示管理员主窗口
+            if(signInAdmin(username, password)==1){
+                //ui->useraccount->clear();
+                //ui->useraccount->setFocus();
+                //ui->userpassword->clear();
+                //隐藏登录对话框
+                ui->mainwidget->setCurrentIndex(5);;//显示用户主窗口
+            }
+            else {
+                QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
+                ui->useraccount->clear();
+                ui->useraccount->setFocus();
+                ui->userpassword->clear();
+            }
+            //对用户账号和密码的检查，
         }
 
 
