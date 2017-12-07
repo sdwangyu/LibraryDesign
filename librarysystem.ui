@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>4</number
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -517,7 +517,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="label_11">
@@ -535,7 +535,7 @@
       </widget>
      </widget>
      <widget class="QWidget" name="searchwindow">
-      <widget class="QPushButton" name="okbutton">
+      <widget class="QPushButton" name="searchokbutton">
        <property name="geometry">
         <rect>
          <x>370</x>
@@ -831,27 +831,14 @@
       <widget class="QPushButton" name="chargeokBtn">
        <property name="geometry">
         <rect>
-         <x>160</x>
-         <y>190</y>
+         <x>290</x>
+         <y>200</y>
          <width>75</width>
          <height>23</height>
         </rect>
        </property>
        <property name="text">
         <string>确认</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="chargecancleBtn">
-       <property name="geometry">
-        <rect>
-         <x>370</x>
-         <y>190</y>
-         <width>75</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>取消</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_26">
