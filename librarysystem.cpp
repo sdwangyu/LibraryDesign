@@ -2425,9 +2425,10 @@ void LibrarySystem::on_chargeBtn_clicked()
 
 void LibrarySystem::on_chargeokBtn_clicked()
 {
-    if(ui->paymoney->text().isEmpty()){//判断充值金额是否为空
+
+    if(ui->chargetext->text().isEmpty()){//判断充值金额是否为空
         QMessageBox::information(this,tr("充值"),tr("充值金额不能为空."));
-        ui->paymoney->clear();
+        ui->chargetext->clear();
         return;
     }
     else {
@@ -2435,7 +2436,7 @@ void LibrarySystem::on_chargeokBtn_clicked()
         int chargeintmoney=0;
         chargeintmoney=chargemoney.toInt();
         QMessageBox::information(this,tr("充值"),tr("充值成功."));
-        ui->paymoney->clear();
+        ui->chargetext->clear();
         return;
     }
     this->hide();
