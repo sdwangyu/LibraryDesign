@@ -2389,6 +2389,70 @@ void LibrarySystem::on_registerAchieve_clicked()
     //注意判断是否为空,存储数据，转至登录界面
 }
 
+//充值界面
+void LibrarySystem::on_chargeBtn_clicked()
+{
+    ui->userwidget->setCurrentIndex(4);
+    //以下内容用于限定充值时输入金额的大小
+    QRegExp rx("^[1-9][0-9]?[0-9]?[0-9]?$");
+    QRegExpValidator *pRevalidotor = new QRegExpValidator(rx, this);
+    ui->chargetext->setValidator(pRevalidotor);//限定输入内容为正则表达式^[1-9][0-9][0-9][0-9][0-9]$的形式
+}
+
+void LibrarySystem::on_chargeokBtn_clicked()
+{
+    if(ui->paymoney->text().isEmpty()){//判断充值金额是否为空
+        QMessageBox::information(this,tr("充值"),tr("充值金额不能为空."));
+        ui->paymoney->clear();
+        return;
+    }
+    else {
+        QString chargemoney=ui->chargetext->text();
+        int chargeintmoney=0;
+        chargeintmoney=chargemoney.toInt();
+        QMessageBox::information(this,tr("充值"),tr("充值成功."));
+        ui->paymoney->clear();
+        return;
+    }
+    this->hide();
+}
+
+
+void LibrarySystem::on_orderInfoBtn_clicked()
+{
+    ui->userwidget->setCurrentIndex(2);
+    FILE*fp_orderbuffer=NULL,*fp_book=NULL;
+    Book book_temp;//用于读取每条借书记录对应的书的信息
+     Record record_temp;        //用于读取借书buffer中的每一条记录
+     if ((fp_book = fopen("BOOKINFORMATION", "rb+")) == NULL)
+     {
+         fprintf(stderr, "Can not open file");
+         exit(1);
+     }
+    if ((fp_orderbuffer = fopen("BUFFERZONE_ORDER", "rb+")) == NULL)
+    {
+        fprintf(stderr, "Can not open file");
+        exit(1);
+    }
+    //向预约表格中写入数据
+    int orderInforow=ui->orderInfotable->rowCount();
+
+    while (!feof(fp_orderbuffer))
+    {
+        if (fread(&record_temp, sizeof(Record), 1, fp_orderbuffer)){
+            if ((std::string)record_temp.getCardid() == (std::string)card.getcardID())
+            {
+                    ui->orderInfotable->insertRow(orderInforow);
+                    int position = atoi(record_temp.getBookid()) - 100000000 - 1;//用于定位到书籍的位置
+                    fseek(fp_book, position*sizeof(Book), SEEK_SET);
+                    fread(&book_temp, sizeof(Book), 1, fp_book);
+            }
+
+        }
+    }
+
+}
+
 void LibrarySystem::on_searchokbutton_clicked()
 {
     ui->searchresult->setRowCount(0);
