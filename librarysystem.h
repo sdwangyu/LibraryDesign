@@ -301,6 +301,18 @@ private slots:
 
     void on_orderInfoBtn_clicked();
 
+    void on_registerExit_clicked();
+
+    void on_lossPassword_clicked();
+
+    void on_achievesetnewpassword_clicked();
+
+    void on_submit_clicked();
+
+    void on_setnewpasswordexit_clicked();
+
+    void on_findbackpasswordexit_clicked();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;
