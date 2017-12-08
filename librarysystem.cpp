@@ -4,14 +4,29 @@
 #include <QTextStream>
 #include <QTableWidgetItem>
 
+using namespace std;
+
 int allbook;
 int allcard;
 int alladmin;
+
+int tcflag=1; //用于表示找回密码的时候是用户还是管理员
 
 LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
+    FILE *fp1;
+    if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
+    {
+        fprintf(stderr, "Can not open file allnum");
+        exit(1);
+    }
+        fread(&allcard, sizeof(int), 1, fp1);
+        fread(&allbook, sizeof(int), 1, fp1);
+        fread(&alladmin, sizeof(int), 1, fp1);
+
+        fclose(fp1);
     ui->setupUi(this);
     //ui->mainwidget->setCurrentIndex(0);
 
@@ -25,7 +40,13 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     ui->lendInfotable->setSelectionMode ( QAbstractItemView::SingleSelection); //设置选择模式，选择单行
     ui->lendInfotable->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
 
-
+		//对于查询结果表只能选中一行的限定
+    ui->searchresult->setSelectionBehavior ( QAbstractItemView::SelectRows); //设置选择行为，以行为单位
+    ui->searchresult->setSelectionMode ( QAbstractItemView::SingleSelection); //设置选择模式，选择单行
+    ui->searchresult->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
+    //ui->searchresult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
+    //ui->searchresult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
+    ui->mainwidget->setCurrentIndex(0);
 }
 
 LibrarySystem::~LibrarySystem()
@@ -95,7 +116,7 @@ int compareDate(int year1, int month1, int day1, int year2, int month2, int day2
 }
 
 
-Book::Book(char BookID[10], char BookName[100], char Author[50], char Publisher[50], short Storage)//构造函数
+Book::Book(char BookID[10], char BookName[100], char Author[50], char Publisher[50],char BOOKISBN[20], short Storage)//构造函数
     {
 
         for (int i = 0; i<10; i++)
@@ -113,6 +134,10 @@ Book::Book(char BookID[10], char BookName[100], char Author[50], char Publisher[
         for (int i = 0; i<50; i++)
         {
             publisher[i] = Publisher[i];
+        }
+        for (int i = 0; i < 20 ; i++ )
+        {
+            bookisbn[i] = BOOKISBN[i];
         }
         memset(books, '3', sizeof(books));//把books全部初始化为3
         books[20] = '\0';
@@ -148,6 +173,10 @@ Book::Book()
         {
             publisher[i] = ' ';
         }
+        for (int i = 0; i < 20 ; i++ )
+        {
+            bookisbn[i] = ' ';
+        }
         memset(books, '3', sizeof(books));//把books全部初始化为3
         books[20] = '\0';
         storage = 0;//初始库存为10本
@@ -173,6 +202,10 @@ Book::Book(Book &book) //复制构造函数
         for (int i = 0; i<50; i++)
         {
             publisher[i] = book.publisher[i];
+        }
+        for (int i = 0; i < 20 ; i++ )
+        {
+            bookisbn[i] = book.bookisbn[i];
         }
         storage = book.storage;
         bookMan = book.bookMan;
@@ -227,6 +260,17 @@ void Book::setpublisher(char newpublisher[50])
             publisher[i] = newpublisher[i];
         }
     }
+char* Book::getbookisbn()
+{
+    return bookisbn;
+}
+void Book::setbookisbn(char BOOKISBN[20])
+{
+    for(int i=0;i < 20; i++)
+    {
+        bookisbn[i]=BOOKISBN[i];
+    }
+}
 short Book::getstorage()
     {
         return storage;
@@ -983,17 +1027,17 @@ void Record::bookLendRecord(int flag)        //借书记录
     {
         if (NULL == (fp_book_lend = fopen("BOOK_LEND_RECORD", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open booklendrecord");
             exit(1);
         }
         if (NULL == (fp_log = fopen("LOG", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open log");
             exit(1);
         }
         if (NULL == (fp_buffer = fopen("BUFFERZONE_LEND", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open bufferzonelend");
             exit(1);
         }
         fseek(fp_book_lend, 0, SEEK_END);
@@ -1015,17 +1059,17 @@ void Record::bookLendRecord(int flag)        //借书记录
 
         if (NULL == (fp_book_lend = fopen("BOOK_LEND_RECORD", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open booklendrecord");
             exit(1);
         }
-        if (NULL == (fp_log = fopen("LOG", "rb+")))
+        if (NULL == (fp_log = fopen("LOG", "wb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open log");
             exit(1);
         }
         if (NULL == (fp_buffer = fopen("BUFFERZONE_LEND", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open bufferzonelend");
             exit(1);
         }
         fseek(fp_book_lend, 0, SEEK_END);
@@ -1043,12 +1087,12 @@ void Record::bookLendRecord(int flag)        //借书记录
 
         if (NULL == (fp_order = fopen("BUFFERZONE_ORDER", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open BUFFERZONE_ORDER");
             exit(1);
         }
-        if (NULL == (fp_new_order = fopen("bufferzone_ordernew", "wb+")))
+        if (NULL == (fp_new_order = fopen("BUFFERZONE_ORDERNEW", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open BUFFERZONE_ORDERNEW");
             exit(1);
         }
         Record record_temp;
@@ -1126,17 +1170,17 @@ void Record::bookOrderRecord()
     FILE *fp_buffer;
     if (NULL == (fp_book_order = fopen("BOOK_ORDER_RECORD", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open book_order_record");
         exit(1);
     }
     if (NULL == (fp_log = fopen("LOG", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open log");
         exit(1);
     }
     if (NULL == (fp_buffer = fopen("BUFFERZONE_ORDER", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open bufferzone_order");
         exit(1);
     }
     fseek(fp_book_order, 0, SEEK_END);
@@ -1175,7 +1219,7 @@ void Record::bookOrderCancelRecord()
         fprintf(stderr, "Can not open file");
         exit(1);
     }
-    if (NULL == (fp_order_buffernew = fopen("bufferzone_ordernew", "wb+")))
+    if (NULL == (fp_order_buffernew = fopen("bufferzone_ordernew", "rb+")))
     {
         fprintf(stderr, "Can not open file");
         exit(1);
@@ -1427,7 +1471,7 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
     unsigned int i;
     int n = 0;
     unsigned int num = 0;
-    if (NULL == (fp1 = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb")))
+    if (NULL == (fp1 = fopen("BOOKINFORMATION", "rb")))
     {
         fprintf(stderr, "Can not open file bookInformation");
     }
@@ -1468,11 +1512,12 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
             ui->searchresult->insertRow(row);
             int nn = abc.getstorage();
             QString s = QString::number(nn, 10);
-            ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));//把这个Item加到第一行第二列中
+            ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
             ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
             ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
             ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
-            ui->searchresult->setItem(row,4,new QTableWidgetItem(s));
+            ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+            ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
         }
         fclose(fp1);
         fclose(fp2);
@@ -1658,9 +1703,9 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
         QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");
     }
     else{//可借本数没有超过上限
-        if (book.getstorage() >= 2) { //库存允许
+        if (book.getstorage() >= 1) { //库存允许
             //cout << "借阅成功" << endl;
-            QMessageBox::information(this, "Sucess", "借阅成功");
+            QMessageBox::information(this, "Success", "借阅成功");
             int order = 1;//标识第几本书
             char *q = book.getBooks();
             while (!(*(q + order) == '1')) {//从第一本书开始检索而不是第0本
@@ -1684,7 +1729,7 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
             FILE *fp_book;
             if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
             {
-                fprintf(stderr, "Can not open file");
+                fprintf(stderr, "Can not open bookinformation");
                 exit(1);
             }
             int position = atoi(book.getbookID()) - 100000000 - 1;
@@ -1798,20 +1843,21 @@ void LibrarySystem::bookReturn(int recordyear,int recordmonth,int recordday,int 
 
 void LibrarySystem::bookOrder(){//预约
     //预约记录就记录预约时间即可，因为为了方便在update_order里使用
-    if (card.getbookedCount() == 5) {//预约本数已达上限
+    if(book.getstorage() > 2)QMessageBox::information(this, "Fail", "该书可以直接借阅！");
+    else if (card.getbookedCount() == 5) {//预约本数已达上限
         //cout << "您的预约本数已达上限，无法进行预约！" << endl;
         QMessageBox::information(this, "Warning", "您的预约本数已达上限，无法进行预约！");
     }
     else{
         //cout << "预约成功！" << endl;//提示预约成功
-        QMessageBox::information(this, "Success", "借阅成功！");
+        QMessageBox::information(this, "Success", "预约成功！");
         book.setbookMan(book.getbookMan() + 1);//书的预约人数+1
         card.setbookedCount(card.getbookedCount() + 1);//人的预约本数+1
         //写回book文件
         FILE *fp_book;
         if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open bookinformation");
             exit(1);
         }
         int position = atoi(book.getbookID()) - 100000000 - 1;
@@ -1907,15 +1953,15 @@ void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的�
 int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         //用户登录
 {
     //将用户输入的id和密码传到形参以便进行账号和密码的匹配
-    FILE*fpEnd = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
-    //FILE *fp = fopen("BOOKINFORMATION", "rb+");
+    //FILE*fpEnd = fopen("BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
+    FILE *fpEnd = fopen("BOOKINFORMATION", "rb+");
      if (fpEnd == NULL) {
      printf("file error bookinformation\n");
      exit(1);
      }
      fseek(fpEnd, 0, SEEK_END);        //把fpEnd指针移到文件末尾
-    FILE *fp = fopen("/Users/wangzhengtao/CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
-    //FILE *fp = fopen("CARDINFORMATION", "rb+");
+    //FILE *fp = fopen("CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
+    FILE *fp = fopen("CARDINFORMATION", "rb+");
     if (fp == NULL)
     {
         printf("file error cardinformation\n");
@@ -1945,8 +1991,8 @@ int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         
         int year = t_tm->tm_year + 1900;
         int month = month = t_tm->tm_mon + 1;
         int day = t_tm->tm_mday;
-        //Record record(card.getcardID(), year, month, day, 'i');
-        //record.signInRecord();
+        Record record(card.getcardID(), year, month, day, 'i');
+        record.signInRecord();
         fclose(fp);
         return 1;
     }
@@ -2018,7 +2064,7 @@ void LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone
     FILE*fp_card;
     if (NULL == (fp_card = fopen("CARDINFORMATION", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open cardinformation");
         exit(1);
     }
     fseek(fp_card, 0, SEEK_END);
@@ -2303,9 +2349,9 @@ void LibrarySystem::on_userLogin_clicked()
     }
     //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
     //对用户账号和密码的检查，*/
-    FILE *fp1; //= fopen("ALLNUM", "rb");
-    if ((fp1 = fopen("/Users/wangzhengtao/ALLNUM", "rb")) == NULL)
+    /*FILE *fp1; //= fopen("ALLNUM", "rb");
     //if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
+    if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
         fprintf(stderr, "Can not open file allnum");
         exit(1);
@@ -2314,7 +2360,7 @@ void LibrarySystem::on_userLogin_clicked()
         fread(&allbook, sizeof(int), 1, fp1);
         fread(&alladmin, sizeof(int), 1, fp1);
 
-        fclose(fp1);
+        fclose(fp1);*/
         //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
         //Library library1;
         //cout << "请输入账号：";
@@ -2323,12 +2369,23 @@ void LibrarySystem::on_userLogin_clicked()
         //cout << "请输入密码：";
         //char password[20];
         //cin >> password;
+        //QString q_str("abc");
+        //string = q_str.toStdString();
+        //string std_str("abc");
+        //char *str = std_str.c_str(std_str);
+        /*QString usernamegets1=ui->usernameget->text();
+        string usernamegets2;
+        usernamegets2=usernamegets1.toStdString();
+        char usernamegets[10];
+        strcpy(usernamegets, usernamegets2.c_str());*/
         QString username1=ui->useraccount->text();
-        QByteArray ba=username1.toLatin1();
-        char *username=ba.data();
+        string ba=username1.toStdString();
+        char username[10];
+        strcpy(username, ba.c_str());
         QString password1=ui->userpassword->text();
-        QByteArray be=password1.toLatin1();
-        char *password=be.data();
+        string be=password1.toStdString();
+        char password[20];
+        strcpy(password, be.c_str());
         if(ui->loginforuser->isChecked()){
             if(signInUser(username, password)==1){
                 ui->useraccount->clear();
@@ -2339,32 +2396,33 @@ void LibrarySystem::on_userLogin_clicked()
             }
             else {
                 QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
-                ui->useraccount->clear();
-                ui->useraccount->setFocus();
+                //ui->useraccount->clear();
                 ui->userpassword->clear();
+                ui->userpassword->setFocus();
+
             }
             //对用户账号和密码的检查，
         }
         else if(ui->loginforadmin->isChecked()){
             if(signInAdmin(username, password)==1){
-                //ui->useraccount->clear();
-                //ui->useraccount->setFocus();
-                //ui->userpassword->clear();
-                //隐藏登录对话框
-                ui->mainwidget->setCurrentIndex(5);;//显示用户主窗口
-            }
-            else {
-                QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
                 ui->useraccount->clear();
                 ui->useraccount->setFocus();
                 ui->userpassword->clear();
+                //隐藏登录对话框
+                ui->mainwidget->setCurrentIndex(5);;//显示管理员主窗口
+            }
+            else {
+                QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
+                //ui->useraccount->clear();
+                ui->userpassword->clear();
+                ui->userpassword->setFocus();
+
             }
             //对用户账号和密码的检查，
         }
-
-
 }
 
+//用户注册
 void LibrarySystem::on_registerAchieve_clicked()
 {
     /*QString usernamegets1=ui->usernameget->text();
@@ -2397,23 +2455,51 @@ void LibrarySystem::on_registerAchieve_clicked()
         ui->userphonenumbleget->setFocus();
         return;
     }
-    QString usernamegets1=ui->usernameget->text();
-    QByteArray ba=usernamegets1.toLatin1();
-    char *usernamegets=ba.data();
+
     QString userpasswordgets1=ui->userpasswordget->text();
-    QByteArray ba1=userpasswordgets1.toLatin1();
-    char *userpasswordgets=ba1.data();
-    QString usersfznumblegets1=ui->usersfznumbleget->text();
-    QByteArray ba2=usersfznumblegets1.toLatin1();
-    char *usersfznumblegets=ba2.data();
-    QString userphonenumblegets1=ui->userphonenumbleget->text();
-    QByteArray ba3=userphonenumblegets1.toLatin1();
-    char *userphonenumblegets=ba3.data();
-    signUp(userpasswordgets,usernamegets,usersfznumblegets,userphonenumblegets);
-    QMessageBox::information(this,"注册","注册成功.");
-    //隐藏注册窗口
-    ui->mainwidget->setCurrentIndex(0);//显示用户主窗口//发射显示登录对话框信号
-    //注意判断是否为空,存储数据，转至登录界面
+    string ba1=userpasswordgets1.toStdString();
+    char userpasswordgets[20];
+    strcpy(userpasswordgets, ba1.c_str());
+    QString userpasswordtwice1=ui->userpasswordtwice->text();
+    string ba4=userpasswordtwice1.toStdString();
+    char userpasswordtwice[10];
+    strcpy(userpasswordtwice, ba4.c_str());
+    if (strcmp(userpasswordgets,userpasswordtwice) == 0){
+        QString usernamegets1=ui->usernameget->text();
+        string ba=usernamegets1.toStdString();
+        char usernamegets[10];
+        strcpy(usernamegets, ba.c_str());
+
+        QString usersfznumblegets1=ui->usersfznumbleget->text();
+        string ba2=usersfznumblegets1.toStdString();
+        char usersfznumblegets[19];
+        strcpy(usersfznumblegets, ba2.c_str());
+
+
+        QString userphonenumblegets1=ui->userphonenumbleget->text();
+        string ba3=userphonenumblegets1.toStdString();
+        char userphonenumblegets[12];
+        strcpy(userphonenumblegets, ba3.c_str());
+
+        signUp(userpasswordgets,usernamegets,usersfznumblegets,userphonenumblegets);
+        QMessageBox::information(this,"注册","注册成功.");
+        //隐藏注册窗口
+        ui->usernameget->clear();
+        ui->useraccount->setFocus();
+        ui->userpasswordget->clear();
+        ui->userpasswordtwice->clear();
+        ui->usersfznumbleget->clear();
+        ui->userphonenumbleget->clear();
+        ui->mainwidget->setCurrentIndex(0);//显示用户主窗口//发射显示登录对话框信号
+        //注意判断是否为空,存储数据，转至登录界面
+    }
+    else {
+        ui->userpasswordget->clear();
+        ui->userpasswordget->setFocus();
+        ui->userpasswordtwice->clear();
+        QMessageBox::information(this,"确认密码错误","请再次输入密码并确认.");
+    }
+
 }
 
 //充值界面
@@ -2507,13 +2593,13 @@ void LibrarySystem::on_searchokbutton_clicked()
     else if(ui->author->isChecked())Search(3);
     else if(ui->publisher->isChecked())Search(4);
     else QMessageBox::warning(this, "Warning", "请选择查询类型！");
-    ui->searchtext->clear();
 }
 
+//用户点击注册
 void LibrarySystem::on_userRegister_clicked()
 {
     ui->useraccount->clear();
-    ui->useraccount->setFocus();
+    ui->usernameget->setFocus();
     ui->userpassword->clear();
     ui->mainwidget->setCurrentIndex(1);
 }
@@ -2642,4 +2728,376 @@ void LibrarySystem::on_returnbookBtn_clicked()
     {
         QMessageBox::warning(this,tr("提示"),tr("请先选中对应借书信息."));
     }
+
+void LibrarySystem::on_booklendbutton_clicked()
+{
+    int row = ui->searchresult->currentRow();//获取当前选中的行号
+    QString str = ui->searchresult->item(row,0)->text();//获取某行某列单元格的文本内容
+    int bookid = str.toInt() - 100000001;//QString转int
+    FILE *fp;
+    if (NULL == (fp = fopen("BOOKINFORMATION", "rb")))
+    {
+        fprintf(stderr, "Can not open file bookInformation");
+    }
+    fseek(fp, bookid*sizeof(Book), SEEK_SET);
+    if (fread(&book, sizeof(Book), 1, fp) != 1)
+        printf("file write error\n");
+    fclose(fp);
+    bookLend();
+    ui->searchresult->setRowCount(0);
+    ui->searchresult->clearContents();
+    if(ui->bookname1->isChecked())Search(1);
+    else if(ui->bookname2->isChecked())Search(2);
+    else if(ui->author->isChecked())Search(3);
+    else if(ui->publisher->isChecked())Search(4);
+    ui->searchtext->clear();
+}
+
+void LibrarySystem::on_searchBtn_clicked()
+{
+    ui->userwidget->setCurrentIndex(1);
+}
+
+void LibrarySystem::on_bookorderbutton_clicked()
+{
+    int row = ui->searchresult->currentRow();//获取当前选中的行号
+    QString str = ui->searchresult->item(row,0)->text();//获取某行某列单元格的文本内容
+    int bookid = str.toInt() - 100000001;//QString转int
+    FILE *fp;
+    if (NULL == (fp = fopen("BOOKINFORMATION", "rb")))
+    {
+        fprintf(stderr, "Can not open file bookInformation");
+    }
+    fseek(fp, bookid*sizeof(Book), SEEK_SET);
+    if (fread(&book, sizeof(Book), 1, fp) != 1)
+        printf("file write error\n");
+    fclose(fp);
+    bookOrder();
+    ui->searchtext->clear();
+}
+
+void LibrarySystem::on_userwindowinformation_clicked()
+{
+    ui->userwidget->setCurrentIndex(0);
+    ui->username1->setText(card.getcardHolder());
+    ui->userid1->setText(card.getcardID());
+    ui->usercid1->setText(card.getcID());
+    QString temp = QString::number(card.getlendedCount(),10);
+    ui->lendednum1->setText(temp);
+    temp.setNum(card.getlendingCount());
+    ui->lendingnum1->setText(temp);
+    temp.setNum(card.getbookedCount());
+    ui->ordernum1->setText(temp);
+    temp.setNum(card.getbalance());
+    ui->usermoney1->setText(temp);
+    temp.setNum(card.getoweMoney());
+    ui->userowemoney1->setText(temp);
+    if(card.getcardState() == '1')     ui->userstate1->setText("可用");
+        else ui->userstate1->setText("冻结");
+
+
+}
+
+
+void LibrarySystem::on_admininformationBtn_clicked()
+{
+    ui->adminwidget->setCurrentIndex(1);
+    ui->adminname1->setText(admin.getaccountHolder());
+    ui->adminid1->setText(admin.getaccount());
+    ui->admincid1->setText(admin.getaID());
+    ui->adminphone1->setText(admin.getaPhone());
+}
+//用户退出注册
+void LibrarySystem::on_registerExit_clicked()
+{
+    ui->usernameget->clear();
+    ui->useraccount->setFocus();
+    ui->userpasswordget->clear();
+    ui->userpasswordtwice->clear();
+    ui->usersfznumbleget->clear();
+    ui->userphonenumbleget->clear();
+    ui->mainwidget->setCurrentIndex(0);//清空内容并返回登录界面
+}
+
+//忘记密码
+void LibrarySystem::on_lossPassword_clicked()
+{
+    ui->useraccount->clear();
+    ui->findbackuseraccount->setFocus();
+    ui->userpassword->clear();
+    ui->mainwidget->setCurrentIndex(2);
+}
+
+//用户找回密码
+void LibrarySystem::on_submit_clicked()
+{
+    /*FILE *fp1;
+    if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
+    {
+        fprintf(stderr, "Can not open file allnum");
+        exit(1);
+    }
+        fread(&allcard, sizeof(int), 1, fp1);
+        fread(&allbook, sizeof(int), 1, fp1);
+        fread(&alladmin, sizeof(int), 1, fp1);
+
+        fclose(fp1);*/
+    if(ui->findbackuseraccount->text().isEmpty()){
+        QMessageBox::information(this,"输入错误","请输入用户名.");
+        ui->findbackuseraccount->setFocus();
+        return;
+    }
+    else if(ui->findbackusersfznumble->text().isEmpty()){
+        QMessageBox::information(this,"输入错误","请输入身份证号码.");
+        ui->findbackusersfznumble->setFocus();
+        return;
+    }
+    QString findbackuseraccount1=ui->findbackuseraccount->text();
+    string ba1=findbackuseraccount1.toStdString();
+    char findbackuseraccount2[10];
+    strcpy(findbackuseraccount2, ba1.c_str());
+    QString findbackusersfznumble1=ui->findbackusersfznumble->text();
+    string ba2=findbackusersfznumble1.toStdString();
+    char findbackusersfznumble2[19];
+    strcpy(findbackusersfznumble2, ba2.c_str());
+
+    //将用户输入的id和身份证号进行匹配
+    //FILE*fpEnd = fopen("BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
+    /*FILE *fpEnd = fopen("BOOKINFORMATION", "rb+");
+     if (fpEnd == NULL) {
+     printf("file error bookinformation\n");
+     exit(1);
+     }
+     fseek(fpEnd, 0, SEEK_END);        //把fpEnd指针移到文件末尾*/
+    //我注释掉了，感觉没啥用
+    //FILE *fp = fopen("CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
+    FILE *fp = fopen("CARDINFORMATION", "rb+");
+    if (fp == NULL)
+    {
+        printf("file error cardinformation\n");
+        exit(1);
+    }
+
+    FILE *fp2 = fopen("ADMININFORMATION", "rb+");
+    if (fp2 == NULL)
+    {
+        printf("file error admininformation\n");
+        exit(1);
+    }
+    Card card_find;
+    Card card_temp;
+    Administrator administrator_find;
+    Administrator administrator_temp;
+    int i = 0;    //循环变量，用于将fp向后移动
+    int j =0;
+    while (i<allcard)
+    {
+        fseek(fp, i * sizeof(Card), SEEK_SET);
+        fread(&card_temp, sizeof(Card), 1, fp);
+        if (strcmp(card_temp.getcardID(), findbackuseraccount2) == 0)     //如果找到对应的card就用复制构造函数把找到的值赋值给一个暂时的变量card_find，以便于后面的身份证号匹配
+        {
+            tcflag=1;
+            card_find = card_temp;
+            break;
+        }
+        i++;
+    }
+    while (j<alladmin)
+    {
+        fseek(fp2, j * sizeof(Administrator), SEEK_SET);
+        fread(&administrator_temp, sizeof(Administrator), 1, fp2);
+        if (strcmp(administrator_temp.getaccount(), findbackuseraccount2) == 0)     //如果找到对应的card就用复制构造函数把找到的值赋值给一个暂时的变量card_find，以便于后面的身份证号匹配
+        {
+            tcflag=2;
+            administrator_find = administrator_temp;
+            break;
+        }
+        j++;
+    }
+    if(tcflag==1){
+        if (strcmp(card_find.getcardID(), findbackuseraccount2) == 0 && strcmp(card_find.getcID(), findbackusersfznumble2) == 0)
+        {
+            //账号和身份证号匹配成功后就可以设置密码了，然后就直接把查找到的card_find赋值给私有成员card
+            card = card_find;
+            fclose(fp);
+            ui->findbackuseraccount->clear();
+            ui->findbackuseraccount->setFocus();
+            ui->findbackusersfznumble->clear();
+            ui->mainwidget->setCurrentIndex(3);//转到设置新密码界面
+        }
+        else
+        {
+            fclose(fp);
+            //ui->findbackuseraccount->clear();
+            ui->findbackusersfznumble->clear();
+            ui->findbackusersfznumble->setFocus();
+
+            QMessageBox::information(this,"输入错误","请输入正确的身份证号.");
+        }
+    }
+    else if(tcflag==2){
+        if (strcmp(administrator_find.getaccount(), findbackuseraccount2) == 0 && strcmp(administrator_find.getaID(), findbackusersfznumble2) == 0)
+        {
+            //账号和身份证号匹配成功后就可以设置密码了，然后就直接把查找到的card_find赋值给私有成员card
+            admin = administrator_find;
+            fclose(fp2);
+            ui->findbackuseraccount->clear();
+            ui->findbackuseraccount->setFocus();
+            ui->findbackusersfznumble->clear();
+            ui->mainwidget->setCurrentIndex(3);//转到设置新密码界面
+        }
+        else
+        {
+            fclose(fp2);
+            //ui->findbackuseraccount->clear();
+            ui->findbackusersfznumble->clear();
+            ui->findbackusersfznumble->setFocus();
+            QMessageBox::information(this,"输入错误","请输入正确的身份证号.");
+        }
+    }
+}
+
+//重新设置密码
+void LibrarySystem::on_achievesetnewpassword_clicked()
+{
+    QString setusernewpassword1=ui->setusernewpassword->text();
+    string ba1=setusernewpassword1.toStdString();
+    char setusernewpassword2[20];
+    strcpy(setusernewpassword2, ba1.c_str());
+
+    QString setusernewpasswordtwice1=ui->setusernewpasswordtwice->text();
+    string ba2=setusernewpasswordtwice1.toStdString();
+    char setusernewpasswordtwice2[20];
+    strcpy(setusernewpasswordtwice2, ba2.c_str());
+    if (strcmp(setusernewpassword2,setusernewpasswordtwice2) == 0)
+    {
+        if(tcflag==1){
+            card.setcPassword(setusernewpassword2);
+            //把刚刚时获设置密码获取的card写回文件原来的位置
+            FILE*fp_card;
+            if (NULL == (fp_card = fopen("CARDINFORMATION", "rb+")))
+            {
+                fprintf(stderr, "Can not open file");
+                exit(1);
+            }
+            int position = atoi(card.getcardID()) - 10000 - 1;
+            fseek(fp_card, position*sizeof(Card), 0);
+            if (fwrite(&card, sizeof(Card), 1, fp_card) != 1)
+                printf("file write error\n");
+            /*time_t timer;
+            time(&timer);
+            tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
+            int year = t_tm->tm_year + 1900;
+            int month = month = t_tm->tm_mon + 1;
+            int day = t_tm->tm_mday;
+            Record record(card.getcardID(), year, month, day, 'h');
+            record.signOutRecord();*/
+            fclose(fp_card);
+            //把card变量重新用无参的构造函数赋值，是否能用？
+            Card card_blank;
+            card = card_blank;
+            /*//是否将allcard，allbook，alladmin写回文件？
+            FILE *fp_num;
+            if (NULL == (fp_num = fopen("ALLNUM", "rb+")))
+            {
+                fprintf(stderr, "Can not open file");
+                exit(1);
+            }
+            if (fwrite(&allcard, sizeof(int), 1, fp_num) != 1)            //覆盖写入?
+                printf("file write error\n");
+            if (fwrite(&allbook, sizeof(int), 1, fp_num) != 1)
+                printf("file write error\n");
+            if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
+                printf("file write error\n");
+            fclose(fp_num);*/
+
+        }
+        else if(tcflag==2){
+            admin.setaPassword(setusernewpassword2);
+            //把刚刚时获设置密码获取的admin写回文件原来的位置
+            FILE*fp_admin;
+            if (NULL == (fp_admin = fopen("ADMININFORMATION", "rb+")))
+            {
+                fprintf(stderr, "Can not open file");
+                exit(1);
+            }
+            int position = atoi(admin.getaccount()) - 10000 - 1;
+            fseek(fp_admin, position*sizeof(Administrator), 0);
+            if (fwrite(&admin, sizeof(Administrator), 1, fp_admin) != 1)
+                printf("file write error\n");
+            /*time_t timer;
+            time(&timer);
+            tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
+            int year = t_tm->tm_year + 1900;
+            int month = month = t_tm->tm_mon + 1;
+            int day = t_tm->tm_mday;
+            Record record(card.getcardID(), year, month, day, 'h');
+            record.signOutRecord();*/
+            fclose(fp_admin);
+            //把card变量重新用无参的构造函数赋值，是否能用？
+            Administrator administrator_blank;
+            admin = administrator_blank;
+            /*//是否将allcard，allbook，alladmin写回文件？
+            FILE *fp_num;
+            if (NULL == (fp_num = fopen("ALLNUM", "rb+")))
+            {
+                fprintf(stderr, "Can not open file");
+                exit(1);
+            }
+            if (fwrite(&allcard, sizeof(int), 1, fp_num) != 1)            //覆盖写入?
+                printf("file write error\n");
+            if (fwrite(&allbook, sizeof(int), 1, fp_num) != 1)
+                printf("file write error\n");
+            if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
+                printf("file write error\n");
+            fclose(fp_num);*/
+
+        }
+         ui->setusernewpassword->clear();
+         ui->useraccount->setFocus();
+         ui->setusernewpasswordtwice->clear();
+         ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
+    }
+    else {
+         QMessageBox::information(this,"输入错误","请确认密码.");
+         ui->setusernewpassword->clear();
+         ui->setusernewpassword->setFocus();
+         ui->setusernewpasswordtwice->clear();
+    }
+
+}
+
+void LibrarySystem::on_setnewpasswordexit_clicked()
+{
+    //把card变量重新用无参的构造函数赋值，是否能用？
+    Card card_blank;
+    card = card_blank;
+    ui->setusernewpassword->clear();
+    ui->useraccount->setFocus();
+    ui->setusernewpasswordtwice->clear();
+    ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
+}
+
+void LibrarySystem::on_findbackpasswordexit_clicked()
+{
+    //把card变量重新用无参的构造函数赋值，是否能用？
+    Card card_blank;
+    card = card_blank;
+    ui->findbackuseraccount->clear();
+    ui->useraccount->setFocus();
+    ui->findbackusersfznumble->clear();
+    ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
+}
+
+//用户注销
+void LibrarySystem::on_userLogout_clicked()
+{
+    signOut();
+    ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
+}
+
+void LibrarySystem::on_adminLogout_clicked()
+{
+    signOut_Admin();
+    ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
 }
