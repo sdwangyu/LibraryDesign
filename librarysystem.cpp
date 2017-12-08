@@ -1679,7 +1679,7 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
     else{//可借本数没有超过上限
         if (book.getstorage() >= 1) { //库存允许
             //cout << "借阅成功" << endl;
-            QMessageBox::information(this, "Sucess", "借阅成功");
+            QMessageBox::information(this, "Success", "借阅成功");
             int order = 1;//标识第几本书
             char *q = book.getBooks();
             while (!(*(q + order) == '1')) {//从第一本书开始检索而不是第0本
@@ -2405,8 +2405,6 @@ void LibrarySystem::on_userLogin_clicked()
             }
             //对用户账号和密码的检查，
         }
-
-
 }
 
 //用户注册
