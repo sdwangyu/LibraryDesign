@@ -2648,6 +2648,7 @@ void LibrarySystem::on_registerExit_clicked()
     ui->mainwidget->setCurrentIndex(0);//清空内容并返回登录界面
 }
 
+//忘记密码
 void LibrarySystem::on_lossPassword_clicked()
 {
     ui->useraccount->clear();
