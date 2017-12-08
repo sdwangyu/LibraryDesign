@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -99,6 +99,9 @@
      </property>
      <property name="text">
       <string>用户</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="loginforadmin">
@@ -517,7 +520,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
@@ -806,6 +809,11 @@
        <column>
         <property name="text">
          <string>出版社</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>ISBN</string>
         </property>
        </column>
        <column>
@@ -1375,7 +1383,7 @@
         <rect>
          <x>150</x>
          <y>190</y>
-         <width>60</width>
+         <width>111</width>
          <height>16</height>
         </rect>
        </property>

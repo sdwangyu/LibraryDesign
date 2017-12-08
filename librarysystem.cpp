@@ -18,8 +18,8 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     ui->searchresult->setSelectionBehavior ( QAbstractItemView::SelectRows); //设置选择行为，以行为单位
     ui->searchresult->setSelectionMode ( QAbstractItemView::SingleSelection); //设置选择模式，选择单行
     ui->searchresult->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
-    ui->searchresult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
-    ui->searchresult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
+    //ui->searchresult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
+    //ui->searchresult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
     ui->mainwidget->setCurrentIndex(0);
 }
 
@@ -90,7 +90,7 @@ int compareDate(int year1, int month1, int day1, int year2, int month2, int day2
 }
 
 
-Book::Book(char BookID[10], char BookName[100], char Author[50], char Publisher[50], short Storage)//构造函数
+Book::Book(char BookID[10], char BookName[100], char Author[50], char Publisher[50],char BOOKISBN[20], short Storage)//构造函数
     {
 
         for (int i = 0; i<10; i++)
@@ -108,6 +108,10 @@ Book::Book(char BookID[10], char BookName[100], char Author[50], char Publisher[
         for (int i = 0; i<50; i++)
         {
             publisher[i] = Publisher[i];
+        }
+        for (int i = 0; i < 20 ; i++ )
+        {
+            bookisbn[i] = BOOKISBN[i];
         }
         memset(books, '3', sizeof(books));//把books全部初始化为3
         books[20] = '\0';
@@ -143,6 +147,10 @@ Book::Book()
         {
             publisher[i] = ' ';
         }
+        for (int i = 0; i < 20 ; i++ )
+        {
+            bookisbn[i] = ' ';
+        }
         memset(books, '3', sizeof(books));//把books全部初始化为3
         books[20] = '\0';
         storage = 0;//初始库存为10本
@@ -168,6 +176,10 @@ Book::Book(Book &book) //复制构造函数
         for (int i = 0; i<50; i++)
         {
             publisher[i] = book.publisher[i];
+        }
+        for (int i = 0; i < 20 ; i++ )
+        {
+            bookisbn[i] = book.bookisbn[i];
         }
         storage = book.storage;
         bookMan = book.bookMan;
@@ -222,6 +234,17 @@ void Book::setpublisher(char newpublisher[50])
             publisher[i] = newpublisher[i];
         }
     }
+char* Book::getbookisbn()
+{
+    return bookisbn;
+}
+void Book::setbookisbn(char BOOKISBN[20])
+{
+    for(int i=0;i < 20; i++)
+    {
+        bookisbn[i]=BOOKISBN[i];
+    }
+}
 short Book::getstorage()
     {
         return storage;
@@ -976,17 +999,17 @@ void Record::bookLendRecord(int flag)        //借书记录
     FILE *fp_new_order;
     if (flag == 0)
     {
-        if (NULL == (fp_book_lend = fopen("/Users/wangzhengtao/BOOK_LEND_RECORD", "rb+")))
+        if (NULL == (fp_book_lend = fopen("BOOK_LEND_RECORD", "rb+")))
         {
             fprintf(stderr, "Can not open booklendrecord");
             exit(1);
         }
-        if (NULL == (fp_log = fopen("/Users/wangzhengtao/LOG", "rb+")))
+        if (NULL == (fp_log = fopen("LOG", "rb+")))
         {
             fprintf(stderr, "Can not open log");
             exit(1);
         }
-        if (NULL == (fp_buffer = fopen("/Users/wangzhengtao/BUFFERZONE_LEND", "rb+")))
+        if (NULL == (fp_buffer = fopen("BUFFERZONE_LEND", "rb+")))
         {
             fprintf(stderr, "Can not open bufferzonelend");
             exit(1);
@@ -1008,17 +1031,17 @@ void Record::bookLendRecord(int flag)        //借书记录
     {
 
 
-        if (NULL == (fp_book_lend = fopen("/Users/wangzhengtao/BOOK_LEND_RECORD", "rb+")))
+        if (NULL == (fp_book_lend = fopen("BOOK_LEND_RECORD", "rb+")))
         {
             fprintf(stderr, "Can not open booklendrecord");
             exit(1);
         }
-        if (NULL == (fp_log = fopen("/Users/wangzhengtao/LOG", "wb+")))
+        if (NULL == (fp_log = fopen("LOG", "wb+")))
         {
             fprintf(stderr, "Can not open log");
             exit(1);
         }
-        if (NULL == (fp_buffer = fopen("/Users/wangzhengtao/BUFFERZONE_LEND", "rb+")))
+        if (NULL == (fp_buffer = fopen("BUFFERZONE_LEND", "rb+")))
         {
             fprintf(stderr, "Can not open bufferzonelend");
             exit(1);
@@ -1036,12 +1059,12 @@ void Record::bookLendRecord(int flag)        //借书记录
         fclose(fp_log);
         fclose(fp_buffer);
 
-        if (NULL == (fp_order = fopen("/Users/wangzhengtao/BUFFERZONE_ORDER", "rb+")))
+        if (NULL == (fp_order = fopen("BUFFERZONE_ORDER", "rb+")))
         {
             fprintf(stderr, "Can not open BUFFERZONE_ORDER");
             exit(1);
         }
-        if (NULL == (fp_new_order = fopen("/Users/wangzhengtao/BUFFERZONE_ORDERNEW", "rb+")))
+        if (NULL == (fp_new_order = fopen("BUFFERZONE_ORDERNEW", "rb+")))
         {
             fprintf(stderr, "Can not open BUFFERZONE_ORDERNEW");
             exit(1);
@@ -1119,17 +1142,17 @@ void Record::bookOrderRecord()
     FILE *fp_book_order;
     FILE *fp_log;
     FILE *fp_buffer;
-    if (NULL == (fp_book_order = fopen("/Users/wangzhengtao/BOOK_ORDER_RECORD", "rb+")))
+    if (NULL == (fp_book_order = fopen("BOOK_ORDER_RECORD", "rb+")))
     {
         fprintf(stderr, "Can not open book_order_record");
         exit(1);
     }
-    if (NULL == (fp_log = fopen("/Users/wangzhengtao/LOG", "rb+")))
+    if (NULL == (fp_log = fopen("LOG", "rb+")))
     {
         fprintf(stderr, "Can not open log");
         exit(1);
     }
-    if (NULL == (fp_buffer = fopen("/Users/wangzhengtao/BUFFERZONE_ORDER", "rb+")))
+    if (NULL == (fp_buffer = fopen("BUFFERZONE_ORDER", "rb+")))
     {
         fprintf(stderr, "Can not open bufferzone_order");
         exit(1);
@@ -1422,7 +1445,7 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
     unsigned int i;
     int n = 0;
     unsigned int num = 0;
-    if (NULL == (fp1 = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb")))
+    if (NULL == (fp1 = fopen("BOOKINFORMATION", "rb")))
     {
         fprintf(stderr, "Can not open file bookInformation");
     }
@@ -1463,11 +1486,12 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
             ui->searchresult->insertRow(row);
             int nn = abc.getstorage();
             QString s = QString::number(nn, 10);
-            ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));//把这个Item加到第一行第二列中
+            ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
             ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
             ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
             ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
-            ui->searchresult->setItem(row,4,new QTableWidgetItem(s));
+            ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+            ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
         }
         fclose(fp1);
         fclose(fp2);
@@ -1677,7 +1701,7 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
             record.bookLendRecord(0);
             //写回book文件
             FILE *fp_book;
-            if (NULL == (fp_book = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+")))
+            if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
             {
                 fprintf(stderr, "Can not open bookinformation");
                 exit(1);
@@ -1807,7 +1831,7 @@ void LibrarySystem::bookOrder(){//预约
         card.setbookedCount(card.getbookedCount() + 1);//人的预约本数+1
         //写回book文件
         FILE *fp_book;
-        if (NULL == (fp_book = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+")))
+        if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
         {
             fprintf(stderr, "Can not open bookinformation");
             exit(1);
@@ -1913,14 +1937,14 @@ void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的�
 int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         //用户登录
 {
     //将用户输入的id和密码传到形参以便进行账号和密码的匹配
-    //FILE*fpEnd = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
+    //FILE*fpEnd = fopen("BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
     FILE *fpEnd = fopen("BOOKINFORMATION", "rb+");
      if (fpEnd == NULL) {
      printf("file error bookinformation\n");
      exit(1);
      }
      fseek(fpEnd, 0, SEEK_END);        //把fpEnd指针移到文件末尾
-    //FILE *fp = fopen("/Users/wangzhengtao/CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
+    //FILE *fp = fopen("CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
     FILE *fp = fopen("CARDINFORMATION", "rb+");
     if (fp == NULL)
     {
@@ -2024,7 +2048,7 @@ void LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone
     FILE*fp_card;
     if (NULL == (fp_card = fopen("CARDINFORMATION", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open cardinformation");
         exit(1);
     }
     fseek(fp_card, 0, SEEK_END);
@@ -2311,7 +2335,7 @@ void LibrarySystem::on_userLogin_clicked()
     //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
     //对用户账号和密码的检查，*/
     FILE *fp1; //= fopen("ALLNUM", "rb");
-    //if ((fp1 = fopen("/Users/wangzhengtao/ALLNUM", "rb")) == NULL)
+    //if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
         fprintf(stderr, "Can not open file allnum");
@@ -2541,12 +2565,6 @@ void LibrarySystem::on_searchokbutton_clicked()
     else if(ui->author->isChecked())Search(3);
     else if(ui->publisher->isChecked())Search(4);
     else QMessageBox::warning(this, "Warning", "请选择查询类型！");
-    FILE *fp;
-    if (NULL == (fp = fopen("xunzhao", "wb")))
-    {
-        fprintf(stderr, "Can not open file bookInformation");
-    }
-
 }
 
 //用户点击注册
@@ -2564,7 +2582,7 @@ void LibrarySystem::on_booklendbutton_clicked()
     QString str = ui->searchresult->item(row,0)->text();//获取某行某列单元格的文本内容
     int bookid = str.toInt() - 100000001;//QString转int
     FILE *fp;
-    if (NULL == (fp = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb")))
+    if (NULL == (fp = fopen("BOOKINFORMATION", "rb")))
     {
         fprintf(stderr, "Can not open file bookInformation");
     }
@@ -2593,7 +2611,7 @@ void LibrarySystem::on_bookorderbutton_clicked()
     QString str = ui->searchresult->item(row,0)->text();//获取某行某列单元格的文本内容
     int bookid = str.toInt() - 100000001;//QString转int
     FILE *fp;
-    if (NULL == (fp = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb")))
+    if (NULL == (fp = fopen("BOOKINFORMATION", "rb")))
     {
         fprintf(stderr, "Can not open file bookInformation");
     }
@@ -2691,7 +2709,7 @@ void LibrarySystem::on_submit_clicked()
     strcpy(findbackusersfznumble2, ba2.c_str());
 
     //将用户输入的id和身份证号进行匹配
-    //FILE*fpEnd = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
+    //FILE*fpEnd = fopen("BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
     /*FILE *fpEnd = fopen("BOOKINFORMATION", "rb+");
      if (fpEnd == NULL) {
      printf("file error bookinformation\n");
@@ -2699,7 +2717,7 @@ void LibrarySystem::on_submit_clicked()
      }
      fseek(fpEnd, 0, SEEK_END);        //把fpEnd指针移到文件末尾*/
     //我注释掉了，感觉没啥用
-    //FILE *fp = fopen("/Users/wangzhengtao/CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
+    //FILE *fp = fopen("CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
     FILE *fp = fopen("CARDINFORMATION", "rb+");
     if (fp == NULL)
     {

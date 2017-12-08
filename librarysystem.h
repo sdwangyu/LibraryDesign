@@ -24,7 +24,7 @@ class Book//构造函数 复制构造函数
 public:
     friend class Administrator;
     friend class Record;
-    Book(char BookID[10], char BookName[100], char Author[50], char Publisher[50], short Storage);
+    Book(char BookID[10], char BookName[100], char Author[50], char Publisher[50], char BOOKISBN[20], short Storage);
     Book();
     Book(Book &book); //复制构造函数
     char *getbookID();
@@ -35,6 +35,8 @@ public:
     void setauthor(char newauthor[50]);
     char *getpublisher();
     void setpublisher(char newpublisher[50]);
+    char *getbookisbn();
+    void setbookisbn(char BOOKISBN[20]);
     short getstorage();
     void setstorage(short newstorage);
     void addstorage(short newstorage);
@@ -53,6 +55,7 @@ private:
     char bookName[100];//书名
     char author[50];//作者
     char publisher[50];//出版商
+    char bookisbn[20];
     short storage; //库存
     short bookMan; //预约人数
     short tStorage;  //临时库存
