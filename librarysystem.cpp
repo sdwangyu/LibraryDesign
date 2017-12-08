@@ -13,6 +13,17 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
+    FILE *fp1;
+    if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
+    {
+        fprintf(stderr, "Can not open file allnum");
+        exit(1);
+    }
+        fread(&allcard, sizeof(int), 1, fp1);
+        fread(&allbook, sizeof(int), 1, fp1);
+        fread(&alladmin, sizeof(int), 1, fp1);
+
+        fclose(fp1);
     ui->setupUi(this);
     //ui->mainwidget->setCurrentIndex(0);
     ui->searchresult->setSelectionBehavior ( QAbstractItemView::SelectRows); //设置选择行为，以行为单位
@@ -2334,7 +2345,7 @@ void LibrarySystem::on_userLogin_clicked()
     }
     //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
     //对用户账号和密码的检查，*/
-    FILE *fp1; //= fopen("ALLNUM", "rb");
+    /*FILE *fp1; //= fopen("ALLNUM", "rb");
     //if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
@@ -2345,7 +2356,7 @@ void LibrarySystem::on_userLogin_clicked()
         fread(&allbook, sizeof(int), 1, fp1);
         fread(&alladmin, sizeof(int), 1, fp1);
 
-        fclose(fp1);
+        fclose(fp1);*/
         //QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
         //Library library1;
         //cout << "请输入账号：";
@@ -2676,7 +2687,7 @@ void LibrarySystem::on_lossPassword_clicked()
 //用户找回密码
 void LibrarySystem::on_submit_clicked()
 {
-    FILE *fp1;
+    /*FILE *fp1;
     if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
         fprintf(stderr, "Can not open file allnum");
@@ -2686,7 +2697,7 @@ void LibrarySystem::on_submit_clicked()
         fread(&allbook, sizeof(int), 1, fp1);
         fread(&alladmin, sizeof(int), 1, fp1);
 
-        fclose(fp1);
+        fclose(fp1);*/
     if(ui->findbackuseraccount->text().isEmpty()){
         QMessageBox::information(this,"输入错误","请输入用户名.");
         ui->findbackuseraccount->setFocus();
