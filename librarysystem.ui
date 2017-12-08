@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -456,7 +456,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="setusernewpassword_2">
+    <widget class="QLineEdit" name="setusernewpasswordtwice">
      <property name="geometry">
       <rect>
        <x>250</x>
@@ -517,7 +517,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
@@ -1106,7 +1106,7 @@
       <string>借阅信息</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
+    <widget class="QPushButton" name="userLogout">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -1225,7 +1225,7 @@
       <string>增加管理员</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="signoutBtn">
+    <widget class="QPushButton" name="adminLogout">
      <property name="geometry">
       <rect>
        <x>20</x>
