@@ -520,17 +520,238 @@
       <number>1</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
-      <widget class="QLabel" name="label_11">
+      <widget class="QLabel" name="username">
        <property name="geometry">
         <rect>
-         <x>190</x>
-         <y>170</y>
-         <width>151</width>
+         <x>60</x>
+         <y>50</y>
+         <width>60</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>显示用户信息</string>
+        <string>姓名：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="userid">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>80</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>学号：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="usercid">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>110</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>身份证号：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="usermoney">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>370</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>余额：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lendednum">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>190</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>已借本数：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lendingnum">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>220</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>可借本数：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="userstate">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>400</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>账号状态：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ordernum">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>250</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>预约本数：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="userowemoney">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>340</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>违约金：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="username1">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>50</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="userid1">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>80</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="usercid1">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>110</y>
+         <width>191</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lendednum1">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>190</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lendingnum1">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>220</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ordernum1">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>250</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="userowemoney1">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>340</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="usermoney1">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>370</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="userstate1">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>400</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
@@ -561,10 +782,10 @@
       <widget class="QTableWidget" name="searchresult">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>90</y>
-         <width>651</width>
-         <height>331</height>
+         <width>691</width>
+         <height>341</height>
         </rect>
        </property>
        <column>
@@ -604,6 +825,9 @@
        </property>
        <property name="text">
         <string>书名前方一致</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
       <widget class="QRadioButton" name="bookname2">
@@ -649,7 +873,7 @@
        <property name="geometry">
         <rect>
          <x>40</x>
-         <y>430</y>
+         <y>440</y>
          <width>113</width>
          <height>32</height>
         </rect>
@@ -662,7 +886,7 @@
        <property name="geometry">
         <rect>
          <x>190</x>
-         <y>430</y>
+         <y>440</y>
          <width>113</width>
          <height>32</height>
         </rect>
@@ -934,7 +1158,7 @@
       <string>预约信息</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_4">
+    <widget class="QPushButton" name="searchBtn">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -952,8 +1176,8 @@
     <widget class="QLabel" name="label_12">
      <property name="geometry">
       <rect>
-       <x>290</x>
-       <y>30</y>
+       <x>430</x>
+       <y>20</y>
        <width>71</width>
        <height>16</height>
       </rect>
@@ -962,7 +1186,7 @@
       <string>管理员界面</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_9">
+    <widget class="QPushButton" name="addbookBtn">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -975,7 +1199,7 @@
       <string>增加书籍</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_10">
+    <widget class="QPushButton" name="looklogBtn">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -988,7 +1212,7 @@
       <string>查询记录</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_11">
+    <widget class="QPushButton" name="addadminBtn">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -1001,7 +1225,7 @@
       <string>增加管理员</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_13">
+    <widget class="QPushButton" name="signoutBtn">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -1014,11 +1238,11 @@
       <string>注销</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_14">
+    <widget class="QPushButton" name="admininformationBtn">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>110</y>
+       <x>20</x>
+       <y>120</y>
        <width>81</width>
        <height>23</height>
       </rect>
@@ -1032,12 +1256,12 @@
       <rect>
        <x>170</x>
        <y>70</y>
-       <width>581</width>
-       <height>391</height>
+       <width>641</width>
+       <height>461</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="looklogwindow">
       <widget class="QLabel" name="label_14">
@@ -1055,17 +1279,108 @@
       </widget>
      </widget>
      <widget class="QWidget" name="addbookwindow">
-      <widget class="QLabel" name="label_15">
+      <widget class="QLabel" name="adminname">
        <property name="geometry">
         <rect>
-         <x>220</x>
-         <y>160</y>
-         <width>91</width>
+         <x>60</x>
+         <y>50</y>
+         <width>60</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>增加书籍界面</string>
+        <string>姓名：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="adminid">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>90</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>账号：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="admincid">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>140</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>身份证号：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="adminphone">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>190</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>手机号：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="adminname1">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>50</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="adminid1">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>90</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="admincid1">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>140</y>
+         <width>151</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="adminphone1">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>190</y>
+         <width>60</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
@@ -1097,21 +1412,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="admininforwindow">
-      <widget class="QLabel" name="label_13">
-       <property name="geometry">
-        <rect>
-         <x>150</x>
-         <y>140</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>显示管理员信息</string>
-       </property>
-      </widget>
-     </widget>
+     <widget class="QWidget" name="admininforwindow"/>
     </widget>
    </widget>
   </widget>

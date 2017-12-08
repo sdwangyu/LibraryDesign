@@ -12,6 +12,11 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
 {
     ui->setupUi(this);
     //ui->mainwidget->setCurrentIndex(0);
+    ui->searchresult->setSelectionBehavior ( QAbstractItemView::SelectRows); //设置选择行为，以行为单位
+    ui->searchresult->setSelectionMode ( QAbstractItemView::SingleSelection); //设置选择模式，选择单行
+    ui->searchresult->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
+    ui->searchresult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
+    ui->searchresult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
 }
 
 LibrarySystem::~LibrarySystem()
@@ -967,19 +972,19 @@ void Record::bookLendRecord(int flag)        //借书记录
     FILE *fp_new_order;
     if (flag == 0)
     {
-        if (NULL == (fp_book_lend = fopen("BOOK_LEND_RECORD", "rb+")))
+        if (NULL == (fp_book_lend = fopen("/Users/wangzhengtao/BOOK_LEND_RECORD", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open booklendrecord");
             exit(1);
         }
-        if (NULL == (fp_log = fopen("LOG", "rb+")))
+        if (NULL == (fp_log = fopen("/Users/wangzhengtao/LOG", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open log");
             exit(1);
         }
-        if (NULL == (fp_buffer = fopen("BUFFERZONE_LEND", "rb+")))
+        if (NULL == (fp_buffer = fopen("/Users/wangzhengtao/BUFFERZONE_LEND", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open bufferzonelend");
             exit(1);
         }
         fseek(fp_book_lend, 0, SEEK_END);
@@ -999,19 +1004,19 @@ void Record::bookLendRecord(int flag)        //借书记录
     {
 
 
-        if (NULL == (fp_book_lend = fopen("BOOK_LEND_RECORD", "rb+")))
+        if (NULL == (fp_book_lend = fopen("/Users/wangzhengtao/BOOK_LEND_RECORD", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open booklendrecord");
             exit(1);
         }
-        if (NULL == (fp_log = fopen("LOG", "rb+")))
+        if (NULL == (fp_log = fopen("/Users/wangzhengtao/LOG", "wb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open log");
             exit(1);
         }
-        if (NULL == (fp_buffer = fopen("BUFFERZONE_LEND", "rb+")))
+        if (NULL == (fp_buffer = fopen("/Users/wangzhengtao/BUFFERZONE_LEND", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open bufferzonelend");
             exit(1);
         }
         fseek(fp_book_lend, 0, SEEK_END);
@@ -1027,14 +1032,14 @@ void Record::bookLendRecord(int flag)        //借书记录
         fclose(fp_log);
         fclose(fp_buffer);
 
-        if (NULL == (fp_order = fopen("BUFFERZONE_ORDER", "rb+")))
+        if (NULL == (fp_order = fopen("/Users/wangzhengtao/BUFFERZONE_ORDER", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open BUFFERZONE_ORDER");
             exit(1);
         }
-        if (NULL == (fp_new_order = fopen("bufferzone_ordernew", "wb+")))
+        if (NULL == (fp_new_order = fopen("/Users/wangzhengtao/BUFFERZONE_ORDERNEW", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open BUFFERZONE_ORDERNEW");
             exit(1);
         }
         Record record_temp;
@@ -1110,19 +1115,19 @@ void Record::bookOrderRecord()
     FILE *fp_book_order;
     FILE *fp_log;
     FILE *fp_buffer;
-    if (NULL == (fp_book_order = fopen("BOOK_ORDER_RECORD", "rb+")))
+    if (NULL == (fp_book_order = fopen("/Users/wangzhengtao/BOOK_ORDER_RECORD", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open book_order_record");
         exit(1);
     }
-    if (NULL == (fp_log = fopen("LOG", "rb+")))
+    if (NULL == (fp_log = fopen("/Users/wangzhengtao/LOG", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open log");
         exit(1);
     }
-    if (NULL == (fp_buffer = fopen("BUFFERZONE_ORDER", "rb+")))
+    if (NULL == (fp_buffer = fopen("/Users/wangzhengtao/BUFFERZONE_ORDER", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open bufferzone_order");
         exit(1);
     }
     fseek(fp_book_order, 0, SEEK_END);
@@ -1161,7 +1166,7 @@ void Record::bookOrderCancelRecord()
         fprintf(stderr, "Can not open file");
         exit(1);
     }
-    if (NULL == (fp_order_buffernew = fopen("bufferzone_ordernew", "wb+")))
+    if (NULL == (fp_order_buffernew = fopen("bufferzone_ordernew", "rb+")))
     {
         fprintf(stderr, "Can not open file");
         exit(1);
@@ -1644,7 +1649,7 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
         QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");
     }
     else{//可借本数没有超过上限
-        if (book.getstorage() >= 2) { //库存允许
+        if (book.getstorage() >= 1) { //库存允许
             //cout << "借阅成功" << endl;
             QMessageBox::information(this, "Sucess", "借阅成功");
             int order = 1;//标识第几本书
@@ -1668,9 +1673,9 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
             record.bookLendRecord(0);
             //写回book文件
             FILE *fp_book;
-            if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
+            if (NULL == (fp_book = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+")))
             {
-                fprintf(stderr, "Can not open file");
+                fprintf(stderr, "Can not open bookinformation");
                 exit(1);
             }
             int position = atoi(book.getbookID()) - 100000000 - 1;
@@ -1786,20 +1791,21 @@ void LibrarySystem::bookReturn(Record record1){ //还书（需要用到qt）
 
 void LibrarySystem::bookOrder(){//预约
     //预约记录就记录预约时间即可，因为为了方便在update_order里使用
-    if (card.getbookedCount() == 5) {//预约本数已达上限
+    if(book.getstorage() > 2)QMessageBox::information(this, "Fail", "该书可以直接借阅！");
+    else if (card.getbookedCount() == 5) {//预约本数已达上限
         //cout << "您的预约本数已达上限，无法进行预约！" << endl;
         QMessageBox::information(this, "Warning", "您的预约本数已达上限，无法进行预约！");
     }
     else{
         //cout << "预约成功！" << endl;//提示预约成功
-        QMessageBox::information(this, "Success", "借阅成功！");
+        QMessageBox::information(this, "Success", "预约成功！");
         book.setbookMan(book.getbookMan() + 1);//书的预约人数+1
         card.setbookedCount(card.getbookedCount() + 1);//人的预约本数+1
         //写回book文件
         FILE *fp_book;
-        if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
+        if (NULL == (fp_book = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+")))
         {
-            fprintf(stderr, "Can not open file");
+            fprintf(stderr, "Can not open bookinformation");
             exit(1);
         }
         int position = atoi(book.getbookID()) - 100000000 - 1;
@@ -2489,7 +2495,12 @@ void LibrarySystem::on_searchokbutton_clicked()
     else if(ui->author->isChecked())Search(3);
     else if(ui->publisher->isChecked())Search(4);
     else QMessageBox::warning(this, "Warning", "请选择查询类型！");
-    ui->searchtext->clear();
+    FILE *fp;
+    if (NULL == (fp = fopen("xunzhao", "wb")))
+    {
+        fprintf(stderr, "Can not open file bookInformation");
+    }
+
 }
 
 void LibrarySystem::on_userRegister_clicked()
@@ -2498,4 +2509,83 @@ void LibrarySystem::on_userRegister_clicked()
     ui->useraccount->setFocus();
     ui->userpassword->clear();
     ui->mainwidget->setCurrentIndex(1);
+}
+
+void LibrarySystem::on_booklendbutton_clicked()
+{
+    int row = ui->searchresult->currentRow();//获取当前选中的行号
+    QString str = ui->searchresult->item(row,0)->text();//获取某行某列单元格的文本内容
+    int bookid = str.toInt() - 100000001;//QString转int
+    FILE *fp;
+    if (NULL == (fp = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb")))
+    {
+        fprintf(stderr, "Can not open file bookInformation");
+    }
+    fseek(fp, bookid*sizeof(Book), SEEK_SET);
+    if (fread(&book, sizeof(Book), 1, fp) != 1)
+        printf("file write error\n");
+    fclose(fp);
+    bookLend();
+    ui->searchresult->setRowCount(0);
+    ui->searchresult->clearContents();
+    if(ui->bookname1->isChecked())Search(1);
+    else if(ui->bookname2->isChecked())Search(2);
+    else if(ui->author->isChecked())Search(3);
+    else if(ui->publisher->isChecked())Search(4);
+    ui->searchtext->clear();
+}
+
+void LibrarySystem::on_searchBtn_clicked()
+{
+    ui->userwidget->setCurrentIndex(1);
+}
+
+void LibrarySystem::on_bookorderbutton_clicked()
+{
+    int row = ui->searchresult->currentRow();//获取当前选中的行号
+    QString str = ui->searchresult->item(row,0)->text();//获取某行某列单元格的文本内容
+    int bookid = str.toInt() - 100000001;//QString转int
+    FILE *fp;
+    if (NULL == (fp = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb")))
+    {
+        fprintf(stderr, "Can not open file bookInformation");
+    }
+    fseek(fp, bookid*sizeof(Book), SEEK_SET);
+    if (fread(&book, sizeof(Book), 1, fp) != 1)
+        printf("file write error\n");
+    fclose(fp);
+    bookOrder();
+    ui->searchtext->clear();
+}
+
+void LibrarySystem::on_userwindowinformation_clicked()
+{
+    ui->userwidget->setCurrentIndex(0);
+    ui->username1->setText(card.getcardHolder());
+    ui->userid1->setText(card.getcardID());
+    ui->usercid1->setText(card.getcID());
+    QString temp = QString::number(card.getlendedCount(),10);
+    ui->lendednum1->setText(temp);
+    temp.setNum(card.getlendingCount());
+    ui->lendingnum1->setText(temp);
+    temp.setNum(card.getbookedCount());
+    ui->ordernum1->setText(temp);
+    temp.setNum(card.getbalance());
+    ui->usermoney1->setText(temp);
+    temp.setNum(card.getoweMoney());
+    ui->userowemoney1->setText(temp);
+    if(card.getcardState() == '1')     ui->userstate1->setText("可用");
+        else ui->userstate1->setText("冻结");
+
+
+}
+
+
+void LibrarySystem::on_admininformationBtn_clicked()
+{
+    ui->adminwidget->setCurrentIndex(1);
+    ui->adminname1->setText(admin.getaccountHolder());
+    ui->adminid1->setText(admin.getaccount());
+    ui->admincid1->setText(admin.getaID());
+    ui->adminphone1->setText(admin.getaPhone());
 }

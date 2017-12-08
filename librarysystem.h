@@ -301,6 +301,16 @@ private slots:
 
     void on_orderInfoBtn_clicked();
 
+    void on_booklendbutton_clicked();
+
+    void on_searchBtn_clicked();
+
+    void on_bookorderbutton_clicked();
+
+    void on_userwindowinformation_clicked();
+
+    void on_admininformationBtn_clicked();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;
