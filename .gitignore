@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-
 librarysystem.ui.autosave
-=======
 *.user
 *.autosave
 *.pro.user
-*.user
 LibraryDesign.pro.user
->>>>>>> 28043b49ec31cc833f869d7c3eda9a5780b373e0
