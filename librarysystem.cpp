@@ -7,6 +7,8 @@ int allbook;
 int allcard;
 int alladmin;
 
+int tcflag=1; //用于表示找回密码的时候是用户还是管理员
+
 LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
@@ -2348,25 +2350,27 @@ void LibrarySystem::on_userLogin_clicked()
             }
             else {
                 QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
-                ui->useraccount->clear();
-                ui->useraccount->setFocus();
+                //ui->useraccount->clear();
                 ui->userpassword->clear();
+                ui->userpassword->setFocus();
+
             }
             //对用户账号和密码的检查，
         }
         else if(ui->loginforadmin->isChecked()){
             if(signInAdmin(username, password)==1){
-                //ui->useraccount->clear();
-                //ui->useraccount->setFocus();
-                //ui->userpassword->clear();
-                //隐藏登录对话框
-                ui->mainwidget->setCurrentIndex(5);;//显示用户主窗口
-            }
-            else {
-                QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
                 ui->useraccount->clear();
                 ui->useraccount->setFocus();
                 ui->userpassword->clear();
+                //隐藏登录对话框
+                ui->mainwidget->setCurrentIndex(5);;//显示管理员主窗口
+            }
+            else {
+                QMessageBox::warning(this,tr("密码错误"),tr("请输入正确的密码."),QMessageBox::Ok);
+                //ui->useraccount->clear();
+                ui->userpassword->clear();
+                ui->userpassword->setFocus();
+
             }
             //对用户账号和密码的检查，
         }
@@ -2598,12 +2602,13 @@ void LibrarySystem::on_submit_clicked()
 
     //将用户输入的id和身份证号进行匹配
     //FILE*fpEnd = fopen("/Users/wangzhengtao/BOOKINFORMATION", "rb+");    //用于标志文件的末尾，以控制查找时的循环变量的控制。
-    FILE *fpEnd = fopen("BOOKINFORMATION", "rb+");
+    /*FILE *fpEnd = fopen("BOOKINFORMATION", "rb+");
      if (fpEnd == NULL) {
      printf("file error bookinformation\n");
      exit(1);
      }
-     fseek(fpEnd, 0, SEEK_END);        //把fpEnd指针移到文件末尾
+     fseek(fpEnd, 0, SEEK_END);        //把fpEnd指针移到文件末尾*/
+    //我注释掉了，感觉没啥用
     //FILE *fp = fopen("/Users/wangzhengtao/CARDINFORMATION", "rb+");        //在循环时每一次往后移动的指针
     FILE *fp = fopen("CARDINFORMATION", "rb+");
     if (fp == NULL)
@@ -2611,41 +2616,87 @@ void LibrarySystem::on_submit_clicked()
         printf("file error cardinformation\n");
         exit(1);
     }
+
+    FILE *fp2 = fopen("ADMININFORMATION", "rb+");
+    if (fp2 == NULL)
+    {
+        printf("file error admininformation\n");
+        exit(1);
+    }
     Card card_find;
     Card card_temp;
+    Administrator administrator_find;
+    Administrator administrator_temp;
     int i = 0;    //循环变量，用于将fp向后移动
+    int j =0;
     while (i<allcard)
     {
         fseek(fp, i * sizeof(Card), SEEK_SET);
         fread(&card_temp, sizeof(Card), 1, fp);
         if (strcmp(card_temp.getcardID(), findbackuseraccount2) == 0)     //如果找到对应的card就用复制构造函数把找到的值赋值给一个暂时的变量card_find，以便于后面的身份证号匹配
         {
+            tcflag=1;
             card_find = card_temp;
             break;
         }
         i++;
     }
-    if (strcmp(card_find.getcardID(), findbackuseraccount2) == 0 && strcmp(card_find.getcID(), findbackusersfznumble2) == 0)
+    while (j<alladmin)
     {
-        //账号和身份证号匹配成功后就可以设置密码了，然后就直接把查找到的card_find赋值给私有成员card
-        card = card_find;
-        fclose(fp);
-        ui->findbackuseraccount->clear();
-        ui->findbackuseraccount->setFocus();
-        ui->findbackusersfznumble->clear();
-        ui->mainwidget->setCurrentIndex(3);//转到设置新密码界面
+        fseek(fp2, j * sizeof(Administrator), SEEK_SET);
+        fread(&administrator_temp, sizeof(Administrator), 1, fp2);
+        if (strcmp(administrator_temp.getaccount(), findbackuseraccount2) == 0)     //如果找到对应的card就用复制构造函数把找到的值赋值给一个暂时的变量card_find，以便于后面的身份证号匹配
+        {
+            tcflag=2;
+            administrator_find = administrator_temp;
+            break;
+        }
+        j++;
     }
-    else
-    {
-        fclose(fp);
-        ui->findbackuseraccount->clear();
-        ui->findbackuseraccount->setFocus();
-        ui->findbackusersfznumble->clear();
-        QMessageBox::information(this,"输入错误","请输入正确的身份证号.");
+    if(tcflag==1){
+        if (strcmp(card_find.getcardID(), findbackuseraccount2) == 0 && strcmp(card_find.getcID(), findbackusersfznumble2) == 0)
+        {
+            //账号和身份证号匹配成功后就可以设置密码了，然后就直接把查找到的card_find赋值给私有成员card
+            card = card_find;
+            fclose(fp);
+            ui->findbackuseraccount->clear();
+            ui->findbackuseraccount->setFocus();
+            ui->findbackusersfznumble->clear();
+            ui->mainwidget->setCurrentIndex(3);//转到设置新密码界面
+        }
+        else
+        {
+            fclose(fp);
+            //ui->findbackuseraccount->clear();
+            ui->findbackusersfznumble->clear();
+            ui->findbackusersfznumble->setFocus();
+
+            QMessageBox::information(this,"输入错误","请输入正确的身份证号.");
+        }
+    }
+    else if(tcflag==2){
+        if (strcmp(administrator_find.getaccount(), findbackuseraccount2) == 0 && strcmp(administrator_find.getaID(), findbackusersfznumble2) == 0)
+        {
+            //账号和身份证号匹配成功后就可以设置密码了，然后就直接把查找到的card_find赋值给私有成员card
+            admin = administrator_find;
+            fclose(fp2);
+            ui->findbackuseraccount->clear();
+            ui->findbackuseraccount->setFocus();
+            ui->findbackusersfznumble->clear();
+            ui->mainwidget->setCurrentIndex(3);//转到设置新密码界面
+        }
+        else
+        {
+            fclose(fp2);
+            //ui->findbackuseraccount->clear();
+            ui->findbackusersfznumble->clear();
+            ui->findbackusersfznumble->setFocus();
+            QMessageBox::information(this,"输入错误","请输入正确的身份证号.");
+        }
     }
 }
 
-//用户重新设置密码
+//重新设置密码
 void LibrarySystem::on_achievesetnewpassword_clicked()
 {
     QString setusernewpassword1=ui->setusernewpassword->text();
@@ -2659,44 +2710,88 @@ void LibrarySystem::on_achievesetnewpassword_clicked()
     strcpy(setusernewpasswordtwice2, ba2.c_str());
     if (strcmp(setusernewpassword2,setusernewpasswordtwice2) == 0)
     {
-         card.setcPassword(setusernewpassword2);
-         //把刚刚时获设置密码获取的card写回文件原来的位置
-         FILE*fp_card;
-         if (NULL == (fp_card = fopen("CARDINFORMATION", "rb+")))
-         {
-             fprintf(stderr, "Can not open file");
-             exit(1);
-         }
-         int position = atoi(card.getcardID()) - 10000 - 1;
-         fseek(fp_card, position*sizeof(Card), 0);
-         if (fwrite(&card, sizeof(Card), 1, fp_card) != 1)
-             printf("file write error\n");
-         /*time_t timer;
-         time(&timer);
-         tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
-         int year = t_tm->tm_year + 1900;
-         int month = month = t_tm->tm_mon + 1;
-         int day = t_tm->tm_mday;
-         Record record(card.getcardID(), year, month, day, 'h');
-         record.signOutRecord();*/
-         fclose(fp_card);
-         //把card变量重新用无参的构造函数赋值，是否能用？
-         Card card_blank;
-         card = card_blank;
-         /*//是否将allcard，allbook，alladmin写回文件？
-         FILE *fp_num;
-         if (NULL == (fp_num = fopen("ALLNUM", "rb+")))
-         {
-             fprintf(stderr, "Can not open file");
-             exit(1);
-         }
-         if (fwrite(&allcard, sizeof(int), 1, fp_num) != 1)            //覆盖写入?
-             printf("file write error\n");
-         if (fwrite(&allbook, sizeof(int), 1, fp_num) != 1)
-             printf("file write error\n");
-         if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
-             printf("file write error\n");
-         fclose(fp_num);*/
+        if(tcflag==1){
+            card.setcPassword(setusernewpassword2);
+            //把刚刚时获设置密码获取的card写回文件原来的位置
+            FILE*fp_card;
+            if (NULL == (fp_card = fopen("CARDINFORMATION", "rb+")))
+            {
+                fprintf(stderr, "Can not open file");
+                exit(1);
+            }
+            int position = atoi(card.getcardID()) - 10000 - 1;
+            fseek(fp_card, position*sizeof(Card), 0);
+            if (fwrite(&card, sizeof(Card), 1, fp_card) != 1)
+                printf("file write error\n");
+            /*time_t timer;
+            time(&timer);
+            tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
+            int year = t_tm->tm_year + 1900;
+            int month = month = t_tm->tm_mon + 1;
+            int day = t_tm->tm_mday;
+            Record record(card.getcardID(), year, month, day, 'h');
+            record.signOutRecord();*/
+            fclose(fp_card);
+            //把card变量重新用无参的构造函数赋值，是否能用？
+            Card card_blank;
+            card = card_blank;
+            /*//是否将allcard，allbook，alladmin写回文件？
+            FILE *fp_num;
+            if (NULL == (fp_num = fopen("ALLNUM", "rb+")))
+            {
+                fprintf(stderr, "Can not open file");
+                exit(1);
+            }
+            if (fwrite(&allcard, sizeof(int), 1, fp_num) != 1)            //覆盖写入?
+                printf("file write error\n");
+            if (fwrite(&allbook, sizeof(int), 1, fp_num) != 1)
+                printf("file write error\n");
+            if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
+                printf("file write error\n");
+            fclose(fp_num);*/
+
+        }
+        else if(tcflag==2){
+            admin.setaPassword(setusernewpassword2);
+            //把刚刚时获设置密码获取的admin写回文件原来的位置
+            FILE*fp_admin;
+            if (NULL == (fp_admin = fopen("ADMININFORMATION", "rb+")))
+            {
+                fprintf(stderr, "Can not open file");
+                exit(1);
+            }
+            int position = atoi(admin.getaccount()) - 10000 - 1;
+            fseek(fp_admin, position*sizeof(Administrator), 0);
+            if (fwrite(&admin, sizeof(Administrator), 1, fp_admin) != 1)
+                printf("file write error\n");
+            /*time_t timer;
+            time(&timer);
+            tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
+            int year = t_tm->tm_year + 1900;
+            int month = month = t_tm->tm_mon + 1;
+            int day = t_tm->tm_mday;
+            Record record(card.getcardID(), year, month, day, 'h');
+            record.signOutRecord();*/
+            fclose(fp_admin);
+            //把card变量重新用无参的构造函数赋值，是否能用？
+            Administrator administrator_blank;
+            admin = administrator_blank;
+            /*//是否将allcard，allbook，alladmin写回文件？
+            FILE *fp_num;
+            if (NULL == (fp_num = fopen("ALLNUM", "rb+")))
+            {
+                fprintf(stderr, "Can not open file");
+                exit(1);
+            }
+            if (fwrite(&allcard, sizeof(int), 1, fp_num) != 1)            //覆盖写入?
+                printf("file write error\n");
+            if (fwrite(&allbook, sizeof(int), 1, fp_num) != 1)
+                printf("file write error\n");
+            if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
+                printf("file write error\n");
+            fclose(fp_num);*/
+
+        }
          ui->setusernewpassword->clear();
          ui->useraccount->setFocus();
          ui->setusernewpasswordtwice->clear();
@@ -2730,5 +2825,18 @@ void LibrarySystem::on_findbackpasswordexit_clicked()
     ui->findbackuseraccount->clear();
     ui->useraccount->setFocus();
     ui->findbackusersfznumble->clear();
+    ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
+}
+
+//用户注销
+void LibrarySystem::on_userLogout_clicked()
+{
+    signOut();
+    ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
+}
+
+void LibrarySystem::on_adminLogout_clicked()
+{
+    signOut_Admin();
     ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
 }

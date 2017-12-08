@@ -313,6 +313,10 @@ private slots:
 
     void on_findbackpasswordexit_clicked();
 
+    void on_userLogout_clicked();
+
+    void on_adminLogout_clicked();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;
