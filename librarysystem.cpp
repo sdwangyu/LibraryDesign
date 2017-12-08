@@ -2728,6 +2728,7 @@ void LibrarySystem::on_returnbookBtn_clicked()
     {
         QMessageBox::warning(this,tr("提示"),tr("请先选中对应借书信息."));
     }
+}
 
 void LibrarySystem::on_booklendbutton_clicked()
 {
