@@ -32,3 +32,6 @@ HEADERS += \
 
 FORMS += \
         librarysystem.ui
+
+RESOURCES += \
+    libraryqrc.qrc
