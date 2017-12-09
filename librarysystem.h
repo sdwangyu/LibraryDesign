@@ -368,6 +368,26 @@ private slots:
     void on_looklogBtn_clicked();
 
 
+    void on_inputbookname1_editingFinished();
+
+    void on_inputauthor1_editingFinished();
+
+    void on_inputpublisher1_editingFinished();
+
+    void on_inputisbn1_editingFinished();
+
+    void on_inputstorage1_editingFinished();
+
+    void on_inputadminname1_editingFinished();
+
+    void on_inputadminpass1_editingFinished();
+
+    void on_inputadminpasstwice1_editingFinished();
+
+    void on_inputadmincid1_editingFinished();
+
+    void on_inputadminphone1_editingFinished();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;
