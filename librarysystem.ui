@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>5</number>
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -1284,7 +1284,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="looklogwindow">
       <widget class="QLabel" name="label_14">
@@ -1301,7 +1301,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="addbookwindow">
+     <widget class="QWidget" name="admininformation">
       <widget class="QLabel" name="adminname">
        <property name="geometry">
         <rect>
@@ -1435,7 +1435,149 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="admininforwindow"/>
+     <widget class="QWidget" name="addbokwindow">
+      <widget class="QLabel" name="inputbookname">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>50</y>
+         <width>111</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>请输入书名:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputauthor">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>100</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>请输入作者:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputpublisher">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>150</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>请输入出版社:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputisbn">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>200</y>
+         <width>81</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>请输入ISBN:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputstorage">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>250</y>
+         <width>91</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>请输入数量:</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputbookname1">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>60</y>
+         <width>113</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputauthor1">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>110</y>
+         <width>113</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputpublisher1">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>150</y>
+         <width>113</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputisbn1">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>210</y>
+         <width>113</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputstorage1">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>260</y>
+         <width>113</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="addbookokBtn">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>350</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>确认</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="addbookbackBtn">
+       <property name="geometry">
+        <rect>
+         <x>310</x>
+         <y>350</y>
+         <width>91</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>返回</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
   </widget>
