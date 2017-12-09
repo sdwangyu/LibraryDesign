@@ -3182,7 +3182,6 @@ void LibrarySystem::on_adminLogout_clicked()
     ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
 }
 
-<<<<<<< HEAD
 void LibrarySystem::on_useraccount_editingFinished()
 {
     /*QRegExp reg("[1-9]\\d{0,8}");
