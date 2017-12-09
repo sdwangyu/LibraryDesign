@@ -660,18 +660,27 @@ char* Administrator::getaPhone()
     return aPhone;
 }
 
-/*
-void Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone)
+
+int Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone)
 {
     std::string account_str = std::to_string(2000 + alladmin + 1);
     char account[5];
     strcpy(account,account_str.c_str());
+    int i = 0;
     Administrator newadministrator(account, aPassword, accountHolder, aID, aPhone);
+    Administrator temp;
     FILE*fp_admin;
     if (NULL == (fp_admin = fopen("ADMININFORMATION", "rb+")))
     {
         fprintf(stderr, "Can not open file");
         exit(1);
+    }
+    while(i < alladmin)
+    {
+        fseek(fp_admin, i*sizeof(Administrator), SEEK_SET);
+        fread(&temp, sizeof(Administrator), 1, fp_admin);
+        if(newadministrator.getaID() == temp.getaID())return 0;
+        i++;
     }
     fseek(fp_admin, 0, SEEK_END);
     if (fwrite(&newadministrator, sizeof(Administrator), 1, fp_admin) != 1)
@@ -680,7 +689,7 @@ void Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Record record(newadministrator.getaccount(), year, month, day, 'l');
     record.signUpRecord();
@@ -699,10 +708,9 @@ void Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
-    return;
+    return 1;
 }
 
-*/
 
 //管理员查看大日志
 void Administrator::searchLog()
@@ -718,23 +726,30 @@ void Administrator::searchLog()
 
 
 //11.2管理员新加书函数
-void Administrator::addBook(Book book)
+int Administrator::addBook(Book book)
 {
-    //
     FILE *fp_add_book;
     FILE *fp_book;
+    Book temp;
+    int i = 0;
     if (NULL == (fp_add_book = fopen("ADMININ_ADD_BOOK", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open admin_add_book");
         exit(1);
     }
     if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
     {
-        fprintf(stderr, "Can not open file");
+        fprintf(stderr, "Can not open bookinformation");
         exit(1);
     }
+    while(i < allbook)
+    {
+        fseek(fp_book, i*sizeof(Book), SEEK_SET);
+        fread(&temp, sizeof(Book), 1, fp_book);
+        if(temp.getbookisbn() == book.getbookisbn())return 0;
+        i++;
+    }
     fseek(fp_add_book, 0, SEEK_END);
-
     fseek(fp_book, 0, SEEK_END);
     fwrite(&book, sizeof(Book), 1, fp_book);
     allbook++;
@@ -742,7 +757,7 @@ void Administrator::addBook(Book book)
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Record record(book.getbookID(), this->getaccount(), year, month, day, 'j', '0');		//这个this是可以用的，因为调用的时候指向的也是一个具体的Administrator对象
     record.admininaddbook();
@@ -761,6 +776,7 @@ void Administrator::addBook(Book book)
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
+    return 1;
 }
 
 
@@ -1483,7 +1499,7 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
     {
         std::vector<so_1> sou_1;
         sou_1.reserve(10000);
-        while (n != 20000)
+        while (n != allbook)
         {
             fread(&tc, sizeof(Book), 1, fp1);
             size_t position;
@@ -1528,7 +1544,7 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
         std::vector<so_2> sou_2;
         sou_2.reserve(10000);
         unsigned int j;
-        while (n!= 20000)
+        while (n!= allbook)
         {
             char target[100];
             double same=0;
@@ -1649,7 +1665,7 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
     {
         if (select == 3) //与作者进行匹配
         {
-            while (n != 20000)
+            while (n != allbook)
             {
                 fread(&tc, sizeof(Book), 1, fp1);
                 if (strcmp(source, tc.getauthor()) == 0)
@@ -1672,10 +1688,33 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
         }
         if (select == 4) //与出版社进行匹配
         {
-            while (n != 20000)
+            while (n != allbook)
             {
                 fread(&tc, sizeof(Book), 1, fp1);
                 if (strcmp(source, tc.getpublisher()) == 0)
+                {
+                    if (fwrite(&tc, sizeof(Book), 1, fp2) != 1)
+                        printf("file write error\n");
+                    int row = ui->searchresult->rowCount();//增加一行操作
+                    ui->searchresult->insertRow(row);
+                    int nn = tc.getstorage();
+                    QString s = QString::number(nn, 10);
+                    ui->searchresult->setItem(row,0,new QTableWidgetItem(tc.getbookID()));//把这个Item加到第一行第二列中
+                    ui->searchresult->setItem(row,1,new QTableWidgetItem(tc.getbookName()));
+                    ui->searchresult->setItem(row,2,new QTableWidgetItem(tc.getauthor()));
+                    ui->searchresult->setItem(row,3,new QTableWidgetItem(tc.getpublisher()));
+                    ui->searchresult->setItem(row,4,new QTableWidgetItem(s));
+                    num++;
+                }
+                n++;
+            }
+        }
+        if (select == 5) //与出版社进行匹配
+        {
+            while (n != allbook)
+            {
+                fread(&tc, sizeof(Book), 1, fp1);
+                if (strcmp(source, tc.getbookisbn()) == 0)
                 {
                     if (fwrite(&tc, sizeof(Book), 1, fp2) != 1)
                         printf("file write error\n");
@@ -1720,7 +1759,7 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
             time(&timer);
             tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
             int year = t_tm->tm_year + 1900;
-            int month = month = t_tm->tm_mon + 1;
+            int month = t_tm->tm_mon + 1;
             int day = t_tm->tm_mday;
             Record record(book.getbookID(), card.getcardID(), year, month, day, 'a', '0', order);//生成一条借书的记录
             record.alter_Date(30);    //加上30天，把应还日期写进记录
@@ -1756,7 +1795,7 @@ void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     card.setlendedCount(card.getlendedCount() + 1);//已借本数+1
     card.setlendingCount(card.getlendingCount() - 1);//可借本数-1
@@ -1795,7 +1834,7 @@ void LibrarySystem::bookReturn(int recordyear,int recordmonth,int recordday,int 
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     card.setlendedCount(card.getlendedCount() - 1);//已借本数-1
     card.setlendingCount(card.getlendingCount() + 1);//可借本数+1
@@ -1871,7 +1910,7 @@ void LibrarySystem::bookOrder(){//预约
         time(&timer);
         tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
         int year = t_tm->tm_year + 1900;
-        int month = month = t_tm->tm_mon + 1;
+        int month = t_tm->tm_mon + 1;
         int day = t_tm->tm_mday;
         Record record(book.getbookID(), card.getcardID(), year, month, day, 'c', '0');
         record.bookOrderRecord();
@@ -1891,7 +1930,7 @@ void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Record record(book.getbookID(), card.getcardID(), year, month, day, 'e', '0');
     record.bookOrderCancelRecord();
@@ -1989,7 +2028,7 @@ int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         
         time(&timer);
         tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
         int year = t_tm->tm_year + 1900;
-        int month = month = t_tm->tm_mon + 1;
+        int month = t_tm->tm_mon + 1;
         int day = t_tm->tm_mday;
         Record record(card.getcardID(), year, month, day, 'i');
         record.signInRecord();
@@ -2041,7 +2080,7 @@ int LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //
         time(&timer);
         tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
         int year = t_tm->tm_year + 1900;
-        int month = month = t_tm->tm_mon + 1;
+        int month = t_tm->tm_mon + 1;
         int day = t_tm->tm_mday;
         Record record(admin.getaccount(), year, month, day, 'i');
         record.signInRecord();
@@ -2055,17 +2094,26 @@ int LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //
     }
 }
 
-void LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone)     //用户注册
+int LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone)     //用户注册
 {
     std::string account_str = std::to_string(10000 + allcard + 1);
     char account[10];
     strcpy(account,account_str.c_str());
     Card newcard(account, password, cardHolder, 0, CID, CPhone);
+    Card temp;
+    int i = 0;
     FILE*fp_card;
     if (NULL == (fp_card = fopen("CARDINFORMATION", "rb+")))
     {
         fprintf(stderr, "Can not open cardinformation");
         exit(1);
+    }
+    while(i < allcard)
+    {
+        fseek(fp_card, i*sizeof(Card), SEEK_SET);
+        fread(&temp, sizeof(Card), 1, fp_card);
+        if(newcard.getcID() == temp.getcID())return 0;
+        i++;
     }
     fseek(fp_card, 0, SEEK_END);
     if (fwrite(&newcard, sizeof(Card), 1, fp_card) != 1)
@@ -2074,7 +2122,7 @@ void LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Record record(newcard.getcardID(), year, month, day, 'g');
     record.signUpRecord();
@@ -2093,7 +2141,7 @@ void LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
-    return;
+    return 1;
 }
 
 void LibrarySystem::signOut()         //用户注销
@@ -2113,7 +2161,7 @@ void LibrarySystem::signOut()         //用户注销
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Record record(card.getcardID(), year, month, day, 'h');
     record.signOutRecord();
@@ -2154,7 +2202,7 @@ void LibrarySystem::signOut_Admin()         //管理员注销
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Record record(admin.getaccount(), year, month, day, 'h');
     record.signOutRecord();
@@ -2217,7 +2265,7 @@ void LibrarySystem::update_Order()             //函数用于用户进入系统�
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
     int year = t_tm->tm_year + 1900;
-    int month = month = t_tm->tm_mon + 1;
+    int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     int i = 0;
     while (!feof(fp_buffer_order)) //feof()函数可以用来判断文件是否到达文件尾，若到达文件尾，函数返回值为1
@@ -2296,7 +2344,7 @@ void LibrarySystem::update_book()         //函数用于在登录后判断用户
                 time(&timer);
                 tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
                 int year = t_tm->tm_year + 1900;
-                int month = month = t_tm->tm_mon + 1;
+                int month = t_tm->tm_mon + 1;
                 int day = t_tm->tm_mday;
                 //判断当前时间与应还日期
                 if (!(compareDate(record_temp.getyear(), record_temp.getmonth(), record_temp.getday(), year, month, day) > 0))
@@ -2392,6 +2440,7 @@ void LibrarySystem::on_userLogin_clicked()
                 ui->useraccount->setFocus();
                 ui->userpassword->clear();
                 //隐藏登录对话框
+                on_userwindowinformation_clicked();
                 ui->mainwidget->setCurrentIndex(4);;//显示用户主窗口
             }
             else {
@@ -2592,7 +2641,7 @@ void LibrarySystem::on_searchokbutton_clicked()
     else if(ui->bookname2->isChecked())Search(2);
     else if(ui->author->isChecked())Search(3);
     else if(ui->publisher->isChecked())Search(4);
-    else QMessageBox::warning(this, "Warning", "请选择查询类型！");
+    else if(ui->ISBN->isChecked())Search(5);
 }
 
 //用户点击注册
@@ -2756,6 +2805,10 @@ void LibrarySystem::on_booklendbutton_clicked()
 
 void LibrarySystem::on_searchBtn_clicked()
 {
+    ui->searchtext->clear();
+    ui->searchtext->setFocus();
+    ui->searchresult->setRowCount(0);
+    ui->searchresult->clearContents();
     ui->userwidget->setCurrentIndex(1);
 }
 
@@ -2795,8 +2848,6 @@ void LibrarySystem::on_userwindowinformation_clicked()
     ui->userowemoney1->setText(temp);
     if(card.getcardState() == '1')     ui->userstate1->setText("可用");
         else ui->userstate1->setText("冻结");
-
-
 }
 
 
@@ -3101,4 +3152,102 @@ void LibrarySystem::on_adminLogout_clicked()
 {
     signOut_Admin();
     ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
+}
+
+void LibrarySystem::on_addbookokBtn_clicked()
+{
+    if(ui->inputbookname1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入书名");
+    else if(ui->inputauthor1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入作者");
+    else if(ui->inputpublisher1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入出版社");
+    else if(ui->inputisbn1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入ISBN");
+    else if(ui->inputstorage1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入数量");
+    else
+    {
+    QString bookname = ui->inputbookname1->text();
+    QString author = ui->inputauthor1->text();
+    QString publisher = ui->inputpublisher1->text();
+    QString isbn = ui->inputisbn1->text();
+    QString storage = ui->inputstorage1->text();
+    //std::string str = filename.toStdString();
+    //const char* ch = str.c_str();
+    std::string bookname_1 = bookname.toStdString();
+    std::string author_1 = author.toStdString();
+    std::string publisher_1 = publisher.toStdString();
+    std::string isbn_1 = isbn.toStdString();
+    char* bookname_2 = const_cast<char*>(bookname_1.c_str());
+    char* author_2 = const_cast<char*>(author_1.c_str());
+    char* publisher_2 = const_cast<char*>(publisher_1.c_str());
+    char* isbn_2 = const_cast<char*>(isbn_1.c_str());
+    short storage_2 = storage.toShort();
+    int bookid = allbook + 100000001;
+    char *bookid_2;
+    itoa(bookid,bookid_2,10);
+    Book temp(bookid_2,bookname_2,author_2,publisher_2,isbn_2,storage_2);
+    if(admin.addBook(temp) == 1)QMessageBox::information(this, "Warning", "添加成功");
+    else QMessageBox::warning(this, "ERROR", "该书已存在，添加失败");
+    ui->inputbookname1->clear();
+    ui->inputauthor1->clear();
+    ui->inputpublisher1->clear();
+    ui->inputisbn1->clear();
+    ui->inputstorage1->clear();
+    }
+}
+
+void LibrarySystem::on_addbookBtn_clicked()
+{
+    ui->inputbookname1->clear();
+    ui->inputauthor1->clear();
+    ui->inputpublisher1->clear();
+    ui->inputisbn1->clear();
+    ui->inputstorage1->clear();
+    ui->adminwidget->setCurrentIndex(3);
+}
+
+void LibrarySystem::on_addadminBtn_clicked()
+{
+    ui->inputadminname1->clear();
+    ui->inputadminpass1->clear();
+    ui->inputadminpasstwice1->clear();
+    ui->inputadmincid1->clear();
+    ui->inputadminphone1->clear();
+    ui->adminwidget->setCurrentIndex(2);
+}
+
+
+void LibrarySystem::on_addadminokBtn_clicked()
+{
+    if(ui->inputadminname1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入姓名");
+    else if(ui->inputadminpass1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入密码");
+    else if(ui->inputadminpasstwice1->text().isEmpty())QMessageBox::warning(this, "Warning", "请确认密码");
+    else if(ui->inputadmincid1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入身份证");
+    else if(ui->inputadminphone1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入手机号");
+    else if(ui->inputadminpasstwice1->text() != ui->inputadminpass1->text())QMessageBox::warning(this, "Warning", "两次输入密码不一致");
+    else{
+        QString adminname = ui->inputadminname1->text();
+        QString adminpass = ui->inputadminpass1->text();
+        QString admincid = ui->inputadmincid1->text();
+        QString adminphone = ui->inputadminphone1->text();
+        std::string adminname_1 = adminname.toStdString();
+        std::string adminpass_1 = adminpass.toStdString();
+        std::string admincid_1 = admincid.toStdString();
+        std::string adminphone_1 = adminphone.toStdString();
+        //char* bookname_2 = const_cast<char*>(bookname_1.c_str());
+        char* adminname_2 =  const_cast<char*>(adminname_1.c_str());
+        char* adminpass_2 = const_cast<char*>(adminpass_1.c_str());
+        char* admincid_2 = const_cast<char*>(admincid_1.c_str());
+        char* adminphone_2 = const_cast<char*>(adminphone_1.c_str());
+        //int Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone)
+        if(admin.addadmin(adminpass_2,adminname_2,admincid_2,adminphone_2) == 1)QMessageBox::information(this, "Warning", "添加成功");
+        else QMessageBox::warning(this, "ERROR", "管理员已存在，添加失败");
+        ui->inputadminname1->clear();
+        ui->inputadminpass1->clear();
+        ui->inputadminpasstwice1->clear();
+        ui->inputadmincid1->clear();
+        ui->inputadminphone1->clear();
+    }
+}
+
+void LibrarySystem::on_looklogBtn_clicked()
+{
+    ui->adminwidget->setCurrentIndex(0);
 }

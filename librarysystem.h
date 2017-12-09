@@ -184,13 +184,13 @@ public:
     char *getaID();
     char *getaPhone();
 
-    void addBook(Book book);//增加书
+    int addBook(Book book);//增加书
 
     //void deleteBook(Book book);老师说不要删书
     //void operateCard(Card card);老师说不要删卡 听老师的
     //void findbook(char*bookid);        //为了在修改库存之前给类中的私有成员book赋值
     void newStorage(short storage);//新设库存
-    void addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone);
+    int addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone);
 
     //11.9管理员所有查看行为函数
     void searchLog();//管理员查看大日志
@@ -265,7 +265,7 @@ public:
 
     int signInUser(char*username_PutIn, char*password_PutIn);//用户登陆
     int signInAdmin(char*adminname_PutIn, char*password_PutIn);//管理员登陆
-    void signUp(char*password, char*cardHolder, char*CID, char*CPhone);//用户注册
+    int signUp(char*password, char*cardHolder, char*CID, char*CPhone);//用户注册
     void signOut();//用户注销
     void signOut_Admin();//管理员注销
     // void matchCid();//身份证ID匹配
@@ -336,6 +336,17 @@ private slots:
     void on_userLogout_clicked();
 
     void on_adminLogout_clicked();
+
+    void on_addbookokBtn_clicked();
+
+    void on_addbookBtn_clicked();
+
+    void on_addadminBtn_clicked();
+
+
+    void on_addadminokBtn_clicked();
+
+    void on_looklogBtn_clicked();
 
 private:
     Ui::LibrarySystem *ui;

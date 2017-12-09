@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>5</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -36,7 +36,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 22pt &quot;Academy Engraved LET&quot;;</string>
+      <string notr="true">font: 22pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>登录</string>
@@ -51,6 +51,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>账号：</string>
      </property>
@@ -63,6 +66,9 @@
        <width>61</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>密码：</string>
@@ -77,6 +83,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="userpassword">
      <property name="geometry">
@@ -87,6 +96,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QRadioButton" name="loginforuser">
      <property name="geometry">
@@ -96,6 +108,9 @@
        <width>89</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>用户</string>
@@ -113,6 +128,9 @@
        <height>16</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>管理员</string>
      </property>
@@ -125,6 +143,9 @@
        <width>75</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>登录</string>
@@ -139,6 +160,9 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>注册</string>
      </property>
@@ -146,11 +170,14 @@
     <widget class="QPushButton" name="lossPassword">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>170</y>
+       <x>360</x>
+       <y>160</y>
        <width>81</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>忘记密码？</string>
@@ -168,7 +195,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 22pt &quot;Academy Engraved LET&quot;;</string>
+      <string notr="true">font: 22pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>注册</string>
@@ -183,6 +210,9 @@
        <height>12</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>姓名：</string>
      </property>
@@ -195,6 +225,9 @@
        <width>54</width>
        <height>12</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>密码：</string>
@@ -209,6 +242,9 @@
        <height>12</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>确认密码：</string>
      </property>
@@ -221,6 +257,9 @@
        <width>54</width>
        <height>12</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>身份证号：</string>
@@ -235,6 +274,9 @@
        <height>12</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>手机号：</string>
      </property>
@@ -248,6 +290,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="userpasswordget">
      <property name="geometry">
@@ -257,6 +302,9 @@
        <width>113</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="userpasswordtwice">
@@ -268,6 +316,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="userphonenumbleget">
      <property name="geometry">
@@ -277,6 +328,9 @@
        <width>113</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="usersfznumbleget">
@@ -288,6 +342,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="registerAchieve">
      <property name="geometry">
@@ -297,6 +354,9 @@
        <width>75</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>注册</string>
@@ -310,6 +370,9 @@
        <width>75</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>退出</string>
@@ -327,7 +390,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 22pt &quot;Academy Engraved LET&quot;;</string>
+      <string notr="true">font: 22pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>找回密码</string>
@@ -342,6 +405,9 @@
        <height>12</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>账号：</string>
      </property>
@@ -354,6 +420,9 @@
        <width>54</width>
        <height>12</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>身份证：</string>
@@ -368,6 +437,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="findbackusersfznumble">
      <property name="geometry">
@@ -378,6 +450,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="submit">
      <property name="geometry">
@@ -387,6 +462,9 @@
        <width>75</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>确认</string>
@@ -400,6 +478,9 @@
        <width>75</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>退出</string>
@@ -417,7 +498,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 22pt &quot;Academy Engraved LET&quot;;</string>
+      <string notr="true">font: 22pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>设置新密码</string>
@@ -432,6 +513,9 @@
        <height>16</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>新密码：</string>
      </property>
@@ -444,6 +528,9 @@
        <width>81</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>再次确认密码：</string>
@@ -458,6 +545,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="setusernewpasswordtwice">
      <property name="geometry">
@@ -468,6 +558,9 @@
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="achievesetnewpassword">
      <property name="geometry">
@@ -477,6 +570,9 @@
        <width>75</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>确认</string>
@@ -491,23 +587,29 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>退出</string>
      </property>
     </widget>
    </widget>
    <widget class="QWidget" name="userwindow">
-    <widget class="QLabel" name="label_7">
+    <widget class="QLabel" name="welcometext">
      <property name="geometry">
       <rect>
-       <x>210</x>
-       <y>20</y>
-       <width>91</width>
-       <height>20</height>
+       <x>0</x>
+       <y>10</y>
+       <width>341</width>
+       <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 22pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
-      <string>用户主界面</string>
+      <string>Welcome to Library</string>
      </property>
     </widget>
     <widget class="QStackedWidget" name="userwidget">
@@ -520,7 +622,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
@@ -531,6 +633,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>姓名：</string>
@@ -545,6 +650,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>学号：</string>
        </property>
@@ -557,6 +665,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>身份证号：</string>
@@ -571,6 +682,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>余额：</string>
        </property>
@@ -583,6 +697,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>已借本数：</string>
@@ -597,6 +714,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>可借本数：</string>
        </property>
@@ -609,6 +729,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>账号状态：</string>
@@ -623,6 +746,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>预约本数：</string>
        </property>
@@ -635,6 +761,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>违约金：</string>
@@ -649,6 +778,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -661,6 +793,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string/>
@@ -675,6 +810,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -687,6 +825,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string/>
@@ -701,6 +842,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -713,6 +857,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string/>
@@ -727,6 +874,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -740,6 +890,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -752,6 +905,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string/>
@@ -768,6 +924,9 @@
          <height>41</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>确定</string>
        </property>
@@ -781,6 +940,9 @@
          <height>31</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
       </widget>
       <widget class="QTableWidget" name="searchresult">
        <property name="geometry">
@@ -790,6 +952,9 @@
          <width>801</width>
          <height>341</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <column>
         <property name="text">
@@ -831,6 +996,9 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>书名前方一致</string>
        </property>
@@ -847,6 +1015,9 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>书名模糊查询</string>
        </property>
@@ -860,6 +1031,9 @@
          <height>20</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>作者</string>
        </property>
@@ -872,6 +1046,9 @@
          <width>100</width>
          <height>20</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>出版社</string>
@@ -912,6 +1089,9 @@
          <height>20</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>ISBN</string>
        </property>
@@ -940,6 +1120,9 @@
          <height>250</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <column>
         <property name="text">
          <string>编号</string>
@@ -961,9 +1144,12 @@
         <rect>
          <x>290</x>
          <y>340</y>
-         <width>75</width>
-         <height>23</height>
+         <width>81</width>
+         <height>31</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>取消预约</string>
@@ -1112,6 +1298,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>修改个人信息</string>
      </property>
@@ -1124,6 +1313,9 @@
        <width>101</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>借阅信息</string>
@@ -1138,6 +1330,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>注销</string>
      </property>
@@ -1150,6 +1345,9 @@
        <width>101</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>充值</string>
@@ -1164,6 +1362,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>主页</string>
      </property>
@@ -1176,6 +1377,9 @@
        <width>101</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>预约信息</string>
@@ -1190,6 +1394,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>查询</string>
      </property>
@@ -1199,14 +1406,17 @@
     <widget class="QLabel" name="label_12">
      <property name="geometry">
       <rect>
-       <x>430</x>
+       <x>20</x>
        <y>20</y>
-       <width>71</width>
-       <height>16</height>
+       <width>281</width>
+       <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 22pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
-      <string>管理员界面</string>
+      <string>Welcome to Library</string>
      </property>
     </widget>
     <widget class="QPushButton" name="addbookBtn">
@@ -1217,6 +1427,9 @@
        <width>81</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>增加书籍</string>
@@ -1231,6 +1444,9 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>查询记录</string>
      </property>
@@ -1243,6 +1459,9 @@
        <width>81</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>增加管理员</string>
@@ -1257,6 +1476,9 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+     </property>
      <property name="text">
       <string>注销</string>
      </property>
@@ -1269,6 +1491,9 @@
        <width>81</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
      </property>
      <property name="text">
       <string>主页</string>
@@ -1284,7 +1509,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="looklogwindow">
       <widget class="QLabel" name="label_14">
@@ -1311,6 +1536,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>姓名：</string>
        </property>
@@ -1323,6 +1551,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>账号：</string>
@@ -1337,6 +1568,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>身份证号：</string>
        </property>
@@ -1349,6 +1583,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>手机号：</string>
@@ -1363,6 +1600,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -1375,6 +1615,9 @@
          <width>60</width>
          <height>16</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string/>
@@ -1389,6 +1632,9 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -1402,40 +1648,178 @@
          <height>16</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string/>
        </property>
       </widget>
      </widget>
      <widget class="QWidget" name="addadminwindow">
-      <widget class="QLabel" name="label_16">
+      <widget class="QPushButton" name="addadminokBtn">
        <property name="geometry">
         <rect>
-         <x>250</x>
-         <y>30</y>
-         <width>101</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>增加管理员界面</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_8">
-       <property name="geometry">
-        <rect>
-         <x>90</x>
-         <y>120</y>
-         <width>131</width>
+         <x>150</x>
+         <y>320</y>
+         <width>111</width>
          <height>41</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
-        <string>PushButton</string>
+        <string>确认</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputadminname">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>70</y>
+         <width>71</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+       <property name="text">
+        <string>请输入姓名:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputadminpass">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>120</y>
+         <width>71</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+       <property name="text">
+        <string>请输入密码：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputadmincid">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>220</y>
+         <width>91</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+       <property name="text">
+        <string>请输入身份证号：</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputadminphone">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>260</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+       <property name="text">
+        <string>请输入手机号：</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputadminname1">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>70</y>
+         <width>113</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputadminpass1">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>120</y>
+         <width>113</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputadminpasstwice1">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>160</y>
+         <width>113</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputadmincid1">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>220</y>
+         <width>113</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputadminpasstwice">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>160</y>
+         <width>61</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+       <property name="text">
+        <string>确认密码：</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="inputadminphone1">
+       <property name="geometry">
+        <rect>
+         <x>150</x>
+         <y>260</y>
+         <width>113</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="addbokwindow">
+     <widget class="QWidget" name="addbookwindow">
       <widget class="QLabel" name="inputbookname">
        <property name="geometry">
         <rect>
@@ -1444,6 +1828,9 @@
          <width>111</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>请输入书名:</string>
@@ -1458,6 +1845,9 @@
          <height>31</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>请输入作者:</string>
        </property>
@@ -1470,6 +1860,9 @@
          <width>101</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>请输入出版社:</string>
@@ -1484,6 +1877,9 @@
          <height>31</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
        <property name="text">
         <string>请输入ISBN:</string>
        </property>
@@ -1496,6 +1892,9 @@
          <width>91</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>请输入数量:</string>
@@ -1510,6 +1909,9 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
       </widget>
       <widget class="QLineEdit" name="inputauthor1">
        <property name="geometry">
@@ -1519,6 +1921,9 @@
          <width>113</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="inputpublisher1">
@@ -1530,6 +1935,9 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
       </widget>
       <widget class="QLineEdit" name="inputisbn1">
        <property name="geometry">
@@ -1539,6 +1947,9 @@
          <width>113</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="inputstorage1">
@@ -1550,31 +1961,24 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
       </widget>
       <widget class="QPushButton" name="addbookokBtn">
        <property name="geometry">
         <rect>
-         <x>140</x>
-         <y>350</y>
+         <x>160</x>
+         <y>320</y>
          <width>91</width>
          <height>41</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>确认</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="addbookbackBtn">
-       <property name="geometry">
-        <rect>
-         <x>310</x>
-         <y>350</y>
-         <width>91</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>返回</string>
        </property>
       </widget>
      </widget>
