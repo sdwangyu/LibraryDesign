@@ -15,6 +15,9 @@ QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
 QRegExp passwordstype("[A-Za-z0-9]{6,16}");
 QRegExp sfztype("[0-9]{18}");
 QRegExp phonetype("[0-9]{11}");
+QRegExp shuming("[A-Za-z0-9\u4e00-\u9fa5]{1,30}");
+QRegExp zuozhe("[A-Za-z0-9\u4e00-\u9fa5]{1,15}");
+QRegExp isbntype("[A-Za-z0-9]{1,16}");
 
 LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
@@ -2129,7 +2132,9 @@ int LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone)
     {
         fseek(fp_card, i*sizeof(Card), SEEK_SET);
         fread(&temp, sizeof(Card), 1, fp_card);
-        if(newcard.getcID() == temp.getcID())return 0;
+        if(newcard.getcID() == temp.getcID()){
+            return 0;
+        }
         i++;
     }
     fseek(fp_card, 0, SEEK_END);
@@ -2487,6 +2492,18 @@ void LibrarySystem::on_userLogin_clicked()
             }
             //对用户账号和密码的检查，
         }
+        ui->inputbookname1warning->setText(tr("1到30个字符，汉字、字母、数字"));
+        ui->inputauthor1warning->setText(tr("1到15个字符，汉字、字母、数字"));
+        ui->inputpublisher1warning->setText(tr("1到15个字符，汉字、字母、数字"));
+        ui->inputisbn1warning->setText(tr("1到16位数字或字母，区分大小写"));
+        ui->inputstorage1warning->setText(tr("库位1到20"));
+        ui->inputadminname1warning->setText(tr("1到3位汉字"));
+        ui->inputadminpass1warning->setText(tr("6到16位数字或字母，区分大小写"));
+        ui->inputadminpasstwice1warning->setText(tr("请再次填写密码"));
+        ui->inputadmincid1warning->setText(tr("忘记密码时，可以通过该身份证号码快速找回密码"));
+        ui->inputadminphone1warning->setText(tr("方便我们联系您"));
+        ui->inputadminpass1->setEchoMode(QLineEdit::Password);
+        ui->inputadminpasstwice1->setEchoMode(QLineEdit::Password);
 }
 
 //用户注册
@@ -2550,7 +2567,10 @@ void LibrarySystem::on_registerAchieve_clicked()
         char userphonenumblegets[12];
         strcpy(userphonenumblegets, ba3.c_str());
 
-        signUp(userpasswordgets,usernamegets,usersfznumblegets,userphonenumblegets);
+        if(signUp(userpasswordgets,usernamegets,usersfznumblegets,userphonenumblegets)==0){
+            QMessageBox::information(this,"注册失败","该身份证号已被注册.");
+            return;
+        }
         QMessageBox::information(this,"注册","注册成功.");
         //隐藏注册窗口
         ui->usernameget->clear();
@@ -3370,11 +3390,17 @@ void LibrarySystem::on_addbookokBtn_clicked()
 void LibrarySystem::on_addbookBtn_clicked()
 {
     ui->inputbookname1->clear();
+    ui->inputbookname1->setFocus();
     ui->inputauthor1->clear();
     ui->inputpublisher1->clear();
     ui->inputisbn1->clear();
     ui->inputstorage1->clear();
     ui->adminwidget->setCurrentIndex(3);
+    ui->inputbookname1warning->setText(tr("1到30个字符，汉字、字母、数字"));
+    ui->inputauthor1warning->setText(tr("1到15个字符，汉字、字母、数字"));
+    ui->inputpublisher1warning->setText(tr("1到15个字符，汉字、字母、数字"));
+    ui->inputisbn1warning->setText(tr("1到16位数字或字母，区分大小写"));
+    ui->inputstorage1warning->setText(tr("库位1到20"));
 }
 
 void LibrarySystem::on_addadminBtn_clicked()
@@ -3385,6 +3411,13 @@ void LibrarySystem::on_addadminBtn_clicked()
     ui->inputadmincid1->clear();
     ui->inputadminphone1->clear();
     ui->adminwidget->setCurrentIndex(2);
+    ui->inputadminname1warning->setText(tr("1到3位汉字"));
+    ui->inputadminpass1warning->setText(tr("6到16位数字或字母，区分大小写"));
+    ui->inputadminpasstwice1warning->setText(tr("请再次填写密码"));
+    ui->inputadmincid1warning->setText(tr("忘记密码时，可以通过该身份证号码快速找回密码"));
+    ui->inputadminphone1warning->setText(tr("方便我们联系您"));
+    ui->inputadminpass1->setEchoMode(QLineEdit::Password);
+    ui->inputadminpasstwice1->setEchoMode(QLineEdit::Password);
 }
 
 
@@ -3426,6 +3459,7 @@ void LibrarySystem::on_looklogBtn_clicked()
     ui->adminwidget->setCurrentIndex(0);
 }
 
+
 void LibrarySystem::setBtnQss(QPushButton *btn,
                         QString normalColor, QString normalTextColor,
                         QString hoverColor, QString hoverTextColor,
@@ -3454,6 +3488,193 @@ void LibrarySystem::UIDesign()
 
         setTxtQss(ui->useraccount, "#DCE4EC", "#34495E");
         setTxtQss(ui->userpassword, "#DCE4EC", "#34495E");
+}
+
+
+void LibrarySystem::on_inputbookname1_editingFinished()
+{
+    if(ui->inputbookname1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(shuming,0);
+    int pos = 0;
+    QString dongman=ui->inputbookname1->text();
+    if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+        //QMessageBox::information(this,"输入错误","请输入1~3个汉字.");
+        ui->inputbookname1warning->setText(tr("输入错误,请输入1到30位字符，汉字、字母、数字"));
+     }
+    else if(QValidator::Acceptable==validator.validate(dongman,pos)){
+        ui->inputbookname1warning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_inputauthor1_editingFinished()
+{
+    if(ui->inputauthor1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(zuozhe,0);
+    int pos = 0;
+    QString dongman=ui->inputauthor1->text();
+    if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+        //QMessageBox::information(this,"输入错误","请输入1~3个汉字.");
+        ui->inputauthor1warning->setText(tr("输入错误,请输入1到15个字符，汉字、字母、数字"));
+     }
+    else if(QValidator::Acceptable==validator.validate(dongman,pos)){
+        ui->inputauthor1warning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_inputpublisher1_editingFinished()
+{
+    if(ui->inputpublisher1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(zuozhe,0);
+    int pos = 0;
+    QString dongman=ui->inputpublisher1->text();
+    if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+        //QMessageBox::information(this,"输入错误","请输入1~3个汉字.");
+        ui->inputpublisher1warning->setText(tr("输入错误,请输入1到15个字符，汉字、字母、数字"));
+     }
+    else if(QValidator::Acceptable==validator.validate(dongman,pos)){
+        ui->inputpublisher1warning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_inputisbn1_editingFinished()
+{
+    if(ui->inputisbn1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(isbntype,0);
+    int pos = 0;
+    QString dongman=ui->inputisbn1->text();
+    if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+        //QMessageBox::information(this,"输入错误","请输入1~3个汉字.");
+        ui->inputisbn1warning->setText(tr("输入错误,请输入1到16位数字或字母，区分大小写"));
+     }
+    else if(QValidator::Acceptable==validator.validate(dongman,pos)){
+        ui->inputisbn1warning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_inputstorage1_editingFinished()
+{
+    if(ui->inputstorage1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QString dongman=ui->inputstorage1->text();
+    int numble;
+    numble=dongman.toInt();
+    if(numble > 20){
+        //QMessageBox::information(this,"输入错误","请输入1~3个汉字.");
+        ui->inputstorage1warning->setText(tr("书库存上限为20"));
+     }
+    else if(numble<=0){
+        ui->inputstorage1warning->setText(tr("库存应为正数"));
+    }
+    else {
+        ui->inputstorage1warning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_inputadminname1_editingFinished()
+{
+    if(ui->inputadminname1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(hanzi,0);
+    int pos = 0;
+    QString dongman=ui->inputadminname1->text();
+    if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+        //QMessageBox::information(this,"输入错误","请输入1~3个汉字.");
+        ui->inputadminname1warning->setText(tr("输入错误,请输入1~3个汉字."));
+     }
+    else if(QValidator::Acceptable==validator.validate(dongman,pos)){
+        ui->inputadminname1warning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_inputadminpass1_editingFinished()
+{
+    if(ui->inputadminpass1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(passwordstype,0);
+    int pos = 0;
+    QString userpasswordgetstype=ui->inputadminpass1->text();
+    if(QValidator::Acceptable!=validator.validate(userpasswordgetstype,pos)){
+        //QMessageBox::information(this,"输入错误","请输入6到16位数字或字母，区分大小写.");
+        ui->inputadminpass1warning->setText(tr("输入错误,请输入6到16位数字或字母，区分大小写"));
+     }
+    else if(QValidator::Acceptable==validator.validate(userpasswordgetstype,pos)){
+        ui->inputadminpass1warning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_inputadminpasstwice1_editingFinished()
+{
+    if(ui->inputadminpasstwice1->text().isEmpty()){
+        return;
+    }
+    QString userpasswordgets1=ui->inputadminpass1->text();
+    string ba1=userpasswordgets1.toStdString();
+    char userpasswordgets[20];
+    strcpy(userpasswordgets, ba1.c_str());
+    QString userpasswordtwice1=ui->inputadminpasstwice1->text();
+    string ba4=userpasswordtwice1.toStdString();
+    char userpasswordtwice[20];
+    strcpy(userpasswordtwice, ba4.c_str());
+    if (strcmp(userpasswordgets,userpasswordtwice) == 0){
+        ui->inputadminpasstwice1warning->setText(tr("输入成功"));
+    }
+    else {
+        ui->inputadminpasstwice1warning->setText(tr("两次密码不相同"));
+    }
+}
+
+void LibrarySystem::on_inputadmincid1_editingFinished()
+{
+    if(ui->inputadmincid1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(sfztype,0);
+    int pos = 0;
+    QString userpasswordgetstype=ui->inputadmincid1->text();
+    if(QValidator::Acceptable!=validator.validate(userpasswordgetstype,pos)){
+        //QMessageBox::information(this,"输入错误","请输入6到16位数字或字母，区分大小写.");
+        ui->inputadmincid1warning->setText(tr("输入错误,请输入正确的身份证号"));
+     }
+    else if(QValidator::Acceptable==validator.validate(userpasswordgetstype,pos)){
+        ui->inputadmincid1warning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_inputadminphone1_editingFinished()
+{
+    if(ui->inputadminphone1->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(phonetype,0);
+    int pos = 0;
+    QString userpasswordgetstype=ui->inputadminphone1->text();
+    if(QValidator::Acceptable!=validator.validate(userpasswordgetstype,pos)){
+        //QMessageBox::information(this,"输入错误","请输入6到16位数字或字母，区分大小写.");
+        ui->inputadminphone1warning->setText(tr("输入错误,请输入正确的手机号"));
+     }
+    else if(QValidator::Acceptable==validator.validate(userpasswordgetstype,pos)){
+        ui->inputadminphone1warning->setText(tr("输入成功"));
+    }
 }
 
 
