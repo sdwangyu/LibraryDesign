@@ -19,12 +19,15 @@ int isLeapYear(int year); //判断是否是闰年,返回1为闰年，返回0不�
 int compareDate(int year1, int month1, int day1, int year2, int month2, int day2);
 int getDayInYear(int year, int month, int day) ;
 
+class QPushButton;
+class QLineEdit;
+
 class Book//构造函数 复制构造函数
 {
 public:
     friend class Administrator;
     friend class Record;
-    Book(char BookID[10], char BookName[100], char Author[50], char Publisher[50], short Storage);
+    Book(char BookID[10], char BookName[100], char Author[50], char Publisher[50], char BOOKISBN[20], short Storage);
     Book();
     Book(Book &book); //复制构造函数
     char *getbookID();
@@ -35,6 +38,8 @@ public:
     void setauthor(char newauthor[50]);
     char *getpublisher();
     void setpublisher(char newpublisher[50]);
+    char *getbookisbn();
+    void setbookisbn(char BOOKISBN[20]);
     short getstorage();
     void setstorage(short newstorage);
     void addstorage(short newstorage);
@@ -53,6 +58,7 @@ private:
     char bookName[100];//书名
     char author[50];//作者
     char publisher[50];//出版商
+    char bookisbn[20];
     short storage; //库存
     short bookMan; //预约人数
     short tStorage;  //临时库存
@@ -181,13 +187,13 @@ public:
     char *getaID();
     char *getaPhone();
 
-    void addBook(Book book);//增加书
+    int addBook(Book book);//增加书
 
     //void deleteBook(Book book);老师说不要删书
     //void operateCard(Card card);老师说不要删卡 听老师的
     //void findbook(char*bookid);        //为了在修改库存之前给类中的私有成员book赋值
     void newStorage(short storage);//新设库存
-    void addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone);
+    int addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone);
 
     //11.9管理员所有查看行为函数
     void searchLog();//管理员查看大日志
@@ -262,7 +268,7 @@ public:
 
     int signInUser(char*username_PutIn, char*password_PutIn);//用户登陆
     int signInAdmin(char*adminname_PutIn, char*password_PutIn);//管理员登陆
-    void signUp(char*password, char*cardHolder, char*CID, char*CPhone);//用户注册
+    int signUp(char*password, char*cardHolder, char*CID, char*CPhone);//用户注册
     void signOut();//用户注销
     void signOut_Admin();//管理员注销
     // void matchCid();//身份证ID匹配
@@ -280,7 +286,7 @@ public:
     void setbook(Book book1); //对需要操作的书进行赋值
     void bookLend();//直接进行的借书
     void bookLendOrder();//通过预约成功借书
-    void bookReturn(Record record1);//还书
+    void bookReturn(int recordyear,int recordmonth,int recordday,int recordorder);//还书
     void bookOrder();//预约
     void bookOrderCancel();//未到期的取消预约
     void bookRenew(Record record1);//续借
@@ -295,12 +301,19 @@ private slots:
     void on_registerAchieve_clicked();
 
     void on_userRegister_clicked();
+    
     void on_chargeBtn_clicked();
 
     void on_chargeokBtn_clicked();
 
     void on_orderInfoBtn_clicked();
 
+    void on_lendInfoBtn_clicked();
+
+    void on_ordercancleBtn_clicked();
+
+    void on_returnbookBtn_clicked();
+    
     void on_booklendbutton_clicked();
 
     void on_searchBtn_clicked();
@@ -326,6 +339,65 @@ private slots:
     void on_userLogout_clicked();
 
     void on_adminLogout_clicked();
+
+    void on_useraccount_editingFinished();
+
+    void on_usernameget_editingFinished();
+
+    void on_userpasswordget_editingFinished();
+
+    void on_usersfznumbleget_editingFinished();
+
+    void on_userphonenumbleget_editingFinished();
+
+    void on_usernameget_textChanged(const QString &arg1);
+
+    void on_usersfznumbleget_cursorPositionChanged(int arg1, int arg2);
+
+    void on_userpasswordtwice_editingFinished();
+
+    void on_setusernewpassword_editingFinished();
+
+    void on_setusernewpasswordtwice_editingFinished();
+
+    void on_addbookokBtn_clicked();
+
+    void on_addbookBtn_clicked();
+
+    void on_addadminBtn_clicked();
+
+    void on_addadminokBtn_clicked();
+
+    void on_looklogBtn_clicked();
+
+    void setBtnQss(QPushButton *btn,
+                   QString normalColor, QString normalTextColor,
+                   QString hoverColor, QString hoverTextColor,
+                   QString pressedColor, QString pressedTextColor);
+
+    void setTxtQss(QLineEdit *txt, QString normalColor, QString focusColor);
+
+    void UIDesign();
+
+    void on_inputbookname1_editingFinished();
+
+    void on_inputauthor1_editingFinished();
+
+    void on_inputpublisher1_editingFinished();
+
+    void on_inputisbn1_editingFinished();
+
+    void on_inputstorage1_editingFinished();
+
+    void on_inputadminname1_editingFinished();
+
+    void on_inputadminpass1_editingFinished();
+
+    void on_inputadminpasstwice1_editingFinished();
+
+    void on_inputadmincid1_editingFinished();
+
+    void on_inputadminphone1_editingFinished();
 
 private:
     Ui::LibrarySystem *ui;
