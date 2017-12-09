@@ -2607,6 +2607,7 @@ void LibrarySystem::on_chargeokBtn_clicked()
 void LibrarySystem::on_orderInfoBtn_clicked()
 {
     ui->userwidget->setCurrentIndex(2);
+    ui->orderInfotable->clearContents();
     FILE*fp_orderbuffer=NULL,*fp_book=NULL;
     Book book_temp;//用于读取每条借书记录对应的书的信息
     Record record_temp;        //用于读取借书buffer中的每一条记录
@@ -2684,6 +2685,7 @@ void LibrarySystem::on_userRegister_clicked()
 void LibrarySystem::on_lendInfoBtn_clicked()
 {
     ui->userwidget->setCurrentIndex(3);
+     ui->lendInfotable->clearContents();
     FILE*fp_lendbuffer=NULL,*fp_book=NULL;
     Book book_temp;//用于读取每条借书记录对应的书的信息
     Record record_temp;        //用于读取借书buffer中的每一条记录
