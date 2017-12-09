@@ -19,6 +19,9 @@ int isLeapYear(int year); //判断是否是闰年,返回1为闰年，返回0不�
 int compareDate(int year1, int month1, int day1, int year2, int month2, int day2);
 int getDayInYear(int year, int month, int day) ;
 
+class QPushButton;
+class QLineEdit;
+
 class Book//构造函数 复制构造函数
 {
 public:
@@ -367,6 +370,14 @@ private slots:
 
     void on_looklogBtn_clicked();
 
+    void setBtnQss(QPushButton *btn,
+                   QString normalColor, QString normalTextColor,
+                   QString hoverColor, QString hoverTextColor,
+                   QString pressedColor, QString pressedTextColor);
+
+    void setTxtQss(QLineEdit *txt, QString normalColor, QString focusColor);
+
+    void UIDesign();
 
 private:
     Ui::LibrarySystem *ui;

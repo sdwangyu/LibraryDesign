@@ -34,6 +34,8 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     ui->setupUi(this);
     //ui->mainwidget->setCurrentIndex(0);
 
+    this->UIDesign();
+
     //对于预约信息表只能选中一行的限定
     ui->orderInfotable->setSelectionBehavior ( QAbstractItemView::SelectRows); //设置选择行为，以行为单位
     ui->orderInfotable->setSelectionMode ( QAbstractItemView::SingleSelection); //设置选择模式，选择单行
@@ -1686,13 +1688,13 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
                         printf("file write error\n");
                     int row = ui->searchresult->rowCount();//增加一行操作
                     ui->searchresult->insertRow(row);
-                    int nn = abc.getstorage();
+                    int nn = tc.getstorage();
                     QString s = QString::number(nn, 10);
-                    ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
-                    ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
-                    ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
-                    ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
-                    ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+                    ui->searchresult->setItem(row,0,new QTableWidgetItem(tc.getbookID()));
+                    ui->searchresult->setItem(row,1,new QTableWidgetItem(tc.getbookName()));
+                    ui->searchresult->setItem(row,2,new QTableWidgetItem(tc.getauthor()));
+                    ui->searchresult->setItem(row,3,new QTableWidgetItem(tc.getpublisher()));
+                    ui->searchresult->setItem(row,4,new QTableWidgetItem(tc.getbookisbn()));
                     ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
                     num++;
                 }
@@ -1710,13 +1712,13 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
                         printf("file write error\n");
                     int row = ui->searchresult->rowCount();//增加一行操作
                     ui->searchresult->insertRow(row);
-                    int nn = abc.getstorage();
+                    int nn = tc.getstorage();
                     QString s = QString::number(nn, 10);
-                    ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
-                    ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
-                    ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
-                    ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
-                    ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+                    ui->searchresult->setItem(row,0,new QTableWidgetItem(tc.getbookID()));
+                    ui->searchresult->setItem(row,1,new QTableWidgetItem(tc.getbookName()));
+                    ui->searchresult->setItem(row,2,new QTableWidgetItem(tc.getauthor()));
+                    ui->searchresult->setItem(row,3,new QTableWidgetItem(tc.getpublisher()));
+                    ui->searchresult->setItem(row,4,new QTableWidgetItem(tc.getbookisbn()));
                     ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
                     num++;
                 }
@@ -1734,13 +1736,13 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
                         printf("file write error\n");
                     int row = ui->searchresult->rowCount();//增加一行操作
                     ui->searchresult->insertRow(row);
-                    int nn = abc.getstorage();
+                    int nn = tc.getstorage();
                     QString s = QString::number(nn, 10);
-                    ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
-                    ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
-                    ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
-                    ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
-                    ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+                    ui->searchresult->setItem(row,0,new QTableWidgetItem(tc.getbookID()));
+                    ui->searchresult->setItem(row,1,new QTableWidgetItem(tc.getbookName()));
+                    ui->searchresult->setItem(row,2,new QTableWidgetItem(tc.getauthor()));
+                    ui->searchresult->setItem(row,3,new QTableWidgetItem(tc.getpublisher()));
+                    ui->searchresult->setItem(row,4,new QTableWidgetItem(tc.getbookisbn()));
                     ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
                     num++;
                 }
@@ -3422,4 +3424,45 @@ void LibrarySystem::on_addadminokBtn_clicked()
 void LibrarySystem::on_looklogBtn_clicked()
 {
     ui->adminwidget->setCurrentIndex(0);
+}
+
+void LibrarySystem::setBtnQss(QPushButton *btn,
+                        QString normalColor, QString normalTextColor,
+                        QString hoverColor, QString hoverTextColor,
+                        QString pressedColor, QString pressedTextColor)
+{
+    QStringList qss;
+    qss.append(QString("QPushButton{border-style:none;padding:10px;border-radius:5px;color:%1;background:%2;}").arg(normalTextColor).arg(normalColor));
+    qss.append(QString("QPushButton:hover{color:%1;background:%2;}").arg(hoverTextColor).arg(hoverColor));
+    qss.append(QString("QPushButton:pressed{color:%1;background:%2;}").arg(pressedTextColor).arg(pressedColor));
+    btn->setStyleSheet(qss.join(""));
+}
+
+void LibrarySystem::setTxtQss(QLineEdit *txt, QString normalColor, QString focusColor)
+{
+    QStringList qss;
+    qss.append(QString("QLineEdit{border-style:none;padding:6px;border-radius:5px;border:2px solid %1;}").arg(normalColor));
+    qss.append(QString("QLineEdit:focus{border:2px solid %1;}").arg(focusColor));
+    txt->setStyleSheet(qss.join(""));
+}
+
+void LibrarySystem::UIDesign()
+{
+        setBtnQss(ui->userLogin, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->userRegister, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->lossPassword, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+
+        setTxtQss(ui->useraccount, "#DCE4EC", "#34495E");
+        setTxtQss(ui->userpassword, "#DCE4EC", "#34495E");
+}
+
+
+void LibrarySystem::on_usernameget_textChanged(const QString &arg1)
+{
+    return;
+}
+
+void LibrarySystem::on_usersfznumbleget_cursorPositionChanged(int arg1, int arg2)
+{
+    return;
 }
