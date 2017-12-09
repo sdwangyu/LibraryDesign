@@ -1265,8 +1265,10 @@ void Record::bookOrderCancelRecord()
     }
     fclose(fp_order_buffer);
     fclose(fp_order_buffernew);
-    if (remove("BUFFERZONE_ORDER") != 0)exit(1);
+    //if (remove("BUFFERZONE_ORDER") != 0)exit(1);
+    if (rename("BUFFERZONE_ORDER", "BUFFERZONE_ORDER_TEMP") != 0)exit(1);
     if (rename("bufferzone_ordernew", "BUFFERZONE_ORDER") != 0)exit(1);
+    if (rename("BUFFERZONE_ORDER_TEMP", "bufferzone_ordernew") != 0)exit(1);
 
     fseek(fp_book_order_cancel, 0, SEEK_END);
     fseek(fp_log, 0, SEEK_END);
@@ -1849,7 +1851,6 @@ void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
 }
 
 void LibrarySystem::bookReturn(int recordyear,int recordmonth,int recordday,int recordorder){ //还书（需要用到qt）
-    QMessageBox::information(this, "提示", "还书成功");
     time_t timer;
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
@@ -1898,6 +1899,7 @@ void LibrarySystem::bookReturn(int recordyear,int recordmonth,int recordday,int 
           card.setoweMoney(card.getoweMoney()-money);
           QMessageBox::information(this, tr("提示"),tr("还书超期，扣除违约金%1元").arg(money));
     }
+    QMessageBox::information(this, "提示", "还书成功");
 }
 
 void LibrarySystem::bookOrder(){//预约
@@ -1938,7 +1940,6 @@ void LibrarySystem::bookOrder(){//预约
 }
 
 void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
-    QMessageBox::information(this, "提示", "取消预约成功");
     if (book.getbookMan() == book.gettStorage()) { //若取消预约时临时库存等于预约人数
         book.settStorage(book.gettStorage() - 1);//临时库存-1
         book.setstorage(book.getstorage() + 1);//库存+1
@@ -1958,6 +1959,7 @@ void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
     FILE *fp_book;
     if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
     {
+        fprintf(stderr,"test cancleorder function!");
         fprintf(stderr, "Can not open file");
         exit(1);
     }
@@ -1967,6 +1969,7 @@ void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
         printf("file write error\n");
     }
     fclose(fp_book);
+    QMessageBox::information(this, "提示", "取消预约成功");
 }
 
 void LibrarySystem::bookRenew(Record record1){//图书续借（需要用到qt）
@@ -2629,6 +2632,7 @@ void LibrarySystem::on_chargeokBtn_clicked()
 void LibrarySystem::on_orderInfoBtn_clicked()
 {
     ui->userwidget->setCurrentIndex(2);
+    ui->orderInfotable->setRowCount(0);
     ui->orderInfotable->clearContents();
     FILE*fp_orderbuffer=NULL,*fp_book=NULL;
     Book book_temp;//用于读取每条借书记录对应的书的信息
@@ -2707,7 +2711,8 @@ void LibrarySystem::on_userRegister_clicked()
 void LibrarySystem::on_lendInfoBtn_clicked()
 {
     ui->userwidget->setCurrentIndex(3);
-     ui->lendInfotable->clearContents();
+    ui->lendInfotable->setRowCount(0);
+    ui->lendInfotable->clearContents();
     FILE*fp_lendbuffer=NULL,*fp_book=NULL;
     Book book_temp;//用于读取每条借书记录对应的书的信息
     Record record_temp;        //用于读取借书buffer中的每一条记录
@@ -2723,9 +2728,7 @@ void LibrarySystem::on_lendInfoBtn_clicked()
     }
     //向预约表格中写入数据
     int lendInforow=0;//对应写入某一行
-    QString year,month,day,date,interval,bookorder;//用于将int型的日期转换为QString类型.以及10本书中第几本书的序号转换为QString类型
-    char charinterval='-';
-    interval=QString(charinterval);//将日期间隔-转换为QString类型
+    QString year,month,day,bookorder;//用于将int型的日期转换为QString类型.以及10本书中第几本书的序号转换为QString类型
     while (!feof(fp_lendbuffer))
     {
         if (fread(&record_temp, sizeof(Record), 1, fp_lendbuffer))
@@ -2781,6 +2784,7 @@ void LibrarySystem::on_ordercancleBtn_clicked()
             fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
             //调用取消预约的函数
             bookOrderCancel();
+            fclose(fp_book);
         }
         if(mess.clickedButton()==canclebutton)return;//取消取消预约则返回
     }
@@ -2813,13 +2817,13 @@ void LibrarySystem::on_returnbookBtn_clicked()
             fseek(fp_book, position*sizeof(Book), SEEK_SET);//定位到某一本书
             fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
             //调用还书的函数
-            QString stryear = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+            QString stryear = ui->lendInfotable->item(selectrow,2)->text();//获取某行某列单元格的文本内容,
             int recordy = stryear.toInt();//记录中的日期的年
-            QString strmonth = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+            QString strmonth = ui->lendInfotable->item(selectrow,3)->text();//获取某行某列单元格的文本内容,
             int recordm = strmonth.toInt();//记录中日期的月
-            QString strday = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+            QString strday = ui->lendInfotable->item(selectrow,4)->text();//获取某行某列单元格的文本内容,
             int recordd = strday.toInt();//记录中日期的日
-            QString strorder = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+            QString strorder = ui->lendInfotable->item(selectrow,5)->text();//获取某行某列单元格的文本内容,
             int recordo = strorder.toInt();//记录中书的序号
             bookReturn(recordy,recordm,recordd,recordo);
         }
