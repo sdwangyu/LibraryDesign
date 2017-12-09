@@ -3,3 +3,4 @@ librarysystem.ui.autosave
 *.autosave
 *.pro.user
 LibraryDesign.pro.user
+*.bak
