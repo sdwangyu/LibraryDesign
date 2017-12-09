@@ -8,6 +8,10 @@ int allcard;
 int alladmin;
 
 int tcflag=1; //用于表示找回密码的时候是用户还是管理员
+QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
+QRegExp passwordstype("[A-Za-z0-9]{6,16}");
+QRegExp sfztype("[0-9]{18}");
+QRegExp phonetype("[0-9]{11}");
 
 LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
@@ -32,6 +36,13 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     //ui->searchresult->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
     //ui->searchresult->horizontalHeader()->setSectionResizeMode(3,QHeaderView::Stretch);
     ui->mainwidget->setCurrentIndex(0);
+    ui->userpassword->setEchoMode(QLineEdit::Password);
+    //QRegExp regExp("0|[1-9]\\d{0,4}");
+    //ui->useraccount->setValidator(new QRegExpValidator(regExp, this));
+    //QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
+    //ui->usernameget->setValidator(new QRegExpValidator(hanzi, this));
+
+
 }
 
 LibrarySystem::~LibrarySystem()
@@ -2336,6 +2347,7 @@ void LibrarySystem::setbook(Book book1)
 
 void LibrarySystem::on_userLogin_clicked()
 {
+
     if(ui->useraccount->text().isEmpty()||ui->userpassword->text().isEmpty()){
         QMessageBox::information(this,"登录","用户名和密码不能为空.");
         ui->useraccount->clear();
@@ -2421,6 +2433,8 @@ void LibrarySystem::on_userLogin_clicked()
 //用户注册
 void LibrarySystem::on_registerAchieve_clicked()
 {
+
+
     /*QString usernamegets1=ui->usernameget->text();
     string usernamegets2;
     usernamegets2=usernamegets1.toStdString();
@@ -2458,7 +2472,7 @@ void LibrarySystem::on_registerAchieve_clicked()
     strcpy(userpasswordgets, ba1.c_str());
     QString userpasswordtwice1=ui->userpasswordtwice->text();
     string ba4=userpasswordtwice1.toStdString();
-    char userpasswordtwice[10];
+    char userpasswordtwice[20];
     strcpy(userpasswordtwice, ba4.c_str());
     if (strcmp(userpasswordgets,userpasswordtwice) == 0){
         QString usernamegets1=ui->usernameget->text();
@@ -2481,13 +2495,16 @@ void LibrarySystem::on_registerAchieve_clicked()
         QMessageBox::information(this,"注册","注册成功.");
         //隐藏注册窗口
         ui->usernameget->clear();
-        ui->useraccount->setFocus();
         ui->userpasswordget->clear();
         ui->userpasswordtwice->clear();
         ui->usersfznumbleget->clear();
         ui->userphonenumbleget->clear();
         ui->mainwidget->setCurrentIndex(0);//显示用户主窗口//发射显示登录对话框信号
         //注意判断是否为空,存储数据，转至登录界面
+        QString newuseraccount;
+        newuseraccount=QString::number(10000+allcard);
+        ui->useraccount->setText(newuseraccount);
+        ui->userpassword->setFocus();
     }
     else {
         ui->userpasswordget->clear();
@@ -2583,6 +2600,13 @@ void LibrarySystem::on_userRegister_clicked()
     ui->usernameget->setFocus();
     ui->userpassword->clear();
     ui->mainwidget->setCurrentIndex(1);
+    ui->usernamewarning->setText(tr("1到3位汉字"));
+    ui->userpasswordwarning->setText(tr("6到16位数字或字母，区分大小写"));
+    ui->userpasswordtwicewaring->setText(tr("请再次填写密码"));
+    ui->usersfzhwarning->setText(tr("忘记密码时，可以通过该身份证号码快速找回密码"));
+    ui->userphonenumblewarning->setText(tr("方便我们联系您"));
+    ui->userpasswordget->setEchoMode(QLineEdit::Password);
+    ui->userpasswordtwice->setEchoMode(QLineEdit::Password);
 }
 
 void LibrarySystem::on_booklendbutton_clicked()
@@ -2811,6 +2835,10 @@ void LibrarySystem::on_submit_clicked()
             QMessageBox::information(this,"输入错误","请输入正确的身份证号.");
         }
     }
+    ui->setnewpasswordwarning->setText(tr("6到16位数字或字母，区分大小写"));
+    ui->setnewpasswordtwicewarning->setText(tr("请再次填写密码"));
+    ui->setusernewpassword->setEchoMode(QLineEdit::Password);
+    ui->setusernewpasswordtwice->setEchoMode(QLineEdit::Password);
 }
 
 //重新设置密码
@@ -2956,4 +2984,145 @@ void LibrarySystem::on_adminLogout_clicked()
 {
     signOut_Admin();
     ui->mainwidget->setCurrentIndex(0);//转到设置登录界面
+}
+
+void LibrarySystem::on_useraccount_editingFinished()
+{
+    /*QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(reg,0);
+    int pos = 0;
+    QString dongman=ui->useraccount->text();
+    if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+        QMessageBox::information(this,"输入错误","请输入数字.");
+     }*/
+}
+
+void LibrarySystem::on_usernameget_editingFinished()
+{
+    if(ui->usernameget->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(hanzi,0);
+    int pos = 0;
+    QString dongman=ui->usernameget->text();
+    if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+        //QMessageBox::information(this,"输入错误","请输入1~3个汉字.");
+        ui->usernamewarning->setText(tr("输入错误,请输入1到3位汉字"));
+     }
+    else if(QValidator::Acceptable==validator.validate(dongman,pos)){
+        ui->usernamewarning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_userpasswordget_editingFinished()
+{
+    if(ui->userpasswordget->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(passwordstype,0);
+    int pos = 0;
+    QString userpasswordgetstype=ui->userpasswordget->text();
+    if(QValidator::Acceptable!=validator.validate(userpasswordgetstype,pos)){
+        //QMessageBox::information(this,"输入错误","请输入6到16位数字或字母，区分大小写.");
+        ui->userpasswordwarning->setText(tr("输入错误,请输入6到16位数字或字母，区分大小写"));
+     }
+    else if(QValidator::Acceptable==validator.validate(userpasswordgetstype,pos)){
+        ui->userpasswordwarning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_usersfznumbleget_editingFinished()
+{
+    if(ui->usersfznumbleget->text().isEmpty()){
+        return;
+    }
+    QRegExpValidator validator(sfztype,0);
+    int pos = 0;
+    QString usersfznumblegetstype=ui->usersfznumbleget->text();
+    if(QValidator::Acceptable!=validator.validate(usersfznumblegetstype,pos)){
+        //QMessageBox::information(this,"输入错误","请输入6到16位数字或字母，区分大小写.");
+        ui->usersfzhwarning->setText(tr("输入错误,请输入正确18位身份证号"));
+     }
+    else if(QValidator::Acceptable==validator.validate(usersfznumblegetstype,pos)){
+        ui->usersfzhwarning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_userphonenumbleget_editingFinished()
+{
+    if(ui->userphonenumbleget->text().isEmpty()){
+        return;
+    }
+    QRegExpValidator validator(phonetype,0);
+    int pos = 0;
+    QString userphonenumblegetstype=ui->userphonenumbleget->text();
+    if(QValidator::Acceptable!=validator.validate(userphonenumblegetstype,pos)){
+        //QMessageBox::information(this,"输入错误","请输入6到16位数字或字母，区分大小写.");
+        ui->userphonenumblewarning->setText(tr("输入错误,请输入正确11位手机号"));
+     }
+    else if(QValidator::Acceptable==validator.validate(userphonenumblegetstype,pos)){
+        ui->userphonenumblewarning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_userpasswordtwice_editingFinished()
+{
+    if(ui->userpasswordtwice->text().isEmpty()){
+        return;
+    }
+    QString userpasswordgets1=ui->userpasswordget->text();
+    string ba1=userpasswordgets1.toStdString();
+    char userpasswordgets[20];
+    strcpy(userpasswordgets, ba1.c_str());
+    QString userpasswordtwice1=ui->userpasswordtwice->text();
+    string ba4=userpasswordtwice1.toStdString();
+    char userpasswordtwice[20];
+    strcpy(userpasswordtwice, ba4.c_str());
+    if (strcmp(userpasswordgets,userpasswordtwice) == 0){
+        ui->userpasswordtwicewaring->setText(tr("输入成功"));
+    }
+    else {
+        ui->userpasswordtwicewaring->setText(tr("两次密码不相同"));
+    }
+}
+
+void LibrarySystem::on_setusernewpassword_editingFinished()
+{
+    if(ui->setusernewpassword->text().isEmpty()){
+        return;
+    }
+    //QRegExp reg("[1-9]\\d{0,8}");
+    QRegExpValidator validator(passwordstype,0);
+    int pos = 0;
+    QString setusernewpasswordstype=ui->setusernewpassword->text();
+    if(QValidator::Acceptable!=validator.validate(setusernewpasswordstype,pos)){
+        //QMessageBox::information(this,"输入错误","请输入6到16位数字或字母，区分大小写.");
+        ui->setnewpasswordwarning->setText(tr("输入错误,请输入6到16位数字或字母，区分大小写"));
+     }
+    else if(QValidator::Acceptable==validator.validate(setusernewpasswordstype,pos)){
+        ui->setnewpasswordwarning->setText(tr("输入成功"));
+    }
+}
+
+void LibrarySystem::on_setusernewpasswordtwice_editingFinished()
+{
+    if(ui->setusernewpasswordtwice->text().isEmpty()){
+        return;
+    }
+    QString userpasswordgets1=ui->setusernewpassword->text();
+    string ba1=userpasswordgets1.toStdString();
+    char userpasswordgets[20];
+    strcpy(userpasswordgets, ba1.c_str());
+    QString userpasswordtwice1=ui->setusernewpasswordtwice->text();
+    string ba4=userpasswordtwice1.toStdString();
+    char userpasswordtwice[20];
+    strcpy(userpasswordtwice, ba4.c_str());
+    if (strcmp(userpasswordgets,userpasswordtwice) == 0){
+        ui->setnewpasswordtwicewarning->setText(tr("输入成功"));
+    }
+    else {
+        ui->setnewpasswordtwicewarning->setText(tr("两次密码不相同"));
+    }
 }

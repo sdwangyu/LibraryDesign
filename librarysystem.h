@@ -330,6 +330,26 @@ private slots:
 
     void on_adminLogout_clicked();
 
+    void on_useraccount_editingFinished();
+
+    void on_usernameget_editingFinished();
+
+    void on_userpasswordget_editingFinished();
+
+    void on_usersfznumbleget_editingFinished();
+
+    void on_userphonenumbleget_editingFinished();
+
+    void on_usernameget_textChanged(const QString &arg1);
+
+    void on_usersfznumbleget_cursorPositionChanged(int arg1, int arg2);
+
+    void on_userpasswordtwice_editingFinished();
+
+    void on_setusernewpassword_editingFinished();
+
+    void on_setusernewpasswordtwice_editingFinished();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;
