@@ -2,6 +2,7 @@
 #define LIBRARYSYSTEM_H
 
 #include <QWidget>
+#include <QCloseEvent>
 
 struct so_1
 {
@@ -292,6 +293,7 @@ public:
     void bookRenew(Record record1);//续借
 
     Administrator getAdmin();
+    void closeEvent(QCloseEvent *event);
 
 private slots:
     void on_searchokbutton_clicked();

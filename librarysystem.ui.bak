@@ -26,7 +26,11 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+<<<<<<< HEAD
+    <number>4</number>
+=======
+    <number>0</number>
+>>>>>>> 064a441b259d9563b71a03b17d7f9553174cbccd
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -723,7 +727,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
