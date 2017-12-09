@@ -520,7 +520,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
@@ -974,9 +974,9 @@
       <widget class="QLabel" name="label_9">
        <property name="geometry">
         <rect>
-         <x>290</x>
+         <x>300</x>
          <y>40</y>
-         <width>71</width>
+         <width>70</width>
          <height>16</height>
         </rect>
        </property>
@@ -987,9 +987,9 @@
       <widget class="QTableWidget" name="lendInfotable">
        <property name="geometry">
         <rect>
-         <x>170</x>
+         <x>40</x>
          <y>70</y>
-         <width>302</width>
+         <width>602</width>
          <height>250</height>
         </rect>
        </property>
@@ -1005,14 +1005,29 @@
        </column>
        <column>
         <property name="text">
-         <string>应还日期</string>
+         <string>应还年</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>应还月</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>应还日</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>书的序号</string>
         </property>
        </column>
       </widget>
       <widget class="QPushButton" name="returnbookBtn">
        <property name="geometry">
         <rect>
-         <x>290</x>
+         <x>300</x>
          <y>340</y>
          <width>75</width>
          <height>23</height>

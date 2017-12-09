@@ -283,7 +283,7 @@ public:
     void setbook(Book book1); //对需要操作的书进行赋值
     void bookLend();//直接进行的借书
     void bookLendOrder();//通过预约成功借书
-    void bookReturn(Record record1);//还书
+    void bookReturn(int recordyear,int recordmonth,int recordday,int recordorder);//还书
     void bookOrder();//预约
     void bookOrderCancel();//未到期的取消预约
     void bookRenew(Record record1);//续借
@@ -298,12 +298,19 @@ private slots:
     void on_registerAchieve_clicked();
 
     void on_userRegister_clicked();
+    
     void on_chargeBtn_clicked();
 
     void on_chargeokBtn_clicked();
 
     void on_orderInfoBtn_clicked();
 
+    void on_lendInfoBtn_clicked();
+
+    void on_ordercancleBtn_clicked();
+
+    void on_returnbookBtn_clicked();
+    
     void on_booklendbutton_clicked();
 
     void on_searchBtn_clicked();
