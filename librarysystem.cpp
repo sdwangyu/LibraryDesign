@@ -1666,11 +1666,12 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
             ui->searchresult->insertRow(row);
             int nn = abc.getstorage();
             QString s = QString::number(nn, 10);
-            ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));//把这个Item加到第一行第二列中
+            ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
             ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
             ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
             ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
-            ui->searchresult->setItem(row,4,new QTableWidgetItem(s));
+            ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+            ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
         }
         fclose(fp1);
         fclose(fp2);
@@ -1688,13 +1689,14 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
                         printf("file write error\n");
                     int row = ui->searchresult->rowCount();//增加一行操作
                     ui->searchresult->insertRow(row);
-                    int nn = tc.getstorage();
+                    int nn = abc.getstorage();
                     QString s = QString::number(nn, 10);
-                    ui->searchresult->setItem(row,0,new QTableWidgetItem(tc.getbookID()));//把这个Item加到第一行第二列中
-                    ui->searchresult->setItem(row,1,new QTableWidgetItem(tc.getbookName()));
-                    ui->searchresult->setItem(row,2,new QTableWidgetItem(tc.getauthor()));
-                    ui->searchresult->setItem(row,3,new QTableWidgetItem(tc.getpublisher()));
-                    ui->searchresult->setItem(row,4,new QTableWidgetItem(s));
+                    ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
+                    ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
+                    ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
+                    ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
+                    ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+                    ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
                     num++;
                 }
                 n++;
@@ -1711,13 +1713,14 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
                         printf("file write error\n");
                     int row = ui->searchresult->rowCount();//增加一行操作
                     ui->searchresult->insertRow(row);
-                    int nn = tc.getstorage();
+                    int nn = abc.getstorage();
                     QString s = QString::number(nn, 10);
-                    ui->searchresult->setItem(row,0,new QTableWidgetItem(tc.getbookID()));//把这个Item加到第一行第二列中
-                    ui->searchresult->setItem(row,1,new QTableWidgetItem(tc.getbookName()));
-                    ui->searchresult->setItem(row,2,new QTableWidgetItem(tc.getauthor()));
-                    ui->searchresult->setItem(row,3,new QTableWidgetItem(tc.getpublisher()));
-                    ui->searchresult->setItem(row,4,new QTableWidgetItem(s));
+                    ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
+                    ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
+                    ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
+                    ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
+                    ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+                    ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
                     num++;
                 }
                 n++;
@@ -1734,13 +1737,14 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
                         printf("file write error\n");
                     int row = ui->searchresult->rowCount();//增加一行操作
                     ui->searchresult->insertRow(row);
-                    int nn = tc.getstorage();
+                    int nn = abc.getstorage();
                     QString s = QString::number(nn, 10);
-                    ui->searchresult->setItem(row,0,new QTableWidgetItem(tc.getbookID()));//把这个Item加到第一行第二列中
-                    ui->searchresult->setItem(row,1,new QTableWidgetItem(tc.getbookName()));
-                    ui->searchresult->setItem(row,2,new QTableWidgetItem(tc.getauthor()));
-                    ui->searchresult->setItem(row,3,new QTableWidgetItem(tc.getpublisher()));
-                    ui->searchresult->setItem(row,4,new QTableWidgetItem(s));
+                    ui->searchresult->setItem(row,0,new QTableWidgetItem(abc.getbookID()));
+                    ui->searchresult->setItem(row,1,new QTableWidgetItem(abc.getbookName()));
+                    ui->searchresult->setItem(row,2,new QTableWidgetItem(abc.getauthor()));
+                    ui->searchresult->setItem(row,3,new QTableWidgetItem(abc.getpublisher()));
+                    ui->searchresult->setItem(row,4,new QTableWidgetItem(abc.getbookisbn()));
+                    ui->searchresult->setItem(row,5,new QTableWidgetItem(s));
                     num++;
                 }
                 n++;
