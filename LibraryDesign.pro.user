@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<<<<<<< HEAD
 <!-- Written by QtCreator 4.4.1, 2017-12-09T20:32:44. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
   <value type="QByteArray">{9fc9cb62-ffd1-4c04-94a8-b3f6526d70ca}</value>
+=======
+<<<<<<< HEAD
+<!-- Written by QtCreator 4.4.1, 2017-12-09T18:58:17. -->
+=======
+<<<<<<< HEAD
+<!-- Written by QtCreator 4.4.1, 2017-12-09T20:29:54. -->
+=======
+<<<<<<< HEAD
+<!-- Written by QtCreator 4.4.1, 2017-12-09T16:44:32. -->
+=======
+<!-- Written by QtCreator 4.4.1, 2017-12-09T16:39:27. -->
+>>>>>>> 6f23396b5b87efaf2fd77ac30fc7cd4a5d7263eb
+>>>>>>> 65892020e71ca3413314b21eb8f230bdac0ae475
+>>>>>>> a97b179250c7bbcb857537310df1e6cf4d398019
+<qtcreator>
+ <data>
+  <variable>EnvironmentId</variable>
+  <value type="QByteArray">{b258a94c-dd93-4d66-a97a-82f79a06f794}</value>
+>>>>>>> f7a8d731ea644c9046d24dfc7f5df0b84c169197
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -120,7 +140,11 @@
     <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
+<<<<<<< HEAD
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:/GitHub/BookManagerSystem/build-LibraryDesign-Desktop_Qt_5_9_3_MinGW_32bit-Release</value>
+=======
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">E:/dasanshang/UML/build-LibraryDesign-Desktop_Qt_5_9_3_MinGW_32bit-Release</value>
+>>>>>>> f7a8d731ea644c9046d24dfc7f5df0b84c169197
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -174,7 +198,11 @@
     <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
+<<<<<<< HEAD
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:/GitHub/BookManagerSystem/build-LibraryDesign-Desktop_Qt_5_9_3_MinGW_32bit-Profile</value>
+=======
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">E:/dasanshang/UML/build-LibraryDesign-Desktop_Qt_5_9_3_MinGW_32bit-Profile</value>
+>>>>>>> f7a8d731ea644c9046d24dfc7f5df0b84c169197
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -284,12 +312,24 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">-1</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
+<<<<<<< HEAD
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments"></value>
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Executable"></value>
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory">%{buildDir}</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Custom Executable</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.CustomExecutableRunConfiguration</value>
+=======
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">LibraryDesign</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">LibraryDesign2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/DarkPeach/Desktop/LibraryDesign/LibraryDesign.pro</value>
+    <value type="bool" key="QmakeProjectManager.QmakeRunConfiguration.UseLibrarySearchPath">true</value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">LibraryDesign.pro</value>
+    <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory"></value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory.default">C:/Users/DarkPeach/Desktop/build-LibraryDesign-Desktop_Qt_5_9_3_MinGW_32bit-Debug</value>
+>>>>>>> f7a8d731ea644c9046d24dfc7f5df0b84c169197
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
