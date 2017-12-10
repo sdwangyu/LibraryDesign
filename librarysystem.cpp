@@ -1262,7 +1262,7 @@ void Record::bookOrderCancelRecord()
         fprintf(stderr, "Can not open file");
         exit(1);
     }
-    if (NULL == (fp_order_buffernew = fopen("bufferzone_ordernew", "rb+")))
+    if (NULL == (fp_order_buffernew = fopen("bufferzone_ordernew", "wb+")))
     {
         fprintf(stderr, "Can not open file");
         exit(1);
@@ -1270,9 +1270,13 @@ void Record::bookOrderCancelRecord()
     Record record_temp;
     while (!feof(fp_order_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_order_buffer);
-        if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
-        fwrite(&record_temp, sizeof(Record), 1, fp_order_buffernew);
+        if(fread(&record_temp, sizeof(Record), 1, fp_order_buffer)){
+        if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid())continue;
+           fwrite(&record_temp, sizeof(Record), 1, fp_order_buffernew);
+        }
+        else
+            break;
+
     }
     fclose(fp_order_buffer);
     fclose(fp_order_buffernew);
