@@ -1784,14 +1784,62 @@
       <widget class="QLabel" name="label_14">
        <property name="geometry">
         <rect>
-         <x>170</x>
-         <y>150</y>
-         <width>111</width>
+         <x>420</x>
+         <y>50</y>
+         <width>71</width>
          <height>16</height>
         </rect>
        </property>
        <property name="text">
-        <string>管理员查询记录界面</string>
+        <string>大日志信息</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="logtable">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>130</y>
+         <width>581</width>
+         <height>192</height>
+        </rect>
+       </property>
+       <column>
+        <property name="text">
+         <string>记录类型</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>书的编号</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>用户账号</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>日期</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>书的序号</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QPushButton" name="lognextpageBtn">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>330</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>下一页</string>
        </property>
       </widget>
      </widget>
