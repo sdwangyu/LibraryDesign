@@ -11,6 +11,8 @@ int allbook;
 int allcard;
 int alladmin;
 
+Card carddm;
+
 int tcflag=1; //用于表示找回密码的时候是用户还是管理员
 QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
 QRegExp passwordstype("[A-Za-z0-9]{6,16}");
@@ -24,6 +26,14 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
+    char accounttc[10]="0";
+    char passwordtc[19]="8008208820";
+    char cardHoldertc[10];
+    char CIDtc[19];
+    char CPhontce[12];
+    Card cardtc(accounttc, passwordtc, cardHoldertc, 0, CIDtc, CPhontce);
+    carddm=cardtc;
+    //Card newcard(account, password, cardHolder, 0, CID, CPhone);
     FILE *fp1;
     if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
@@ -1266,8 +1276,10 @@ void Record::bookOrderCancelRecord()
     }
     fclose(fp_order_buffer);
     fclose(fp_order_buffernew);
-    if (remove("BUFFERZONE_ORDER") != 0)exit(1);
+    //if (remove("BUFFERZONE_ORDER") != 0)exit(1);
+    if (rename("BUFFERZONE_ORDER", "BUFFERZONE_ORDER_TEMP") != 0)exit(1);
     if (rename("bufferzone_ordernew", "BUFFERZONE_ORDER") != 0)exit(1);
+    if (rename("BUFFERZONE_ORDER_TEMP", "bufferzone_ordernew") != 0)exit(1);
 
     fseek(fp_book_order_cancel, 0, SEEK_END);
     fseek(fp_log, 0, SEEK_END);
@@ -1850,7 +1862,6 @@ void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
 }
 
 void LibrarySystem::bookReturn(int recordyear,int recordmonth,int recordday,int recordorder){ //还书（需要用到qt）
-    QMessageBox::information(this, "提示", "还书成功");
     time_t timer;
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
@@ -1899,6 +1910,7 @@ void LibrarySystem::bookReturn(int recordyear,int recordmonth,int recordday,int 
           card.setoweMoney(card.getoweMoney()-money);
           QMessageBox::information(this, tr("提示"),tr("还书超期，扣除违约金%1元").arg(money));
     }
+    QMessageBox::information(this, "提示", "还书成功");
 }
 
 void LibrarySystem::bookOrder(){//预约
@@ -1939,7 +1951,6 @@ void LibrarySystem::bookOrder(){//预约
 }
 
 void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
-    QMessageBox::information(this, "提示", "取消预约成功");
     if (book.getbookMan() == book.gettStorage()) { //若取消预约时临时库存等于预约人数
         book.settStorage(book.gettStorage() - 1);//临时库存-1
         book.setstorage(book.getstorage() + 1);//库存+1
@@ -1959,6 +1970,7 @@ void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
     FILE *fp_book;
     if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
     {
+        fprintf(stderr,"test cancleorder function!");
         fprintf(stderr, "Can not open file");
         exit(1);
     }
@@ -1968,6 +1980,7 @@ void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
         printf("file write error\n");
     }
     fclose(fp_book);
+    QMessageBox::information(this, "提示", "取消预约成功");
 }
 
 void LibrarySystem::bookRenew(Record record1){//图书续借（需要用到qt）
@@ -2206,6 +2219,8 @@ void LibrarySystem::signOut()         //用户注销
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
+    char newcardIDdmuselogout[10]="0";
+    carddm.setcardID(newcardIDdmuselogout);
 }
 
 void LibrarySystem::signOut_Admin()         //管理员注销
@@ -2247,6 +2262,8 @@ void LibrarySystem::signOut_Admin()         //管理员注销
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
+    char newcardIDdmadminlogout[10]="0";
+    carddm.setcardID(newcardIDdmadminlogout);
 }
 
 
@@ -2472,8 +2489,9 @@ void LibrarySystem::on_userLogin_clicked()
                 //ui->useraccount->clear();
                 ui->userpassword->clear();
                 ui->userpassword->setFocus();
-
             }
+            char newcardIDdm[10]="1";
+            carddm.setcardID(newcardIDdm);
             //对用户账号和密码的检查，
         }
         else if(ui->loginforadmin->isChecked()){
@@ -2492,6 +2510,8 @@ void LibrarySystem::on_userLogin_clicked()
 
             }
             //对用户账号和密码的检查，
+            char newcardIDdmadm[10]="2";
+            carddm.setcardID(newcardIDdmadm);
         }
         ui->inputbookname1warning->setText(tr("1到30个字符，汉字、字母、数字"));
         ui->inputauthor1warning->setText(tr("1到15个字符，汉字、字母、数字"));
@@ -2505,6 +2525,7 @@ void LibrarySystem::on_userLogin_clicked()
         ui->inputadminphone1warning->setText(tr("方便我们联系您"));
         ui->inputadminpass1->setEchoMode(QLineEdit::Password);
         ui->inputadminpasstwice1->setEchoMode(QLineEdit::Password);
+
 }
 
 //用户注册
@@ -2543,6 +2564,21 @@ void LibrarySystem::on_registerAchieve_clicked()
         return;
     }
 
+    QRegExpValidator validator(hanzi,0);
+    int pos = 0;
+    QString dongman=ui->usernameget->text();
+    if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+        QMessageBox::information(this,"用户名输入错误","请输入1~3个汉字.");
+        return;
+     }
+    QRegExpValidator validator1(passwordstype,0);
+    pos = 0;
+    QString userpasswordgetstype=ui->userpasswordget->text();
+    if(QValidator::Acceptable!=validator1.validate(userpasswordgetstype,pos)){
+        QMessageBox::information(this,"密码输入错误","请输入6到16位数字或字母，区分大小写.");
+        return;
+     }
+
     QString userpasswordgets1=ui->userpasswordget->text();
     string ba1=userpasswordgets1.toStdString();
     char userpasswordgets[20];
@@ -2552,6 +2588,21 @@ void LibrarySystem::on_registerAchieve_clicked()
     char userpasswordtwice[20];
     strcpy(userpasswordtwice, ba4.c_str());
     if (strcmp(userpasswordgets,userpasswordtwice) == 0){
+        QRegExpValidator validator2(sfztype,0);
+        pos = 0;
+        QString usersfznumblegetstype=ui->usersfznumbleget->text();
+        if(QValidator::Acceptable!=validator2.validate(usersfznumblegetstype,pos)){
+            QMessageBox::information(this,"身份证号输入错误","请输入正确的身份证号.");
+            return;
+         }
+        QRegExpValidator validator3(phonetype,0);
+        pos = 0;
+        QString userphonenumblegetstype=ui->userphonenumbleget->text();
+        if(QValidator::Acceptable!=validator3.validate(userphonenumblegetstype,pos)){
+            QMessageBox::information(this,"手机号输入错误","请输入正确的手机号.");
+            return;
+         }
+
         QString usernamegets1=ui->usernameget->text();
         string ba=usernamegets1.toStdString();
         char usernamegets[10];
@@ -2630,6 +2681,8 @@ void LibrarySystem::on_chargeokBtn_clicked()
 void LibrarySystem::on_orderInfoBtn_clicked()
 {
     ui->userwidget->setCurrentIndex(2);
+    ui->orderInfotable->setRowCount(0);
+    ui->orderInfotable->clearContents();
     FILE*fp_orderbuffer=NULL,*fp_book=NULL;
     Book book_temp;//用于读取每条借书记录对应的书的信息
     Record record_temp;        //用于读取借书buffer中的每一条记录
@@ -2707,6 +2760,8 @@ void LibrarySystem::on_userRegister_clicked()
 void LibrarySystem::on_lendInfoBtn_clicked()
 {
     ui->userwidget->setCurrentIndex(3);
+    ui->lendInfotable->setRowCount(0);
+    ui->lendInfotable->clearContents();
     FILE*fp_lendbuffer=NULL,*fp_book=NULL;
     Book book_temp;//用于读取每条借书记录对应的书的信息
     Record record_temp;        //用于读取借书buffer中的每一条记录
@@ -2722,9 +2777,7 @@ void LibrarySystem::on_lendInfoBtn_clicked()
     }
     //向预约表格中写入数据
     int lendInforow=0;//对应写入某一行
-    QString year,month,day,date,interval,bookorder;//用于将int型的日期转换为QString类型.以及10本书中第几本书的序号转换为QString类型
-    char charinterval='-';
-    interval=QString(charinterval);//将日期间隔-转换为QString类型
+    QString year,month,day,bookorder;//用于将int型的日期转换为QString类型.以及10本书中第几本书的序号转换为QString类型
     while (!feof(fp_lendbuffer))
     {
         if (fread(&record_temp, sizeof(Record), 1, fp_lendbuffer))
@@ -2780,6 +2833,7 @@ void LibrarySystem::on_ordercancleBtn_clicked()
             fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
             //调用取消预约的函数
             bookOrderCancel();
+            fclose(fp_book);
         }
         if(mess.clickedButton()==canclebutton)return;//取消取消预约则返回
     }
@@ -2812,13 +2866,13 @@ void LibrarySystem::on_returnbookBtn_clicked()
             fseek(fp_book, position*sizeof(Book), SEEK_SET);//定位到某一本书
             fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
             //调用还书的函数
-            QString stryear = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+            QString stryear = ui->lendInfotable->item(selectrow,2)->text();//获取某行某列单元格的文本内容,
             int recordy = stryear.toInt();//记录中的日期的年
-            QString strmonth = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+            QString strmonth = ui->lendInfotable->item(selectrow,3)->text();//获取某行某列单元格的文本内容,
             int recordm = strmonth.toInt();//记录中日期的月
-            QString strday = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+            QString strday = ui->lendInfotable->item(selectrow,4)->text();//获取某行某列单元格的文本内容,
             int recordd = strday.toInt();//记录中日期的日
-            QString strorder = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+            QString strorder = ui->lendInfotable->item(selectrow,5)->text();//获取某行某列单元格的文本内容,
             int recordo = strorder.toInt();//记录中书的序号
             bookReturn(recordy,recordm,recordd,recordo);
         }
@@ -3086,6 +3140,13 @@ void LibrarySystem::on_achievesetnewpassword_clicked()
     string ba2=setusernewpasswordtwice1.toStdString();
     char setusernewpasswordtwice2[20];
     strcpy(setusernewpasswordtwice2, ba2.c_str());
+    QRegExpValidator validator(passwordstype,0);
+    int pos = 0;
+    QString setusernewpasswordstype=ui->setusernewpassword->text();
+    if(QValidator::Acceptable!=validator.validate(setusernewpasswordstype,pos)){
+        QMessageBox::information(this,"密码输入错误","请输入6到16位数字或字母，区分大小写.");
+        return;
+     }
     if (strcmp(setusernewpassword2,setusernewpasswordtwice2) == 0)
     {
         if(tcflag==1){
@@ -3368,6 +3429,43 @@ void LibrarySystem::on_addbookokBtn_clicked()
     else if(ui->inputstorage1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入数量");
     else
     {
+        QRegExpValidator validator(shuming,0);
+        int pos = 0;
+        QString dongman=ui->inputbookname1->text();
+        if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+            QMessageBox::information(this,"书名输入格式错误","请输入1~3个汉字.");
+            return;
+         }
+        QRegExpValidator validator2(zuozhe,0);
+        pos = 0;
+        dongman=ui->inputauthor1->text();
+        if(QValidator::Acceptable!=validator2.validate(dongman,pos)){
+            QMessageBox::information(this,"作者输入格式错误","请输入1到15个字符，汉字、字母、数字.");
+            return;
+         }
+        QRegExpValidator validator3(zuozhe,0);
+        pos = 0;
+        dongman=ui->inputpublisher1->text();
+        if(QValidator::Acceptable!=validator3.validate(dongman,pos)){
+            QMessageBox::information(this,"出版社输入格式错误","请输入1到15个字符，汉字、字母、数字.");
+            return;
+         }
+        QRegExpValidator validator4(isbntype,0);
+        pos = 0;
+        dongman=ui->inputisbn1->text();
+        if(QValidator::Acceptable!=validator4.validate(dongman,pos)){
+            QMessageBox::information(this,"ISBN输入格式错误","请输入1到16位数字或字母，区分大小写.");
+            return;
+         }
+
+        dongman=ui->inputstorage1->text();
+        int numble;
+        numble=dongman.toInt();
+        if(numble > 20||numble<=0){
+            QMessageBox::information(this,"库存输入错误","数量应为1~20.");
+            return;
+         }
+
     QString bookname = ui->inputbookname1->text();
     QString author = ui->inputauthor1->text();
     QString publisher = ui->inputpublisher1->text();
@@ -3444,6 +3542,34 @@ void LibrarySystem::on_addadminokBtn_clicked()
     else if(ui->inputadminphone1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入手机号");
     else if(ui->inputadminpasstwice1->text() != ui->inputadminpass1->text())QMessageBox::warning(this, "Warning", "两次输入密码不一致");
     else{
+        QRegExpValidator validator(hanzi,0);
+        int pos = 0;
+        QString dongman=ui->inputadminname1->text();
+        if(QValidator::Acceptable!=validator.validate(dongman,pos)){
+            QMessageBox::information(this,"姓名输入格式错误","请输入1~3个汉字.");
+            return;
+         }
+        QRegExpValidator validator2(passwordstype,0);
+        pos = 0;
+        QString userpasswordgetstype=ui->inputadminpass1->text();
+        if(QValidator::Acceptable!=validator2.validate(userpasswordgetstype,pos)){
+            QMessageBox::information(this,"密码输入格式错误","请输入6到16位数字或字母，区分大小写.");
+            return;
+         }
+        QRegExpValidator validator3(sfztype,0);
+        pos = 0;
+        userpasswordgetstype=ui->inputadmincid1->text();
+        if(QValidator::Acceptable!=validator3.validate(userpasswordgetstype,pos)){
+            QMessageBox::information(this,"身份证号输入格式错误","请输入正确的身份证号.");
+            return;
+         }
+        QRegExpValidator validator4(phonetype,0);
+        pos = 0;
+        userpasswordgetstype=ui->inputadminphone1->text();
+        if(QValidator::Acceptable!=validator4.validate(userpasswordgetstype,pos)){
+            QMessageBox::information(this,"手机号输入格式错误","请输入正确的手机号.");
+            return;
+         }
         QString adminname = ui->inputadminname1->text();
         QString adminpass = ui->inputadminpass1->text();
         QString admincid = ui->inputadmincid1->text();
@@ -3729,4 +3855,49 @@ void LibrarySystem::on_usernameget_textChanged(const QString &arg1)
 void LibrarySystem::on_usersfznumbleget_cursorPositionChanged(int arg1, int arg2)
 {
     return;
+}
+
+void LibrarySystem::closeEvent(QCloseEvent *event)
+{
+    /*QMessageBox::StandardButton button;
+    button = QMessageBox::question(this, tr("退出程序"),
+        QString(tr("警告：程序有一个任务正在运行中，是否结束操作退出?")),
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (button == QMessageBox::No) {
+        event->ignore();  //忽略退出信号，程序继续运行
+    }
+    else if (button == QMessageBox::Yes) {
+        char accountdm[10]="0";
+        char accountdmuser[10]="1";
+        char accountdmadminr[10]="2";
+        if(strcmp(carddm.getcardID(), accountdm) == 0){
+            //QMessageBox::information(this,"输入错误","啥都没有.");
+        }
+        else if(strcmp(carddm.getcardID(), accountdmuser) == 0){
+            //QMessageBox::information(this,"输入错误","用户登录过了");
+            signOut();
+        }
+        else if(strcmp(carddm.getcardID(), accountdmadminr) == 0){
+            //QMessageBox::information(this,"输入错误","管理员登录过了");
+            signOut_Admin();
+        }
+        event->accept();  //接受退出信号，程序退出
+    }*/
+    char accountdm[10]="0";
+    char accountdmuser[10]="1";
+    char accountdmadminr[10]="2";
+    if(strcmp(carddm.getcardID(), accountdm) == 0){
+        //QMessageBox::information(this,"输入错误","啥都没有.");
+    }
+    else if(strcmp(carddm.getcardID(), accountdmuser) == 0){
+        //QMessageBox::information(this,"输入错误","用户登录过了");
+        signOut();
+    }
+    else if(strcmp(carddm.getcardID(), accountdmadminr) == 0){
+        //QMessageBox::information(this,"输入错误","管理员登录过了");
+        signOut_Admin();
+    }
+    event->accept();  //接受退出信号，程序退出
+
 }
