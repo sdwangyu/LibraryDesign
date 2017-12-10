@@ -26,7 +26,7 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
-    update_order();
+    update_Order();
     dmend=0;
     FILE *fp1;
     if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
