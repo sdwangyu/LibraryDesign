@@ -3932,14 +3932,14 @@ void LibrarySystem::closeEvent(QCloseEvent *event)
         event->accept();  //接受退出信号，程序退出
     }*/
     if(dmend== 0){
-        QMessageBox::information(this,"输入错误","啥都没有.");
+        //QMessageBox::information(this,"输入错误","啥都没有.");
     }
     else if(dmend == 1){
-        QMessageBox::information(this,"输入错误","用户登录过了");
+        //QMessageBox::information(this,"输入错误","用户登录过了");
         signOut();
     }
     else if(dmend == 2){
-        QMessageBox::information(this,"输入错误","管理员登录过了");
+        //QMessageBox::information(this,"输入错误","管理员登录过了");
         signOut_Admin();
     }
     event->accept();  //接受退出信号，程序退出
