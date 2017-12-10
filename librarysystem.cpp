@@ -3,6 +3,7 @@
 #include<QMessageBox>
 #include <QTextStream>
 #include <QTableWidgetItem>
+#include <sstream>
 
 using namespace std;
 
@@ -762,7 +763,7 @@ int Administrator::addBook(Book book)
     {
         fseek(fp_book, i*sizeof(Book), SEEK_SET);
         fread(&temp, sizeof(Book), 1, fp_book);
-        if(temp.getbookisbn() == book.getbookisbn())return 0;
+        if(strcmp(temp.getbookisbn(), book.getbookisbn()) == 0)return 0;
         i++;
     }
     fseek(fp_add_book, 0, SEEK_END);
@@ -1762,7 +1763,7 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
         QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");
     }
     else{//可借本数没有超过上限
-        if (book.getstorage() >= 1) { //库存允许
+        if (book.getstorage() > 1) { //库存允许
             //cout << "借阅成功" << endl;
             QMessageBox::information(this, "Success", "借阅成功");
             int order = 1;//标识第几本书
@@ -2132,7 +2133,7 @@ int LibrarySystem::signUp(char*password, char*cardHolder, char*CID, char*CPhone)
     {
         fseek(fp_card, i*sizeof(Card), SEEK_SET);
         fread(&temp, sizeof(Card), 1, fp_card);
-        if(newcard.getcID() == temp.getcID()){
+        if(strcmp(newcard.getcID(),temp.getcID()) == 0){
             return 0;
         }
         i++;
@@ -2831,6 +2832,9 @@ void LibrarySystem::on_returnbookBtn_clicked()
 
 void LibrarySystem::on_booklendbutton_clicked()
 {
+    bool focus = ui->searchresult->isItemSelected(ui->searchresult->currentItem());
+    if(focus == true)
+    {
     int row = ui->searchresult->currentRow();//获取当前选中的行号
     QString str = ui->searchresult->item(row,0)->text();//获取某行某列单元格的文本内容
     int bookid = str.toInt() - 100000001;//QString转int
@@ -2850,7 +2854,9 @@ void LibrarySystem::on_booklendbutton_clicked()
     else if(ui->bookname2->isChecked())Search(2);
     else if(ui->author->isChecked())Search(3);
     else if(ui->publisher->isChecked())Search(4);
-    ui->searchtext->clear();
+    //ui->searchtext->clear();
+    }
+    else QMessageBox::warning(this,tr("提示"),tr("请先选中要借阅的书籍."));
 }
 
 void LibrarySystem::on_searchBtn_clicked()
@@ -2864,6 +2870,9 @@ void LibrarySystem::on_searchBtn_clicked()
 
 void LibrarySystem::on_bookorderbutton_clicked()
 {
+    bool focus = ui->searchresult->isItemSelected(ui->searchresult->currentItem());
+    if(focus == true)
+    {
     int row = ui->searchresult->currentRow();//获取当前选中的行号
     QString str = ui->searchresult->item(row,0)->text();//获取某行某列单元格的文本内容
     int bookid = str.toInt() - 100000001;//QString转int
@@ -2877,7 +2886,9 @@ void LibrarySystem::on_bookorderbutton_clicked()
         printf("file write error\n");
     fclose(fp);
     bookOrder();
-    ui->searchtext->clear();
+    //ui->searchtext->clear();
+    }
+    else QMessageBox::warning(this,tr("提示"),tr("请先选中要预约的书籍."));
 }
 
 void LibrarySystem::on_userwindowinformation_clicked()
@@ -3374,9 +3385,12 @@ void LibrarySystem::on_addbookokBtn_clicked()
     char* isbn_2 = const_cast<char*>(isbn_1.c_str());
     short storage_2 = storage.toShort();
     int bookid = allbook + 100000001;
-    char *bookid_2;
-    itoa(bookid,bookid_2,10);
+    QString s = QString::number(bookid, 10);
+    char* bookid_2 = const_cast<char*>(s.toStdString().data());//int转char*
+    QMessageBox::information(this, "Warning", "3");
     Book temp(bookid_2,bookname_2,author_2,publisher_2,isbn_2,storage_2);
+
+    QMessageBox::information(this, "Warning", "6");
     if(admin.addBook(temp) == 1)QMessageBox::information(this, "Warning", "添加成功");
     else QMessageBox::warning(this, "ERROR", "该书已存在，添加失败");
     ui->inputbookname1->clear();
@@ -3396,11 +3410,11 @@ void LibrarySystem::on_addbookBtn_clicked()
     ui->inputisbn1->clear();
     ui->inputstorage1->clear();
     ui->adminwidget->setCurrentIndex(3);
-    ui->inputbookname1warning->setText(tr("1到30个字符，汉字、字母、数字"));
-    ui->inputauthor1warning->setText(tr("1到15个字符，汉字、字母、数字"));
-    ui->inputpublisher1warning->setText(tr("1到15个字符，汉字、字母、数字"));
-    ui->inputisbn1warning->setText(tr("1到16位数字或字母，区分大小写"));
-    ui->inputstorage1warning->setText(tr("库位1到20"));
+    //ui->inputbookname1warning->setText(tr("1到30个字符，汉字、字母、数字"));
+    //ui->inputauthor1warning->setText(tr("1到15个字符，汉字、字母、数字"));
+    //ui->inputpublisher1warning->setText(tr("1到15个字符，汉字、字母、数字"));
+    //ui->inputisbn1warning->setText(tr("1到16位数字或字母，区分大小写"));
+    //ui->inputstorage1warning->setText(tr("库位1到20"));
 }
 
 void LibrarySystem::on_addadminBtn_clicked()
@@ -3482,12 +3496,41 @@ void LibrarySystem::setTxtQss(QLineEdit *txt, QString normalColor, QString focus
 
 void LibrarySystem::UIDesign()
 {
-        setBtnQss(ui->userLogin, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->userLogin, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");//绿色
         setBtnQss(ui->userRegister, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
         setBtnQss(ui->lossPassword, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->registerAchieve, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->registerExit, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->submit, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->findbackpasswordexit, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->achievesetnewpassword, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->setnewpasswordexit, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+
+
+        setBtnQss(ui->userwindowinformation, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");//用户蓝色
+        setBtnQss(ui->lendInfoBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->searchBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->changeinforBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->userLogout, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->orderInfoBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->chargeBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+
+        setBtnQss(ui->addadminBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");//管理员 蓝色
+        setBtnQss(ui->addbookBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->adminLogout, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->admininformationBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->adminaddstoBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+        setBtnQss(ui->looklogBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
+
+        setBtnQss(ui->searchokbutton, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");//暗蓝色
+        setBtnQss(ui->bookorderbutton, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->booklendbutton, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->addadminokBtn, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->addbookokBtn, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
 
         setTxtQss(ui->useraccount, "#DCE4EC", "#34495E");
         setTxtQss(ui->userpassword, "#DCE4EC", "#34495E");
+        setTxtQss(ui->searchtext,"#DCE4EC", "#1ABC9C");
 }
 
 
