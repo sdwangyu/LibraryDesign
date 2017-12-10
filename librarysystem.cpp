@@ -854,11 +854,16 @@ Record::Record(char*bookid1, char*cardid1, int Year, int Month, int Day, char fl
     day = Day;
     flag1 = flag11;
     flag2 = flag22;
+    order=0;
     //获取当前系统日期 自行查询方法 读入当前year month day
 }
 
 Record::Record(char*cardid1, int Year, int Month, int Day, int flag11)
 {
+    for (int i = 0; i < 10; i++)
+    {
+        bookid[i] = ' ';
+    }
     for (int i = 0; i < 10; i++)
     {
         cardid[i] = cardid1[i];
@@ -867,6 +872,7 @@ Record::Record(char*cardid1, int Year, int Month, int Day, int flag11)
     month = Month;
     day = Day;
     flag1 = flag11;
+    order=0;
 }
 
 //刘峰同学需要的构造函数啦啦~~
@@ -904,7 +910,7 @@ Record::Record()
     day = 0;
     flag2 = 1;//用于缓冲区   1对预约记录表示此预约失效并且已经写入记录文件 1对续借记录表示该书已续借
     order = 1;
-    flag1 = '1';   //所有标记 0表示不存在 1表示存在//此处，1表示书可借
+    flag1 = 'a';   //所有标记 0表示不存在 1表示存在//此处，1表示书可借
 }
 //复制构造函数
 Record::Record(Record &R)
@@ -3601,6 +3607,42 @@ void LibrarySystem::on_addadminokBtn_clicked()
 void LibrarySystem::on_looklogBtn_clicked()
 {
     ui->adminwidget->setCurrentIndex(0);
+    ui->logtable->setRowCount(0);
+    ui->logtable->clearContents();
+    FILE *fp_log;
+    if (NULL == (fp_log = fopen("LOG", "rb+")))
+    {
+        fprintf(stderr, "Can not open file");
+        exit(1);
+    }
+    Record record_temp;
+    int logrow=0;
+    QString recordtype,year,month,day,date,interval,bookorder,blank;//用于将int型的日期转换为QString类型
+    char charinterval='-',charblank=' ';
+    interval=QString(charinterval);//将日期间隔-转换为QString类型
+    blank=QString(charblank);
+    while(!feof(fp_log)){
+        if(fread(&record_temp,sizeof(Record),1,fp_log)){
+            logrow=ui->logtable->rowCount();//获取当前即将要操作的行的编号
+            ui->logtable->insertRow(logrow);//向表格中添加一行
+            //日期格式转换
+            recordtype=QString(record_temp.getflag1());
+            year=QString::number(record_temp.getyear());
+            month=QString::number(record_temp.getmonth());
+            day=QString::number(record_temp.getday());
+            date=year+interval+month+interval+day;
+            bookorder=QString::number(record_temp.getorder());
+            //写入表格
+            ui->logtable->setItem(logrow,0,new QTableWidgetItem(recordtype));
+            //if(record_temp.getBookid()==NULL) ui->logtable->setItem(logrow,1,new QTableWidgetItem(blank));
+             ui->logtable->setItem(logrow,1,new QTableWidgetItem(record_temp.getBookid()));
+            ui->logtable->setItem(logrow,2,new QTableWidgetItem(record_temp.getCardid()));
+            ui->logtable->setItem(logrow,3,new QTableWidgetItem(date));
+
+            ui->logtable->setItem(logrow,4,new QTableWidgetItem(bookorder));
+        }
+        else break;
+    }
 }
 
 
@@ -3903,5 +3945,4 @@ void LibrarySystem::closeEvent(QCloseEvent *event)
         signOut_Admin();
     }
     event->accept();  //接受退出信号，程序退出
-
 }
