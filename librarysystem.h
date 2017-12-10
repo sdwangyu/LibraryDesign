@@ -401,6 +401,8 @@ private slots:
 
     void on_inputadminphone1_editingFinished();
 
+    void on_changeinforBtn_clicked();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;

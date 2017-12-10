@@ -1185,9 +1185,11 @@ void Record::bookReturnRecord()
     Record record_temp;
     while (!feof(fp_lend_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_lend_buffer);
+        if(fread(&record_temp, sizeof(Record), 1, fp_lend_buffer)){
         if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
         fwrite(&record_temp, sizeof(Record), 1, fp_lend_buffernew);
+        }
+        else break;
     }
     fclose(fp_lend_buffer);
     fclose(fp_lend_buffernew);
@@ -1350,9 +1352,11 @@ void Record::bookOrderNoRecord()
     Record record_temp;
     while (!feof(fp_noorder_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_noorder_buffer);
+        if(fread(&record_temp, sizeof(Record), 1, fp_noorder_buffer)){
         if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
         fwrite(&record_temp, sizeof(Record), 1, fp_noorder_buffernew);
+        }
+        else break;
     }
     fclose(fp_noorder_buffer);
     fclose(fp_noorder_buffernew);
@@ -1403,9 +1407,11 @@ void Record::bookRenewRecord()
     Record record_temp;
     while (!feof(fp_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_buffer);
+        if(fread(&record_temp, sizeof(Record), 1, fp_buffer)){
         if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
         fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_lend);
+        }
+        else break;
     }
     fclose(fp_buffer);
     fclose(fp_new_buffer_lend);
@@ -2015,11 +2021,13 @@ void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的�
     Record record_temp;
     while (!feof(fp_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_buffer);
+        if(fread(&record_temp, sizeof(Record), 1, fp_buffer)){
         if (record_temp.getflag2()=='1' && (std::string)record_temp.getCardid() == (std::string)card.getcardID()) {        //只能删除当前用户失效的预约记录，所以应该判断这条记录的cardID和当前用户的cardID是否一致
             continue;
         }
         fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_order);
+        }
+        else break;
     }
     fclose(fp_buffer);
     fclose(fp_new_buffer_order);
@@ -2653,7 +2661,7 @@ void LibrarySystem::on_registerAchieve_clicked()
 //充值界面
 void LibrarySystem::on_chargeBtn_clicked()
 {
-    ui->userwidget->setCurrentIndex(4);
+    ui->userwidget->setCurrentIndex(5);
     //以下内容用于限定充值时输入金额的大小
     QRegExp rx("^[1-9][0-9]?[0-9]?[0-9]?$");
     QRegExpValidator *pRevalidotor = new QRegExpValidator(rx, this);
@@ -2684,7 +2692,7 @@ void LibrarySystem::on_chargeokBtn_clicked()
 
 void LibrarySystem::on_orderInfoBtn_clicked()
 {
-    ui->userwidget->setCurrentIndex(2);
+    ui->userwidget->setCurrentIndex(3);
     ui->orderInfotable->setRowCount(0);
     ui->orderInfotable->clearContents();
     FILE*fp_orderbuffer=NULL,*fp_book=NULL;
@@ -2763,7 +2771,7 @@ void LibrarySystem::on_userRegister_clicked()
 
 void LibrarySystem::on_lendInfoBtn_clicked()
 {
-    ui->userwidget->setCurrentIndex(3);
+    ui->userwidget->setCurrentIndex(4);
     ui->lendInfotable->setRowCount(0);
     ui->lendInfotable->clearContents();
     FILE*fp_lendbuffer=NULL,*fp_book=NULL;
@@ -2923,7 +2931,7 @@ void LibrarySystem::on_searchBtn_clicked()
     ui->searchtext->setFocus();
     ui->searchresult->setRowCount(0);
     ui->searchresult->clearContents();
-    ui->userwidget->setCurrentIndex(1);
+    ui->userwidget->setCurrentIndex(2);
 }
 
 void LibrarySystem::on_bookorderbutton_clicked()
@@ -3904,4 +3912,9 @@ void LibrarySystem::closeEvent(QCloseEvent *event)
     }
     event->accept();  //接受退出信号，程序退出
 
+}
+
+void LibrarySystem::on_changeinforBtn_clicked()
+{
+    ui->userwidget->setCurrentIndex(1);
 }
