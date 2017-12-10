@@ -26,6 +26,7 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
+    setFixedSize(1300, 800);
     update_Order();
     dmend=0;
     FILE *fp1;
