@@ -26,7 +26,6 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
-    update_order();
     dmend=0;
     FILE *fp1;
     if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
@@ -2530,6 +2529,7 @@ void LibrarySystem::on_userLogin_clicked()
         ui->inputadminpass1->setEchoMode(QLineEdit::Password);
         ui->inputadminpasstwice1->setEchoMode(QLineEdit::Password);
         update_book();
+        update_Order();
 
 }
 
