@@ -11,7 +11,7 @@ int allbook;
 int allcard;
 int alladmin;
 
-Card carddm;
+int dmend;
 
 int tcflag=1; //用于表示找回密码的时候是用户还是管理员
 QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
@@ -26,14 +26,8 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
-    char accounttc[10]="0";
-    char passwordtc[19]="8008208820";
-    char cardHoldertc[10];
-    char CIDtc[19];
-    char CPhontce[12];
-    Card cardtc(accounttc, passwordtc, cardHoldertc, 0, CIDtc, CPhontce);
-    carddm=cardtc;
-    //Card newcard(account, password, cardHolder, 0, CID, CPhone);
+    update_order();
+    dmend=0;
     FILE *fp1;
     if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
@@ -2231,8 +2225,8 @@ void LibrarySystem::signOut()         //用户注销
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
-    char newcardIDdmuselogout[10]="0";
-    carddm.setcardID(newcardIDdmuselogout);
+    dmend=0;
+    update_Order();
 }
 
 void LibrarySystem::signOut_Admin()         //管理员注销
@@ -2274,8 +2268,8 @@ void LibrarySystem::signOut_Admin()         //管理员注销
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
-    char newcardIDdmadminlogout[10]="0";
-    carddm.setcardID(newcardIDdmadminlogout);
+    dmend=0;
+    update_Order();
 }
 
 
@@ -2502,8 +2496,7 @@ void LibrarySystem::on_userLogin_clicked()
                 ui->userpassword->clear();
                 ui->userpassword->setFocus();
             }
-            char newcardIDdm[10]="1";
-            carddm.setcardID(newcardIDdm);
+            dmend=1;
             //对用户账号和密码的检查，
         }
         else if(ui->loginforadmin->isChecked()){
@@ -2522,8 +2515,7 @@ void LibrarySystem::on_userLogin_clicked()
 
             }
             //对用户账号和密码的检查，
-            char newcardIDdmadm[10]="2";
-            carddm.setcardID(newcardIDdmadm);
+            dmend=2;
         }
         ui->inputbookname1warning->setText(tr("1到30个字符，汉字、字母、数字"));
         ui->inputauthor1warning->setText(tr("1到15个字符，汉字、字母、数字"));
@@ -2537,6 +2529,7 @@ void LibrarySystem::on_userLogin_clicked()
         ui->inputadminphone1warning->setText(tr("方便我们联系您"));
         ui->inputadminpass1->setEchoMode(QLineEdit::Password);
         ui->inputadminpasstwice1->setEchoMode(QLineEdit::Password);
+        update_book();
 
 }
 
@@ -3896,18 +3889,15 @@ void LibrarySystem::closeEvent(QCloseEvent *event)
         }
         event->accept();  //接受退出信号，程序退出
     }*/
-    char accountdm[10]="0";
-    char accountdmuser[10]="1";
-    char accountdmadminr[10]="2";
-    if(strcmp(carddm.getcardID(), accountdm) == 0){
-        //QMessageBox::information(this,"输入错误","啥都没有.");
+    if(dmend== 0){
+        QMessageBox::information(this,"输入错误","啥都没有.");
     }
-    else if(strcmp(carddm.getcardID(), accountdmuser) == 0){
-        //QMessageBox::information(this,"输入错误","用户登录过了");
+    else if(dmend == 1){
+        QMessageBox::information(this,"输入错误","用户登录过了");
         signOut();
     }
-    else if(strcmp(carddm.getcardID(), accountdmadminr) == 0){
-        //QMessageBox::information(this,"输入错误","管理员登录过了");
+    else if(dmend == 2){
+        QMessageBox::information(this,"输入错误","管理员登录过了");
         signOut_Admin();
     }
     event->accept();  //接受退出信号，程序退出
