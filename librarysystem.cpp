@@ -11,7 +11,7 @@ int allbook;
 int allcard;
 int alladmin;
 
-Card carddm;
+int dmend;
 
 int tcflag=1; //用于表示找回密码的时候是用户还是管理员
 QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
@@ -26,14 +26,8 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
-    char accounttc[10]="0";
-    char passwordtc[19]="8008208820";
-    char cardHoldertc[10];
-    char CIDtc[19];
-    char CPhontce[12];
-    Card cardtc(accounttc, passwordtc, cardHoldertc, 0, CIDtc, CPhontce);
-    carddm=cardtc;
-    //Card newcard(account, password, cardHolder, 0, CID, CPhone);
+    update_order();
+    dmend=0;
     FILE *fp1;
     if ((fp1 = fopen("ALLNUM", "rb")) == NULL)
     {
@@ -1191,9 +1185,11 @@ void Record::bookReturnRecord()
     Record record_temp;
     while (!feof(fp_lend_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_lend_buffer);
+        if(fread(&record_temp, sizeof(Record), 1, fp_lend_buffer)){
         if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
         fwrite(&record_temp, sizeof(Record), 1, fp_lend_buffernew);
+        }
+        else break;
     }
     fclose(fp_lend_buffer);
     fclose(fp_lend_buffernew);
@@ -1356,9 +1352,11 @@ void Record::bookOrderNoRecord()
     Record record_temp;
     while (!feof(fp_noorder_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_noorder_buffer);
+        if(fread(&record_temp, sizeof(Record), 1, fp_noorder_buffer)){
         if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
         fwrite(&record_temp, sizeof(Record), 1, fp_noorder_buffernew);
+        }
+        else break;
     }
     fclose(fp_noorder_buffer);
     fclose(fp_noorder_buffernew);
@@ -1409,9 +1407,11 @@ void Record::bookRenewRecord()
     Record record_temp;
     while (!feof(fp_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_buffer);
+        if(fread(&record_temp, sizeof(Record), 1, fp_buffer)){
         if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
         fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_lend);
+        }
+        else break;
     }
     fclose(fp_buffer);
     fclose(fp_new_buffer_lend);
@@ -2021,11 +2021,13 @@ void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的�
     Record record_temp;
     while (!feof(fp_buffer))
     {
-        fread(&record_temp, sizeof(Record), 1, fp_buffer);
+        if(fread(&record_temp, sizeof(Record), 1, fp_buffer)){
         if (record_temp.getflag2()=='1' && (std::string)record_temp.getCardid() == (std::string)card.getcardID()) {        //只能删除当前用户失效的预约记录，所以应该判断这条记录的cardID和当前用户的cardID是否一致
             continue;
         }
         fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_order);
+        }
+        else break;
     }
     fclose(fp_buffer);
     fclose(fp_new_buffer_order);
@@ -2229,8 +2231,8 @@ void LibrarySystem::signOut()         //用户注销
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
-    char newcardIDdmuselogout[10]="0";
-    carddm.setcardID(newcardIDdmuselogout);
+    dmend=0;
+    update_Order();
 }
 
 void LibrarySystem::signOut_Admin()         //管理员注销
@@ -2272,8 +2274,8 @@ void LibrarySystem::signOut_Admin()         //管理员注销
     if (fwrite(&alladmin, sizeof(int), 1, fp_num) != 1)
         printf("file write error\n");
     fclose(fp_num);
-    char newcardIDdmadminlogout[10]="0";
-    carddm.setcardID(newcardIDdmadminlogout);
+    dmend=0;
+    update_Order();
 }
 
 
@@ -2500,8 +2502,7 @@ void LibrarySystem::on_userLogin_clicked()
                 ui->userpassword->clear();
                 ui->userpassword->setFocus();
             }
-            char newcardIDdm[10]="1";
-            carddm.setcardID(newcardIDdm);
+            dmend=1;
             //对用户账号和密码的检查，
         }
         else if(ui->loginforadmin->isChecked()){
@@ -2520,8 +2521,7 @@ void LibrarySystem::on_userLogin_clicked()
 
             }
             //对用户账号和密码的检查，
-            char newcardIDdmadm[10]="2";
-            carddm.setcardID(newcardIDdmadm);
+            dmend=2;
         }
         ui->inputbookname1warning->setText(tr("1到30个字符，汉字、字母、数字"));
         ui->inputauthor1warning->setText(tr("1到15个字符，汉字、字母、数字"));
@@ -2535,6 +2535,7 @@ void LibrarySystem::on_userLogin_clicked()
         ui->inputadminphone1warning->setText(tr("方便我们联系您"));
         ui->inputadminpass1->setEchoMode(QLineEdit::Password);
         ui->inputadminpasstwice1->setEchoMode(QLineEdit::Password);
+        update_book();
 
 }
 
@@ -2659,7 +2660,7 @@ void LibrarySystem::on_registerAchieve_clicked()
 //充值界面
 void LibrarySystem::on_chargeBtn_clicked()
 {
-    ui->userwidget->setCurrentIndex(4);
+    ui->userwidget->setCurrentIndex(5);
     //以下内容用于限定充值时输入金额的大小
     QRegExp rx("^[1-9][0-9]?[0-9]?[0-9]?$");
     QRegExpValidator *pRevalidotor = new QRegExpValidator(rx, this);
@@ -2690,7 +2691,7 @@ void LibrarySystem::on_chargeokBtn_clicked()
 
 void LibrarySystem::on_orderInfoBtn_clicked()
 {
-    ui->userwidget->setCurrentIndex(2);
+    ui->userwidget->setCurrentIndex(3);
     ui->orderInfotable->setRowCount(0);
     ui->orderInfotable->clearContents();
     FILE*fp_orderbuffer=NULL,*fp_book=NULL;
@@ -2769,7 +2770,7 @@ void LibrarySystem::on_userRegister_clicked()
 
 void LibrarySystem::on_lendInfoBtn_clicked()
 {
-    ui->userwidget->setCurrentIndex(3);
+    ui->userwidget->setCurrentIndex(4);
     ui->lendInfotable->setRowCount(0);
     ui->lendInfotable->clearContents();
     FILE*fp_lendbuffer=NULL,*fp_book=NULL;
@@ -2929,7 +2930,7 @@ void LibrarySystem::on_searchBtn_clicked()
     ui->searchtext->setFocus();
     ui->searchresult->setRowCount(0);
     ui->searchresult->clearContents();
-    ui->userwidget->setCurrentIndex(1);
+    ui->userwidget->setCurrentIndex(2);
 }
 
 void LibrarySystem::on_bookorderbutton_clicked()
@@ -3930,19 +3931,21 @@ void LibrarySystem::closeEvent(QCloseEvent *event)
         }
         event->accept();  //接受退出信号，程序退出
     }*/
-    char accountdm[10]="0";
-    char accountdmuser[10]="1";
-    char accountdmadminr[10]="2";
-    if(strcmp(carddm.getcardID(), accountdm) == 0){
-        //QMessageBox::information(this,"输入错误","啥都没有.");
+    if(dmend== 0){
+        QMessageBox::information(this,"输入错误","啥都没有.");
     }
-    else if(strcmp(carddm.getcardID(), accountdmuser) == 0){
-        //QMessageBox::information(this,"输入错误","用户登录过了");
+    else if(dmend == 1){
+        QMessageBox::information(this,"输入错误","用户登录过了");
         signOut();
     }
-    else if(strcmp(carddm.getcardID(), accountdmadminr) == 0){
-        //QMessageBox::information(this,"输入错误","管理员登录过了");
+    else if(dmend == 2){
+        QMessageBox::information(this,"输入错误","管理员登录过了");
         signOut_Admin();
     }
     event->accept();  //接受退出信号，程序退出
+}
+
+void LibrarySystem::on_changeinforBtn_clicked()
+{
+    ui->userwidget->setCurrentIndex(1);
 }
