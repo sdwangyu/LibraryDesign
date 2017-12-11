@@ -43,7 +43,7 @@ public:
     void setbookisbn(char BOOKISBN[20]);
     short getstorage();
     void setstorage(short newstorage);
-    void addstorage(short newstorage);
+    int addstorage(short newstorage);
     short getbookMan();
     void setbookMan(short newbookMan);
     short gettStorage();
@@ -193,7 +193,7 @@ public:
     //void deleteBook(Book book);老师说不要删书
     //void operateCard(Card card);老师说不要删卡 听老师的
     //void findbook(char*bookid);        //为了在修改库存之前给类中的私有成员book赋值
-    void newStorage(short storage);//新设库存
+    int newStorage(char* bookid,short storage);//新设库存
     int addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone);
 
     //11.9管理员所有查看行为函数
@@ -402,6 +402,12 @@ private slots:
     void on_inputadminphone1_editingFinished();
 
     void on_changeinforBtn_clicked();
+
+    void on_changepassokBtn_clicked();
+
+    void on_adminaddstoBtn_clicked();
+
+    void on_addstorageokBtn_clicked();
 
 private:
     Ui::LibrarySystem *ui;
