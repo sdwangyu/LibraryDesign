@@ -67,6 +67,20 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     //ui->useraccount->setValidator(new QRegExpValidator(regExp, this));
     //QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
     //ui->usernameget->setValidator(new QRegExpValidator(hanzi, this));
+    //ui->searchresult->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);    //x先自适应宽度
+    ui->searchresult->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->searchresult->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);     //然后设置要根据内容使用宽度的列
+    ui->searchresult->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);     //然后设置要根据内容使用宽度的列
+    ui->searchresult->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);     //然后设置要根据内容使用宽度的列
+    ui->searchresult->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+    ui->searchresult->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
+
+    ui->searchresult->setShowGrid(false);//设置不显示格子线
+    ui->searchresult->setFrameShape(QFrame::NoFrame);//设置无边框
+    ui->searchresult->setFocusPolicy(Qt::NoFocus);//设置无选择虚线
+    ui->searchresult->verticalHeader()->setVisible(false);//设置垂直头不可见
+    ui->searchresult->horizontalHeader()->setVisible(false);//设置水平表头不可见
+
 
 
 }
@@ -301,7 +315,7 @@ void Book::setstorage(short newstorage)
     {
         storage = newstorage;
     }
-void Book::addstorage(short newstorage)
+int Book::addstorage(short newstorage)
     {
         int i=0;
         while(books[i] != '3') i++; //i为目前的库存
@@ -313,7 +327,9 @@ void Book::addstorage(short newstorage)
                 books[i + newstorage - 1] = '1';
                 newstorage--;
             }
+            return 1;
         }
+        else return 0;
     }
 short Book::getbookMan()
     {
@@ -802,7 +818,7 @@ int Administrator::addBook(Book book)
 }
 
 
-void Administrator::newStorage(short addstor) //addstor是要增加的库存数目
+int Administrator::newStorage(char* bookid,short addstor) //addstor是要增加的库存数目
 {
     //修改库存时输入的值应该改成增加的量或者减少的量，不能直接输入最终的库存量
     time_t timer;
@@ -812,9 +828,6 @@ void Administrator::newStorage(short addstor) //addstor是要增加的库存数�
     int month  = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Book book;
-    char bookid[10];  //qt中向此处传入bookid表示要修改哪本书的库存
-    //****cout << "请输入要修改书籍的id（9位）：" ;
-    //****cin >> bookid;
     FILE *fp_book;
     if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
     {
@@ -822,14 +835,17 @@ void Administrator::newStorage(short addstor) //addstor是要增加的库存数�
         exit(1);
     }
     int position = atoi(bookid) - 100000000 - 1;//书籍位置
+    if(position > (allbook - 1) || position < 0)return 2;
     fseek(fp_book, position * sizeof(Book), SEEK_SET);//定位到这本书
     fread(&book, sizeof(Book), 1, fp_book);///取出这本书
-    book.addstorage(addstor);//增加这本书的库存 addstor是要增加的数目
+    if(book.addstorage(addstor) == 0) {fclose(fp_book);return 0;}//增加这本书的库存 addstor是要增加的数目
     Record record(book.getbookID(), this->getaccount(), year, month, day, 'k', '0');//写入记录	//这个this也是可以用的，理由同上
     record.admininchangestorage();
     fseek(fp_book, position * sizeof(Book), SEEK_SET);//重新定位
     if (fwrite(&book, sizeof(Book), 1, fp_book) != 1)//把修改完的book写回文件
         printf("file write error\n");
+    fclose(fp_book);
+    return 1;
 }
 
 
@@ -2512,6 +2528,7 @@ void LibrarySystem::on_userLogin_clicked()
                 ui->useraccount->setFocus();
                 ui->userpassword->clear();
                 //隐藏登录对话框
+                on_admininformationBtn_clicked();
                 ui->mainwidget->setCurrentIndex(5);;//显示管理员主窗口
             }
             else {
@@ -2663,6 +2680,7 @@ void LibrarySystem::on_chargeBtn_clicked()
 {
     ui->userwidget->setCurrentIndex(5);
     //以下内容用于限定充值时输入金额的大小
+    ui->chargetext->setFocus();
     QRegExp rx("^[1-9][0-9]?[0-9]?[0-9]?$");
     QRegExpValidator *pRevalidotor = new QRegExpValidator(rx, this);
     ui->chargetext->setValidator(pRevalidotor);//限定输入内容为正则表达式^[1-9][0-9][0-9][0-9][0-9]$的形式
@@ -2846,6 +2864,7 @@ void LibrarySystem::on_ordercancleBtn_clicked()
             //调用取消预约的函数
             bookOrderCancel();
             fclose(fp_book);
+            on_orderInfoBtn_clicked();
         }
         if(mess.clickedButton()==canclebutton)return;//取消取消预约则返回
     }
@@ -2853,6 +2872,7 @@ void LibrarySystem::on_ordercancleBtn_clicked()
     {
         QMessageBox::warning(this,tr("提示"),tr("请先选中对应预约信息."));
     }
+
 }
 
 void LibrarySystem::on_returnbookBtn_clicked()
@@ -2980,11 +3000,11 @@ void LibrarySystem::on_userwindowinformation_clicked()
 
 void LibrarySystem::on_admininformationBtn_clicked()
 {
-    ui->adminwidget->setCurrentIndex(1);
     ui->adminname1->setText(admin.getaccountHolder());
     ui->adminid1->setText(admin.getaccount());
     ui->admincid1->setText(admin.getaID());
     ui->adminphone1->setText(admin.getaPhone());
+    ui->adminwidget->setCurrentIndex(2);
 }
 //用户退出注册
 void LibrarySystem::on_registerExit_clicked()
@@ -3434,11 +3454,11 @@ void LibrarySystem::on_setusernewpasswordtwice_editingFinished()
 }
 void LibrarySystem::on_addbookokBtn_clicked()
 {
-    if(ui->inputbookname1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入书名");
-    else if(ui->inputauthor1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入作者");
-    else if(ui->inputpublisher1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入出版社");
-    else if(ui->inputisbn1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入ISBN");
-    else if(ui->inputstorage1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入数量");
+    if(ui->inputbookname1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入书名");return;}
+    else if(ui->inputauthor1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入作者");return;}
+    else if(ui->inputpublisher1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入出版社");return;}
+    else if(ui->inputisbn1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入ISBN");return;}
+    else if(ui->inputstorage1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入数量");return;}
     else
     {
         QRegExpValidator validator(shuming,0);
@@ -3477,7 +3497,6 @@ void LibrarySystem::on_addbookokBtn_clicked()
             QMessageBox::information(this,"库存输入错误","数量应为1~20.");
             return;
          }
-
     QString bookname = ui->inputbookname1->text();
     QString author = ui->inputauthor1->text();
     QString publisher = ui->inputpublisher1->text();
@@ -3519,7 +3538,7 @@ void LibrarySystem::on_addbookBtn_clicked()
     ui->inputpublisher1->clear();
     ui->inputisbn1->clear();
     ui->inputstorage1->clear();
-    ui->adminwidget->setCurrentIndex(3);
+    ui->adminwidget->setCurrentIndex(4);
     //ui->inputbookname1warning->setText(tr("1到30个字符，汉字、字母、数字"));
     //ui->inputauthor1warning->setText(tr("1到15个字符，汉字、字母、数字"));
     //ui->inputpublisher1warning->setText(tr("1到15个字符，汉字、字母、数字"));
@@ -3534,7 +3553,8 @@ void LibrarySystem::on_addadminBtn_clicked()
     ui->inputadminpasstwice1->clear();
     ui->inputadmincid1->clear();
     ui->inputadminphone1->clear();
-    ui->adminwidget->setCurrentIndex(2);
+    ui->adminwidget->setCurrentIndex(3);
+    ui->inputadminname1->setFocus();
     ui->inputadminname1warning->setText(tr("1到3位汉字"));
     ui->inputadminpass1warning->setText(tr("6到16位数字或字母，区分大小写"));
     ui->inputadminpasstwice1warning->setText(tr("请再次填写密码"));
@@ -3547,12 +3567,12 @@ void LibrarySystem::on_addadminBtn_clicked()
 
 void LibrarySystem::on_addadminokBtn_clicked()
 {
-    if(ui->inputadminname1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入姓名");
-    else if(ui->inputadminpass1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入密码");
-    else if(ui->inputadminpasstwice1->text().isEmpty())QMessageBox::warning(this, "Warning", "请确认密码");
-    else if(ui->inputadmincid1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入身份证");
-    else if(ui->inputadminphone1->text().isEmpty())QMessageBox::warning(this, "Warning", "请输入手机号");
-    else if(ui->inputadminpasstwice1->text() != ui->inputadminpass1->text())QMessageBox::warning(this, "Warning", "两次输入密码不一致");
+    if(ui->inputadminname1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入姓名");return;}
+    else if(ui->inputadminpass1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入密码");return;}
+    else if(ui->inputadminpasstwice1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请确认密码");return;}
+    else if(ui->inputadmincid1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入身份证");return;}
+    else if(ui->inputadminphone1->text().isEmpty()){QMessageBox::warning(this, "Warning", "请输入手机号");return;}
+    else if(ui->inputadminpasstwice1->text() != ui->inputadminpass1->text()){QMessageBox::warning(this, "Warning", "两次输入密码不一致");return;}
     else{
         QRegExpValidator validator(hanzi,0);
         int pos = 0;
@@ -3670,15 +3690,15 @@ void LibrarySystem::setTxtQss(QLineEdit *txt, QString normalColor, QString focus
 
 void LibrarySystem::UIDesign()
 {
-        setBtnQss(ui->userLogin, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");//绿色
-        setBtnQss(ui->userRegister, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
-        setBtnQss(ui->lossPassword, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
-        setBtnQss(ui->registerAchieve, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
-        setBtnQss(ui->registerExit, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
-        setBtnQss(ui->submit, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
-        setBtnQss(ui->findbackpasswordexit, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
-        setBtnQss(ui->achievesetnewpassword, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
-        setBtnQss(ui->setnewpasswordexit, "#1ABC9C", "#E6F8F5", "#2EE1C1", "#FFFFFF", "#16A086", "#A7EEE6");
+        setBtnQss(ui->userLogin, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");//主窗体按钮暗蓝色
+        setBtnQss(ui->userRegister,"#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->lossPassword,"#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->registerAchieve, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->registerExit, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->submit, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->findbackpasswordexit,"#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->achievesetnewpassword, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->setnewpasswordexit, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
 
 
         setBtnQss(ui->userwindowinformation, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");//用户蓝色
@@ -3696,15 +3716,47 @@ void LibrarySystem::UIDesign()
         setBtnQss(ui->adminaddstoBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
         setBtnQss(ui->looklogBtn, "#3498DB", "#FFFFFF", "#5DACE4", "#E5FEFF", "#2483C7", "#A0DAFB");
 
-        setBtnQss(ui->searchokbutton, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");//暗蓝色
-        setBtnQss(ui->bookorderbutton, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
-        setBtnQss(ui->booklendbutton, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
-        setBtnQss(ui->addadminokBtn, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
-        setBtnQss(ui->addbookokBtn, "#34495E", "#FFFFFF", "#4E6D8C", "#F0F0F0", "#2D3E50", "#B8C6D1");
+        setBtnQss(ui->searchokbutton, "#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");//绿色
+        setBtnQss(ui->bookorderbutton,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->booklendbutton, "#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->addadminokBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->addbookokBtn, "#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->ordercancleBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->returnbookBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->chargeokBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->changepassokBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->lognextpageBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->addstorageokBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
 
-        setTxtQss(ui->useraccount, "#DCE4EC", "#34495E");
-        setTxtQss(ui->userpassword, "#DCE4EC", "#34495E");
-        setTxtQss(ui->searchtext,"#DCE4EC", "#1ABC9C");
+
+        setTxtQss(ui->useraccount, "#FFFFFF", "#34495E");
+        setTxtQss(ui->userpassword, "#FFFFFF", "#34495E");//墨蓝色
+        setTxtQss(ui->searchtext,"#FFFFFF", "#1E56A0");//绿色
+        setTxtQss(ui->usernameget, "#FFFFFF", "#34495E");
+        setTxtQss(ui->userpasswordget ,"#FFFFFF", "#34495E");
+        setTxtQss(ui->userpasswordtwice, "#FFFFFF", "#34495E");
+        setTxtQss(ui->userphonenumbleget, "#FFFFFF", "#34495E");
+        setTxtQss(ui->usersfznumbleget, "#FFFFFF", "#34495E");
+        setTxtQss(ui->findbackuseraccount,"#FFFFFF", "#34495E");
+        setTxtQss(ui->findbackusersfznumble,"#FFFFFF", "#34495E");
+        setTxtQss(ui->setusernewpassword,"#FFFFFF", "#34495E");
+        setTxtQss(ui->setusernewpasswordtwice,"#FFFFFF", "#34495E");
+        setTxtQss(ui->chargetext,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputoldpass1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputnewpass1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputnewpasstwice1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputadminname1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputadminpass1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputadminpasstwice1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputadmincid1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputadminphone1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputbookname1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputauthor1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputpublisher1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputisbn1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputstorage1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputbookid1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->inputnewstorage1,"#FFFFFF", "#1E56A0");
 }
 
 
@@ -3948,5 +4000,61 @@ void LibrarySystem::closeEvent(QCloseEvent *event)
 
 void LibrarySystem::on_changeinforBtn_clicked()
 {
+    ui->inputoldpass1->clear();
+    ui->inputnewpass1->clear();
+    ui->inputnewpasstwice1->clear();
     ui->userwidget->setCurrentIndex(1);
+    ui->inputoldpass1->setFocus();
+}
+
+void LibrarySystem::on_changepassokBtn_clicked()
+{
+    if(ui->inputoldpass1->text().isEmpty()){QMessageBox::information(this,"Warning","请输入老密码");return;}
+    else if(ui->inputnewpass1->text().isEmpty()){QMessageBox::information(this,"Warning","请输入新密码");return;}
+    else if(ui->inputnewpasstwice1->text().isEmpty()){QMessageBox::information(this,"Warning","请确认新密码");return;}
+    else if(ui->inputnewpass1->text() != ui->inputnewpasstwice1->text()){QMessageBox::information(this,"Warning","两次输入密码不一致");return;}
+    else{
+    QString oldpass = ui->inputoldpass1->text();
+    QString newpass = ui->inputnewpass1->text();
+    QString newpasstwice = ui->inputnewpasstwice1->text();
+    std::string oldpass_1= oldpass.toStdString();
+    std::string newpass_1= newpass.toStdString();
+    std::string newpasstwice_1 = newpasstwice.toStdString();
+    char* oldpass_2 = const_cast<char*>(oldpass_1.c_str());
+    char* newpass_2 = const_cast<char*>(newpass_1.c_str());
+    char* newpasstwice_2 = const_cast<char*>(newpasstwice_1.c_str());
+    ResetPassword(oldpass_2,newpass_2,newpasstwice_2);
+    QMessageBox::information(this,"Success","修改密码成功");
+    ui->inputoldpass1->clear();
+    ui->inputnewpass1->clear();
+    ui->inputnewpasstwice1->clear();
+    }
+}
+
+void LibrarySystem::on_adminaddstoBtn_clicked()
+{
+    ui->inputbookid1->clear();
+    ui->inputstorage1->clear();
+    ui->adminwidget->setCurrentIndex(1);
+    ui->inputbookid1->setFocus();
+
+}
+
+void LibrarySystem::on_addstorageokBtn_clicked()
+{
+    if(ui->inputbookid1->text().isEmpty()){QMessageBox::information(this,"Warning","请输入书的编号");return;}
+    else if(ui->inputnewstorage1->text().isEmpty()){QMessageBox::information(this,"Warning","请输入增加本数");return;}
+    else
+    {
+        QString bookid = ui->inputbookid1->text();
+        std::string bookid_1 = bookid.toStdString();
+        char *bookid_2 = const_cast<char*>(bookid_1.c_str());
+        QString storage = ui->inputnewstorage1->text();
+        short num = storage.toShort();
+        if(admin.newStorage(bookid_2, num) == 0)
+        {QMessageBox::information(this,"Fail","添加失败，库存超过上限");return;}
+        else if(admin.newStorage(bookid_2, num) == 2)
+        {QMessageBox::information(this,"Fail","添加失败，该书不存在");return;}
+        else {QMessageBox::information(this,"Success","添加成功");return;}
+    }
 }
