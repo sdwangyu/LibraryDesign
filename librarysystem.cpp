@@ -31,7 +31,7 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
-    setFixedSize(1300, 800);
+    setFixedSize(1400, 900);
     update_Order();
     dmend=0;
     FILE *fp1;
@@ -61,6 +61,8 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     ui->lendInfotable->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
 
     //对于日志信息表的限定
+    ui->logtable->setSelectionBehavior ( QAbstractItemView::SelectRows); //设置选择行为，以行为单位
+    ui->logtable->setSelectionMode ( QAbstractItemView::SingleSelection); //设置选择模式，选择单行
     ui->logtable->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
     //对于查询结果表只能选中一行的限定
     ui->searchresult->setSelectionBehavior ( QAbstractItemView::SelectRows); //设置选择行为，以行为单位
@@ -87,6 +89,21 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     ui->searchresult->setFocusPolicy(Qt::NoFocus);//设置无选择虚线
     ui->searchresult->verticalHeader()->setVisible(false);//设置垂直头不可见
     ui->searchresult->horizontalHeader()->setVisible(false);//设置水平表头不可见
+    ui->searchresult->horizontalHeader();
+    //QTableWidgetItem *SHearder = ui->searchresult->horizontalHeaderItem(1);
+    //SHearder->setBackgroundColor(QColor(221, 231, 242));
+
+
+    ui->orderInfotable->setFrameShape(QFrame::NoFrame);//设置无边框
+    ui->orderInfotable->setFocusPolicy(Qt::NoFocus);//设置无选择虚线
+
+    ui->lendInfotable->setShowGrid(false);//设置不显示格子线
+    ui->lendInfotable->setFrameShape(QFrame::NoFrame);//设置无边框
+    ui->lendInfotable->setFocusPolicy(Qt::NoFocus);//设置无选择虚线
+
+    ui->logtable->setShowGrid(false);//设置不显示格子线
+    ui->logtable->setFrameShape(QFrame::NoFrame);//设置无边框
+    ui->logtable->setFocusPolicy(Qt::NoFocus);//设置无选择虚线
 
 
 
@@ -1232,11 +1249,28 @@ void Record::bookReturnRecord()
 
 
 //11.1预约记录
-void Record::bookOrderRecord()
+int Record::bookOrderRecord()
 {
     FILE *fp_book_order;
     FILE *fp_log;
     FILE *fp_buffer;
+    Record record_temp;
+    if (NULL == (fp_buffer = fopen("BUFFERZONE_ORDER", "rb+")))
+    {
+        fprintf(stderr, "Can not open bufferzone_order");
+        exit(1);
+    }
+    while (!feof(fp_buffer))
+    {
+        if(fread(&record_temp, sizeof(Record), 1, fp_buffer)){
+        if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid())
+        {
+            fclose(fp_buffer);
+            return 0;
+        }
+        }
+        else break;
+    }
     if (NULL == (fp_book_order = fopen("BOOK_ORDER_RECORD", "rb+")))
     {
         fprintf(stderr, "Can not open book_order_record");
@@ -1245,11 +1279,6 @@ void Record::bookOrderRecord()
     if (NULL == (fp_log = fopen("LOG", "rb+")))
     {
         fprintf(stderr, "Can not open log");
-        exit(1);
-    }
-    if (NULL == (fp_buffer = fopen("BUFFERZONE_ORDER", "rb+")))
-    {
-        fprintf(stderr, "Can not open bufferzone_order");
         exit(1);
     }
     fseek(fp_book_order, 0, SEEK_END);
@@ -1264,6 +1293,7 @@ void Record::bookOrderRecord()
     fclose(fp_book_order);
     fclose(fp_log);
     fclose(fp_buffer);
+    return 1;
 }
 
 //11.1取消预约记录
@@ -1949,12 +1979,22 @@ void LibrarySystem::bookReturn(int recordyear,int recordmonth,int recordday,int 
 
 void LibrarySystem::bookOrder(){//预约
     //预约记录就记录预约时间即可，因为为了方便在update_order里使用
-    if(book.getstorage() > 2)QMessageBox::information(this, "Fail", "该书可以直接借阅！");
+    time_t timer;
+    time(&timer);
+    tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
+    int year = t_tm->tm_year + 1900;
+    int month = t_tm->tm_mon + 1;
+    int day = t_tm->tm_mday;
+    Record record(book.getbookID(), card.getcardID(), year, month, day, 'c', '0');
+    if(book.getstorage() > 1)QMessageBox::information(this, "Fail", "该书可以直接借阅！");
     else if (card.getbookedCount() == 5) {//预约本数已达上限
         //cout << "您的预约本数已达上限，无法进行预约！" << endl;
         QMessageBox::information(this, "Warning", "您的预约本数已达上限，无法进行预约！");
     }
-    else{
+    else if(record.bookOrderRecord() == 0)
+        QMessageBox::information(this, "Warning", "不能重复预约！");
+    else
+    {
         //cout << "预约成功！" << endl;//提示预约成功
         QMessageBox::information(this, "Success", "预约成功！");
         book.setbookMan(book.getbookMan() + 1);//书的预约人数+1
@@ -1973,14 +2013,6 @@ void LibrarySystem::bookOrder(){//预约
         }
         fclose(fp_book);
         //生成一条预约记录
-        time_t timer;
-        time(&timer);
-        tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
-        int year = t_tm->tm_year + 1900;
-        int month = t_tm->tm_mon + 1;
-        int day = t_tm->tm_mday;
-        Record record(book.getbookID(), card.getcardID(), year, month, day, 'c', '0');
-        record.bookOrderRecord();
     }
 }
 
@@ -2914,6 +2946,7 @@ void LibrarySystem::on_returnbookBtn_clicked()
             QString strorder = ui->lendInfotable->item(selectrow,5)->text();//获取某行某列单元格的文本内容,
             int recordo = strorder.toInt();//记录中书的序号
             bookReturn(recordy,recordm,recordd,recordo);
+            on_lendInfoBtn_clicked();
         }
         if(mess.clickedButton()==canclebutton)return;//取消还书则返回
     }
@@ -3757,6 +3790,10 @@ void LibrarySystem::UIDesign()
         setBtnQss(ui->changepassokBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
         setBtnQss(ui->lognextpageBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
         setBtnQss(ui->addstorageokBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->logofbookBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->logofuserBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->loglastpageBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+
 
 
         setTxtQss(ui->useraccount, "#FFFFFF", "#34495E");
@@ -3787,6 +3824,8 @@ void LibrarySystem::UIDesign()
         setTxtQss(ui->inputstorage1,"#FFFFFF", "#1E56A0");
         setTxtQss(ui->inputbookid1,"#FFFFFF", "#1E56A0");
         setTxtQss(ui->inputnewstorage1,"#FFFFFF", "#1E56A0");
+        setTxtQss(ui->logtext,"#FFFFFF", "#1E56A0");
+
 }
 
 

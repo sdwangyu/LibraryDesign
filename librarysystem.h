@@ -129,7 +129,7 @@ public:
 
     void bookLendRecord(int flag);//借书记录
     void bookReturnRecord();//还书记录
-    void bookOrderRecord();//预约记录
+    int bookOrderRecord();//预约记录
     void bookRenewRecord();//续借记录
     void bookOrderCancelRecord();//取消预约记录
     void bookOrderNoRecord_new();//失效情况下取消预约记录，专门用于update_order函数里
