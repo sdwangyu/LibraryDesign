@@ -290,7 +290,7 @@ public:
     void bookReturn(int recordyear,int recordmonth,int recordday,int recordorder);//还书
     void bookOrder();//预约
     void bookOrderCancel();//未到期的取消预约
-    void bookRenew(Record record1);//续借
+    void bookRenew(int recordyear,int recordmonth,int recordday,int recordorder);//续借
 
     Administrator getAdmin();
     void closeEvent(QCloseEvent *event);
@@ -416,6 +416,8 @@ private slots:
     void on_logofbookBtn_clicked();
 
     void on_logofuserBtn_clicked();
+
+    void on_bookrenewBtn_clicked();
 
 private:
     Ui::LibrarySystem *ui;

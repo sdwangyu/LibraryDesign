@@ -748,7 +748,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
@@ -1469,8 +1469,8 @@
       <widget class="QPushButton" name="returnbookBtn">
        <property name="geometry">
         <rect>
-         <x>470</x>
-         <y>570</y>
+         <x>600</x>
+         <y>580</y>
          <width>111</width>
          <height>61</height>
         </rect>
@@ -1480,6 +1480,19 @@
        </property>
        <property name="text">
         <string>还书</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="bookrenewBtn">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>580</y>
+         <width>111</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>续借</string>
        </property>
       </widget>
      </widget>

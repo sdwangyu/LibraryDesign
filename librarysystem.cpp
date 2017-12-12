@@ -2049,16 +2049,11 @@ void LibrarySystem::bookOrderCancel(){//取消预约 1.未到期取消预约
     QMessageBox::information(this, "提示", "取消预约成功");
 }
 
-void LibrarySystem::bookRenew(Record record1){//图书续借（需要用到qt）
-   //获取借书的应还书时间
-    int year = record1.getyear();
-    int month = record1.getmonth();
-    int day = record1.getday();
-    Record record(book.getbookID(), card.getcardID(), year, month, day, 'd', '1',record1.getorder());
-    //cout << "续借成功" << endl;
-    QMessageBox::information(this, "Success", "续借成功！");
+void LibrarySystem::bookRenew(int recordyear,int recordmonth,int recordday,int recordorder){//图书续借（需要用到qt）
+    Record record(book.getbookID(), card.getcardID(), recordyear, recordmonth, recordday, 'd', '1',recordorder);
     record.alter_Date(30);        //加上30天，将应还日期写进记录
     record.bookRenewRecord();//生成一条续借记录
+    QMessageBox::information(this, "Success", "续借成功！");
 }
 
 void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的记录删除
@@ -4292,4 +4287,46 @@ void LibrarySystem::on_logofuserBtn_clicked()
         return;
     }
     this->hide();
+}
+
+void LibrarySystem::on_bookrenewBtn_clicked()
+{
+    bool focus = ui->lendInfotable->isItemSelected(ui->lendInfotable->currentItem());//用于判断当前是否有行被选中
+      if(focus==true)
+      {
+          QMessageBox mess(QMessageBox::Information,tr("续借"),tr("确定要续借吗？"));
+          QPushButton *okbutton = (mess.addButton(tr("确定"),QMessageBox::AcceptRole));
+          QPushButton *canclebutton=(mess.addButton(tr("取消"),QMessageBox::RejectRole));
+          mess.exec();
+          if(mess.clickedButton()==okbutton)//确认续借
+          {
+              int selectrow = ui->lendInfotable->currentRow();//获取当前选中的行号
+              QString strid = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
+              int position = strid.toInt() - 100000001;//QString转int
+              FILE *fp_book=NULL;
+              if ((fp_book = fopen("BOOKINFORMATION", "rb+")) == NULL)
+              {
+                  fprintf(stderr, "Can not open file");
+                   exit(1);
+              }
+              fseek(fp_book, position*sizeof(Book), SEEK_SET);//定位到某一本书
+              fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
+              //调用还书的函数
+              QString stryear = ui->lendInfotable->item(selectrow,2)->text();//获取某行某列单元格的文本内容,
+              int recordy = stryear.toInt();//记录中的日期的年
+              QString strmonth = ui->lendInfotable->item(selectrow,3)->text();//获取某行某列单元格的文本内容,
+              int recordm = strmonth.toInt();//记录中日期的月
+              QString strday = ui->lendInfotable->item(selectrow,4)->text();//获取某行某列单元格的文本内容,
+              int recordd = strday.toInt();//记录中日期的日
+              QString strorder = ui->lendInfotable->item(selectrow,5)->text();//获取某行某列单元格的文本内容,
+              int recordo = strorder.toInt();//记录中书的序号
+              bookRenew(recordy,recordm,recordd,recordo);
+              on_lendInfoBtn_clicked();
+          }
+          if(mess.clickedButton()==canclebutton)return;//取消还书则返回
+      }
+      else
+      {
+          QMessageBox::warning(this,tr("提示"),tr("请先选中对应借书信息."));
+      }
 }
