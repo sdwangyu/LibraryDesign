@@ -3699,7 +3699,7 @@ void LibrarySystem::on_looklogBtn_clicked()
             date=year+interval+month+interval+day;
             bookorder=QString::number(record_temp.getorder());
             //写入表格
-            string temptype="记录类型";
+            string temptype="记录类型";//将记录类型的字母转换为文字
             switch(record_temp.getflag1()){
             case 'a':temptype="借书";break;
             case 'b':temptype="还书";break;
@@ -4178,12 +4178,29 @@ void LibrarySystem::on_logofbookBtn_clicked()
                     logrow=ui->logtable->rowCount();//获取当前即将要操作的行的编号
                     ui->logtable->insertRow(logrow);//向表格中添加一行
                     //日期格式转换
-                    recordtype=QString(record_temp.getflag1());
+                    //recordtype=QString(record_temp.getflag1());
                     year=QString::number(record_temp.getyear());
                     month=QString::number(record_temp.getmonth());
                     day=QString::number(record_temp.getday());
                     date=year+interval+month+interval+day;
                     bookorder=QString::number(record_temp.getorder());
+                    string temptype="记录类型";//将记录类型的字母转换为文字
+                    switch(record_temp.getflag1()){
+                    case 'a':temptype="借书";break;
+                    case 'b':temptype="还书";break;
+                    case 'c':temptype="预约";break;
+                    case 'd':temptype="续借";break;
+                    case 'e':temptype="取消预约";break;
+                    case 'f':temptype="预约失效";break;
+                    case 'g':temptype="用户注册";break;
+                    case 'h':temptype="注销";break;
+                    case 'i':temptype="登录";break;
+                    case 'j':temptype="管理员增加书";break;
+                    case 'k':temptype="管理员更改库存";break;
+                    case 'l':temptype="管理员注册";break;
+                    default:break;
+                    }
+                    recordtype=QString::fromStdString(temptype);
                     //写入表格
                     ui->logtable->setItem(logrow,0,new QTableWidgetItem(recordtype));
                     if(record_temp.getflag1()=='g'||record_temp.getflag1()=='h'||record_temp.getflag1()=='i'||record_temp.getflag1()=='l') ui->logtable->setItem(logrow,1,new QTableWidgetItem(blank));
@@ -4235,12 +4252,29 @@ void LibrarySystem::on_logofuserBtn_clicked()
                     logrow=ui->logtable->rowCount();//获取当前即将要操作的行的编号
                     ui->logtable->insertRow(logrow);//向表格中添加一行
                     //日期格式转换
-                    recordtype=QString(record_temp.getflag1());
+                    //recordtype=QString(record_temp.getflag1());
                     year=QString::number(record_temp.getyear());
                     month=QString::number(record_temp.getmonth());
                     day=QString::number(record_temp.getday());
                     date=year+interval+month+interval+day;
                     bookorder=QString::number(record_temp.getorder());
+                    string temptype="记录类型";//将记录类型的字母转换为文字
+                    switch(record_temp.getflag1()){
+                    case 'a':temptype="借书";break;
+                    case 'b':temptype="还书";break;
+                    case 'c':temptype="预约";break;
+                    case 'd':temptype="续借";break;
+                    case 'e':temptype="取消预约";break;
+                    case 'f':temptype="预约失效";break;
+                    case 'g':temptype="用户注册";break;
+                    case 'h':temptype="注销";break;
+                    case 'i':temptype="登录";break;
+                    case 'j':temptype="管理员增加书";break;
+                    case 'k':temptype="管理员更改库存";break;
+                    case 'l':temptype="管理员注册";break;
+                    default:break;
+                    }
+                    recordtype=QString::fromStdString(temptype);
                     //写入表格
                     ui->logtable->setItem(logrow,0,new QTableWidgetItem(recordtype));
                     if(record_temp.getflag1()=='g'||record_temp.getflag1()=='h'||record_temp.getflag1()=='i'||record_temp.getflag1()=='l') ui->logtable->setItem(logrow,1,new QTableWidgetItem(blank));
