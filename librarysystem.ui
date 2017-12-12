@@ -748,7 +748,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
@@ -916,7 +916,7 @@
         <rect>
          <x>270</x>
          <y>110</y>
-         <width>141</width>
+         <width>191</width>
          <height>31</height>
         </rect>
        </property>
@@ -932,7 +932,7 @@
         <rect>
          <x>270</x>
          <y>140</y>
-         <width>231</width>
+         <width>341</width>
          <height>31</height>
         </rect>
        </property>
@@ -1134,7 +1134,7 @@
         <rect>
          <x>430</x>
          <y>70</y>
-         <width>171</width>
+         <width>241</width>
          <height>71</height>
         </rect>
        </property>
@@ -1237,9 +1237,9 @@
       <widget class="QRadioButton" name="bookname1">
        <property name="geometry">
         <rect>
-         <x>230</x>
+         <x>160</x>
          <y>80</y>
-         <width>131</width>
+         <width>161</width>
          <height>21</height>
         </rect>
        </property>
@@ -1256,9 +1256,9 @@
       <widget class="QRadioButton" name="bookname2">
        <property name="geometry">
         <rect>
-         <x>350</x>
+         <x>310</x>
          <y>80</y>
-         <width>131</width>
+         <width>151</width>
          <height>21</height>
         </rect>
        </property>
@@ -1274,7 +1274,7 @@
         <rect>
          <x>480</x>
          <y>80</y>
-         <width>100</width>
+         <width>81</width>
          <height>20</height>
         </rect>
        </property>
@@ -1288,7 +1288,7 @@
       <widget class="QRadioButton" name="publisher">
        <property name="geometry">
         <rect>
-         <x>540</x>
+         <x>580</x>
          <y>80</y>
          <width>100</width>
          <height>20</height>
@@ -1304,7 +1304,7 @@
       <widget class="QRadioButton" name="ISBN">
        <property name="geometry">
         <rect>
-         <x>620</x>
+         <x>710</x>
          <y>80</y>
          <width>100</width>
          <height>20</height>
@@ -1487,9 +1487,9 @@
       <widget class="QLabel" name="label_10">
        <property name="geometry">
         <rect>
-         <x>300</x>
+         <x>260</x>
          <y>340</y>
-         <width>141</width>
+         <width>181</width>
          <height>31</height>
         </rect>
        </property>
@@ -1799,7 +1799,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="looklogwindow">
       <widget class="QLabel" name="label_14">
@@ -1956,7 +1956,7 @@
         <rect>
          <x>420</x>
          <y>110</y>
-         <width>151</width>
+         <width>281</width>
          <height>71</height>
         </rect>
        </property>
@@ -2404,9 +2404,9 @@
       <widget class="QLabel" name="inputbookname">
        <property name="geometry">
         <rect>
-         <x>360</x>
+         <x>320</x>
          <y>120</y>
-         <width>121</width>
+         <width>161</width>
          <height>31</height>
         </rect>
        </property>
@@ -2420,9 +2420,9 @@
       <widget class="QLabel" name="inputauthor">
        <property name="geometry">
         <rect>
-         <x>360</x>
+         <x>320</x>
          <y>170</y>
-         <width>101</width>
+         <width>141</width>
          <height>31</height>
         </rect>
        </property>
@@ -2436,9 +2436,9 @@
       <widget class="QLabel" name="inputpublisher">
        <property name="geometry">
         <rect>
-         <x>340</x>
+         <x>320</x>
          <y>230</y>
-         <width>101</width>
+         <width>121</width>
          <height>31</height>
         </rect>
        </property>
@@ -2452,9 +2452,9 @@
       <widget class="QLabel" name="inputisbn">
        <property name="geometry">
         <rect>
-         <x>350</x>
+         <x>320</x>
          <y>280</y>
-         <width>91</width>
+         <width>121</width>
          <height>31</height>
         </rect>
        </property>
@@ -2468,9 +2468,9 @@
       <widget class="QLabel" name="inputstorage">
        <property name="geometry">
         <rect>
-         <x>360</x>
+         <x>320</x>
          <y>330</y>
-         <width>101</width>
+         <width>141</width>
          <height>21</height>
         </rect>
        </property>
