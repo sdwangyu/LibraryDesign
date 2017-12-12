@@ -4,6 +4,8 @@
 #include <QTextStream>
 #include <QTableWidgetItem>
 #include <sstream>
+#include <QTableView>
+#include <QScrollBar>
 
 using namespace std;
 
@@ -12,6 +14,9 @@ int allcard;
 int alladmin;
 
 int dmend;
+
+static int nCurScroller=0; //翻页时的当时滑动条位置
+static int pageValue = 7; // 一页显示条数
 
 int tcflag=1; //用于表示找回密码的时候是用户还是管理员
 QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
@@ -55,7 +60,9 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     ui->lendInfotable->setSelectionMode ( QAbstractItemView::SingleSelection); //设置选择模式，选择单行
     ui->lendInfotable->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
 
-		//对于查询结果表只能选中一行的限定
+    //对于日志信息表的限定
+    ui->logtable->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
+    //对于查询结果表只能选中一行的限定
     ui->searchresult->setSelectionBehavior ( QAbstractItemView::SelectRows); //设置选择行为，以行为单位
     ui->searchresult->setSelectionMode ( QAbstractItemView::SingleSelection); //设置选择模式，选择单行
     ui->searchresult->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置每行不可编辑
@@ -3631,6 +3638,10 @@ void LibrarySystem::on_looklogBtn_clicked()
     ui->adminwidget->setCurrentIndex(0);
     ui->logtable->setRowCount(0);
     ui->logtable->clearContents();
+    ui->logtext->setFocus();
+    QRegExp rx("^[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$");
+    QRegExpValidator *pRevalidotor = new QRegExpValidator(rx, this);
+    ui->logtext->setValidator(pRevalidotor);//限定输入内容为正则表达式^[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$的形
     FILE *fp_log;
     if (NULL == (fp_log = fopen("LOG", "rb+")))
     {
@@ -3648,23 +3659,42 @@ void LibrarySystem::on_looklogBtn_clicked()
             logrow=ui->logtable->rowCount();//获取当前即将要操作的行的编号
             ui->logtable->insertRow(logrow);//向表格中添加一行
             //日期格式转换
-            recordtype=QString(record_temp.getflag1());
+            //recordtype=QString(record_temp.getflag1());
             year=QString::number(record_temp.getyear());
             month=QString::number(record_temp.getmonth());
             day=QString::number(record_temp.getday());
             date=year+interval+month+interval+day;
             bookorder=QString::number(record_temp.getorder());
             //写入表格
+            string temptype="记录类型";
+            switch(record_temp.getflag1()){
+            case 'a':temptype="借书";break;
+            case 'b':temptype="还书";break;
+            case 'c':temptype="预约";break;
+            case 'd':temptype="续借";break;
+            case 'e':temptype="取消预约";break;
+            case 'f':temptype="预约失效";break;
+            case 'g':temptype="用户注册";break;
+            case 'h':temptype="注销";break;
+            case 'i':temptype="登录";break;
+            case 'j':temptype="管理员增加书";break;
+            case 'k':temptype="管理员更改库存";break;
+            case 'l':temptype="管理员注册";break;
+            default:break;
+            }
+            recordtype=QString::fromStdString(temptype);
             ui->logtable->setItem(logrow,0,new QTableWidgetItem(recordtype));
-            //if(record_temp.getBookid()==NULL) ui->logtable->setItem(logrow,1,new QTableWidgetItem(blank));
-             ui->logtable->setItem(logrow,1,new QTableWidgetItem(record_temp.getBookid()));
+            if(record_temp.getflag1()=='g'||record_temp.getflag1()=='h'||record_temp.getflag1()=='i'||record_temp.getflag1()=='l') ui->logtable->setItem(logrow,1,new QTableWidgetItem(blank));
+            else ui->logtable->setItem(logrow,1,new QTableWidgetItem(record_temp.getBookid()));
             ui->logtable->setItem(logrow,2,new QTableWidgetItem(record_temp.getCardid()));
             ui->logtable->setItem(logrow,3,new QTableWidgetItem(date));
-
-            ui->logtable->setItem(logrow,4,new QTableWidgetItem(bookorder));
+            if(record_temp.getorder()==0)ui->logtable->setItem(logrow,4,new QTableWidgetItem(blank));
+            else ui->logtable->setItem(logrow,4,new QTableWidgetItem(bookorder));
         }
         else break;
     }
+    nCurScroller=0; //翻页时的当时滑动条位置
+    pageValue = 7; // 一页显示条数
 }
 
 
@@ -4057,4 +4087,136 @@ void LibrarySystem::on_addstorageokBtn_clicked()
         {QMessageBox::information(this,"Fail","添加失败，该书不存在");return;}
         else {QMessageBox::information(this,"Success","添加成功");return;}
     }
+}
+
+void LibrarySystem::on_loglastpageBtn_clicked()
+{
+    int maxValue = ui->logtable->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值25
+    nCurScroller = ui->logtable->verticalScrollBar()->value();
+
+    if(nCurScroller>0)ui->logtable->verticalScrollBar()->setSliderPosition(nCurScroller-pageValue);
+    else ui->logtable->verticalScrollBar()->setSliderPosition(maxValue);
+}
+
+void LibrarySystem::on_lognextpageBtn_clicked()
+{
+    int maxValue = ui->logtable->verticalScrollBar()->maximum(); // 当前SCROLLER最大显示值25
+    nCurScroller = ui->logtable->verticalScrollBar()->value(); //获得当前scroller值
+
+    if(nCurScroller<maxValue)ui->logtable->verticalScrollBar()->setSliderPosition(pageValue+nCurScroller);
+    else ui->logtable->verticalScrollBar()->setSliderPosition(0);
+}
+
+void LibrarySystem::on_logofbookBtn_clicked()
+{
+    ui->logtable->setRowCount(0);
+    ui->logtable->clearContents();
+    if(ui->logtext->text().isEmpty()){//判断日志查询输入是否为空
+        QMessageBox::warning(this,tr("提示"),tr("请输入查询内容，查询内容不能为空."));
+        ui->logtext->clear();
+        return;
+    }
+    else {
+        QString logsearch=ui->logtext->text();
+        std::string str = logsearch.toStdString();
+        const char* source = str.c_str();
+        FILE *fp_log;
+        if (NULL == (fp_log = fopen("LOG", "rb+")))
+        {
+            fprintf(stderr, "Can not open file");
+            exit(1);
+        }
+        Record record_temp;
+        int logrow=0;
+        QString recordtype,year,month,day,date,interval,bookorder,blank;//用于将int型的日期转换为QString类型
+        char charinterval='-',charblank=' ';
+        interval=QString(charinterval);//将日期间隔-转换为QString类型
+        blank=QString(charblank);
+        while(!feof(fp_log)){
+            if(fread(&record_temp,sizeof(Record),1,fp_log)){
+                if (strcmp(source, record_temp.getBookid()) == 0)
+                {
+                    logrow=ui->logtable->rowCount();//获取当前即将要操作的行的编号
+                    ui->logtable->insertRow(logrow);//向表格中添加一行
+                    //日期格式转换
+                    recordtype=QString(record_temp.getflag1());
+                    year=QString::number(record_temp.getyear());
+                    month=QString::number(record_temp.getmonth());
+                    day=QString::number(record_temp.getday());
+                    date=year+interval+month+interval+day;
+                    bookorder=QString::number(record_temp.getorder());
+                    //写入表格
+                    ui->logtable->setItem(logrow,0,new QTableWidgetItem(recordtype));
+                    if(record_temp.getflag1()=='g'||record_temp.getflag1()=='h'||record_temp.getflag1()=='i'||record_temp.getflag1()=='l') ui->logtable->setItem(logrow,1,new QTableWidgetItem(blank));
+                    else ui->logtable->setItem(logrow,1,new QTableWidgetItem(record_temp.getBookid()));
+                    ui->logtable->setItem(logrow,2,new QTableWidgetItem(record_temp.getCardid()));
+                    ui->logtable->setItem(logrow,3,new QTableWidgetItem(date));
+                    if(record_temp.getorder()==0)ui->logtable->setItem(logrow,4,new QTableWidgetItem(blank));
+                    else ui->logtable->setItem(logrow,4,new QTableWidgetItem(bookorder));
+                }
+
+            }
+            else break;
+        }
+        ui->logtext->clear();
+        return;
+    }
+    this->hide();
+}
+
+void LibrarySystem::on_logofuserBtn_clicked()
+{
+    ui->logtable->setRowCount(0);
+    ui->logtable->clearContents();
+    if(ui->logtext->text().isEmpty()){//判断日志查询输入是否为空
+        QMessageBox::warning(this,tr("提示"),tr("请输入查询内容，查询内容不能为空."));
+        ui->logtext->clear();
+        return;
+    }
+    else {
+        QString logsearch=ui->logtext->text();
+        std::string str = logsearch.toStdString();
+        const char* source = str.c_str();
+        FILE *fp_log;
+        if (NULL == (fp_log = fopen("LOG", "rb+")))
+        {
+            fprintf(stderr, "Can not open file");
+            exit(1);
+        }
+        Record record_temp;
+        int logrow=0;
+        QString recordtype,year,month,day,date,interval,bookorder,blank;//用于将int型的日期转换为QString类型
+        char charinterval='-',charblank=' ';
+        interval=QString(charinterval);//将日期间隔-转换为QString类型
+        blank=QString(charblank);
+        while(!feof(fp_log)){
+            if(fread(&record_temp,sizeof(Record),1,fp_log)){
+                if (strcmp(source, record_temp.getCardid()) == 0)
+                {
+                    logrow=ui->logtable->rowCount();//获取当前即将要操作的行的编号
+                    ui->logtable->insertRow(logrow);//向表格中添加一行
+                    //日期格式转换
+                    recordtype=QString(record_temp.getflag1());
+                    year=QString::number(record_temp.getyear());
+                    month=QString::number(record_temp.getmonth());
+                    day=QString::number(record_temp.getday());
+                    date=year+interval+month+interval+day;
+                    bookorder=QString::number(record_temp.getorder());
+                    //写入表格
+                    ui->logtable->setItem(logrow,0,new QTableWidgetItem(recordtype));
+                    if(record_temp.getflag1()=='g'||record_temp.getflag1()=='h'||record_temp.getflag1()=='i'||record_temp.getflag1()=='l') ui->logtable->setItem(logrow,1,new QTableWidgetItem(blank));
+                    else ui->logtable->setItem(logrow,1,new QTableWidgetItem(record_temp.getBookid()));
+                    ui->logtable->setItem(logrow,2,new QTableWidgetItem(record_temp.getCardid()));
+                    ui->logtable->setItem(logrow,3,new QTableWidgetItem(date));
+                    if(record_temp.getorder()==0)ui->logtable->setItem(logrow,4,new QTableWidgetItem(blank));
+                    else ui->logtable->setItem(logrow,4,new QTableWidgetItem(bookorder));
+                }
+
+            }
+            else break;
+        }
+        ui->logtext->clear();
+        return;
+    }
+    this->hide();
 }

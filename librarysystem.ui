@@ -748,7 +748,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
@@ -1347,10 +1347,10 @@
       <widget class="QTableWidget" name="orderInfotable">
        <property name="geometry">
         <rect>
-         <x>280</x>
-         <y>170</y>
-         <width>381</width>
-         <height>261</height>
+         <x>230</x>
+         <y>120</y>
+         <width>651</width>
+         <height>321</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -1375,8 +1375,8 @@
       <widget class="QPushButton" name="ordercancleBtn">
        <property name="geometry">
         <rect>
-         <x>410</x>
-         <y>470</y>
+         <x>490</x>
+         <y>480</y>
          <width>121</width>
          <height>61</height>
         </rect>
@@ -1391,7 +1391,7 @@
       <widget class="QLabel" name="label_11">
        <property name="geometry">
         <rect>
-         <x>390</x>
+         <x>490</x>
          <y>30</y>
          <width>181</width>
          <height>81</height>
@@ -1402,6 +1402,19 @@
        </property>
        <property name="text">
         <string>预约信息</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_27">
+       <property name="geometry">
+        <rect>
+         <x>250</x>
+         <y>460</y>
+         <width>351</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>提示：更新表格请重按预约信息按钮</string>
        </property>
       </widget>
      </widget>
@@ -1425,10 +1438,10 @@
       <widget class="QTableWidget" name="lendInfotable">
        <property name="geometry">
         <rect>
-         <x>120</x>
+         <x>90</x>
          <y>190</y>
-         <width>751</width>
-         <height>251</height>
+         <width>911</width>
+         <height>271</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -1479,6 +1492,19 @@
        </property>
        <property name="text">
         <string>还书</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_13">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>480</y>
+         <width>381</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>提示：刷新表格请重按借阅信息按钮</string>
        </property>
       </widget>
      </widget>
@@ -1798,15 +1824,15 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="looklogwindow">
       <widget class="QLabel" name="label_14">
        <property name="geometry">
         <rect>
-         <x>440</x>
+         <x>160</x>
          <y>30</y>
-         <width>241</width>
+         <width>481</width>
          <height>71</height>
         </rect>
        </property>
@@ -1820,10 +1846,10 @@
       <widget class="QTableWidget" name="logtable">
        <property name="geometry">
         <rect>
-         <x>190</x>
+         <x>160</x>
          <y>130</y>
-         <width>731</width>
-         <height>321</height>
+         <width>821</width>
+         <height>361</height>
         </rect>
        </property>
        <column>
@@ -1855,14 +1881,76 @@
       <widget class="QPushButton" name="lognextpageBtn">
        <property name="geometry">
         <rect>
-         <x>490</x>
-         <y>500</y>
+         <x>590</x>
+         <y>510</y>
          <width>131</width>
          <height>61</height>
         </rect>
        </property>
        <property name="text">
         <string>下一页</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="loglastpageBtn">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>510</y>
+         <width>131</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>上一页</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_15">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>110</y>
+         <width>761</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>提示：借书记录的日期为图书应还日期；刷新整个表格请重按查询记录按钮。</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="logtext">
+       <property name="geometry">
+        <rect>
+         <x>670</x>
+         <y>50</y>
+         <width>113</width>
+         <height>51</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="logofbookBtn">
+       <property name="geometry">
+        <rect>
+         <x>800</x>
+         <y>50</y>
+         <width>171</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>查找某一本书的日志</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="logofuserBtn">
+       <property name="geometry">
+        <rect>
+         <x>800</x>
+         <y>80</y>
+         <width>171</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>查找某个用户的日志</string>
        </property>
       </widget>
      </widget>

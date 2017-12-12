@@ -409,6 +409,14 @@ private slots:
 
     void on_addstorageokBtn_clicked();
 
+    void on_loglastpageBtn_clicked();
+
+    void on_lognextpageBtn_clicked();
+
+    void on_logofbookBtn_clicked();
+
+    void on_logofuserBtn_clicked();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;
