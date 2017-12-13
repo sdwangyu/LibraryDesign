@@ -3650,7 +3650,7 @@ void LibrarySystem::on_addadminokBtn_clicked()
         char* admincid_2 = const_cast<char*>(admincid_1.c_str());
         char* adminphone_2 = const_cast<char*>(adminphone_1.c_str());
         //int Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone)
-        int adminid = allbook + 2001;
+        int adminid = alladmin + 2001;
         QString s = QString::number(adminid, 10);
         s.append("添加成功");
         if(admin.addadmin(adminpass_2,adminname_2,admincid_2,adminphone_2) == 1)QMessageBox::information(this, "Success", s);
@@ -4335,7 +4335,7 @@ void LibrarySystem::on_bookrenewBtn_clicked()
 
 void LibrarySystem::on_orderokBtn_clicked()
 {
-    bool focus = ui->lendInfotable->isItemSelected(ui->orderInfotable->currentItem());//用于判断当前是否有行被选中
+    bool focus = ui->orderInfotable->isItemSelected(ui->orderInfotable->currentItem());//用于判断当前是否有行被选中
     if(focus == true){
     if(card.getlendedCount() == 10){QMessageBox::information(this,"Fail","借书本书已超过上限");return;}
 
