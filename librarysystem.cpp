@@ -742,7 +742,7 @@ int Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*a
     {
         fseek(fp_admin, i*sizeof(Administrator), SEEK_SET);
         fread(&temp, sizeof(Administrator), 1, fp_admin);
-        if(newadministrator.getaID() == temp.getaID())return 0;
+        if(strcmp(newadministrator.getaID(),temp.getaID()) == 0)return 0;
         i++;
     }
     fseek(fp_admin, 0, SEEK_END);
@@ -2183,7 +2183,7 @@ int LibrarySystem::signInAdmin(char*adminname_PutIn, char*password_PutIn)     //
     Administrator admin_find;
     Administrator admin_temp;
     int i = 0;    //循环变量，用于将fp向后移动
-    while (i<alladmin)
+    while (i < alladmin)
     {
         fseek(fp, i * sizeof(Administrator), SEEK_SET);
         fread(&admin_temp, sizeof(Administrator), 1, fp);
@@ -3855,6 +3855,9 @@ void LibrarySystem::UIDesign()
         setBtnQss(ui->logofbookBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
         setBtnQss(ui->logofuserBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
         setBtnQss(ui->loglastpageBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->orderokBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+        setBtnQss(ui->bookrenewBtn,"#1E56A0", "#D6E4F0", "#163172", "#FFFFFF", "#1E56A0", "#D6E4F0");
+
 
 
 
