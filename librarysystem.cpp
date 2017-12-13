@@ -1888,6 +1888,14 @@ void LibrarySystem::bookLend() { //借书 1.直接借书
 }
 
 void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
+    if(card.getcardState()=='0'){
+        QMessageBox::information(this,tr("提示"),tr("账号冻结，借阅失败！"));
+        return;
+    }
+    if(card.getbookedCount()==10){
+        QMessageBox::information(this,tr("提示"),tr("借阅本书到达上限，借阅失败！"));
+        return;
+    }
     time_t timer;
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
@@ -1922,6 +1930,7 @@ void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
         printf("file write error\n");
     }
     fclose(fp_book);
+    QMessageBox::information(this,tr("提示"),tr("借阅成功！"));
 }
 
 void LibrarySystem::bookReturn(int recordyear,int recordmonth,int recordday,int recordorder){ //还书（需要用到qt）
@@ -2439,6 +2448,7 @@ void LibrarySystem::update_book()         //函数用于在登录后判断用户
     card.setoweMoney(0);	//每次登陆时重新计算超期违约金
     while (!feof(fp_lendbuffer))
     {
+        fseek(fp_lendbuffer, i*sizeof(Record), SEEK_SET);
         if (fread(&record_temp, sizeof(Record), 1, fp_lendbuffer)){
             if ((std::string)record_temp.getCardid() == (std::string)card.getcardID())
             {
@@ -2454,7 +2464,10 @@ void LibrarySystem::update_book()         //函数用于在登录后判断用户
                 if (!(compareDate(record_temp.getyear(), record_temp.getmonth(), record_temp.getday(), year, month, day) > 0))
                 {
                     //如果当前日期超过还书日期，那么就进行违约金处理；
-
+                    record_temp.setflag2('1');//1对借书记录表示超期
+                    int size = sizeof(Record);
+                    fseek(fp_lendbuffer, -size, SEEK_CUR);//由于fread函数使用后会使指针后移，所以在重写当前位置时要将指针向前移动一个单位，SEEK_CUR表示从当前位置
+                    if (fwrite(&record_temp, sizeof(Record), 1, fp_lendbuffer) != 1)printf("file write error3\n");//更新预约缓冲文件
                     card.setoweMoney(card.getoweMoney() + 0.5*compareDate(year, month, day, record_temp.getyear(), record_temp.getmonth(), record_temp.getday()));//按超期一天0.5元计算
                     if (card.getbalance() < card.getoweMoney())card.setcardState('0');        //余额不足冻结账号
                     //cout << "违约金为：" << card.getoweMoney() << endl;
@@ -2464,6 +2477,7 @@ void LibrarySystem::update_book()         //函数用于在登录后判断用户
             //fseek(fp_lendbuffer, i * sizeof(Record), SEEK_SET);
             //cout << endl;
         }
+        i++;
     }
     fclose(fp_lendbuffer);
     //fclose(fp_End);
@@ -2763,8 +2777,9 @@ void LibrarySystem::on_orderInfoBtn_clicked()
     }
     //向预约表格中写入数据
     int orderInforow=0;//对应写入某一行
-    QString year,month,day,date,interval;//用于将int型的日期转换为QString类型
+    QString year,month,day,date,interval,orderstate;//用于将int型的日期转换为QString类型
     char charinterval='-';
+    string state="正常";
     interval=QString(charinterval);//将日期间隔-转换为QString类型
     while (!feof(fp_orderbuffer))
     {
@@ -2782,10 +2797,13 @@ void LibrarySystem::on_orderInfoBtn_clicked()
                 month=QString::number(record_temp.getmonth());
                 day=QString::number(record_temp.getday());
                 date=year+interval+month+interval+day;
+                if(record_temp.getflag2()=='1')state="失效";
+                orderstate=QString::fromStdString(state);
                 //写入表格
                 ui->orderInfotable->setItem(orderInforow,0,new QTableWidgetItem(record_temp.getBookid()));
                 ui->orderInfotable->setItem(orderInforow,1,new QTableWidgetItem(book_temp.getbookName()));
                 ui->orderInfotable->setItem(orderInforow,2,new QTableWidgetItem(date));
+                ui->orderInfotable->setItem(orderInforow,3,new QTableWidgetItem(orderstate));
             }
         }
     }
@@ -2842,7 +2860,8 @@ void LibrarySystem::on_lendInfoBtn_clicked()
     }
     //向预约表格中写入数据
     int lendInforow=0;//对应写入某一行
-    QString year,month,day,bookorder;//用于将int型的日期转换为QString类型.以及10本书中第几本书的序号转换为QString类型
+    QString year,month,day,bookorder,lendstate;//用于将int型的日期转换为QString类型.以及10本书中第几本书的序号转换为QString类型
+    string state="正常";
     while (!feof(fp_lendbuffer))
     {
         if (fread(&record_temp, sizeof(Record), 1, fp_lendbuffer))
@@ -2860,6 +2879,8 @@ void LibrarySystem::on_lendInfoBtn_clicked()
                 day=QString::number(record_temp.getday());
                // date=year+interval+month+interval+day;
                 bookorder=QString::number(record_temp.getorder());
+                if(record_temp.getflag2()=='1')state="超期";
+                lendstate=QString::fromStdString(state);
                 //写入表格,将日期分开写方便还书时使用日期
                 ui->lendInfotable->setItem(lendInforow,0,new QTableWidgetItem(record_temp.getBookid()));
                 ui->lendInfotable->setItem(lendInforow,1,new QTableWidgetItem(book_temp.getbookName()));
@@ -2867,6 +2888,7 @@ void LibrarySystem::on_lendInfoBtn_clicked()
                 ui->lendInfotable->setItem(lendInforow,3,new QTableWidgetItem(month));
                 ui->lendInfotable->setItem(lendInforow,4,new QTableWidgetItem(day));
                 ui->lendInfotable->setItem(lendInforow,5,new QTableWidgetItem(bookorder));
+                ui->lendInfotable->setItem(lendInforow,6,new QTableWidgetItem(lendstate));
             }
         }
     }
@@ -4335,12 +4357,39 @@ void LibrarySystem::on_bookrenewBtn_clicked()
 
 void LibrarySystem::on_orderokBtn_clicked()
 {
-    bool focus = ui->lendInfotable->isItemSelected(ui->orderInfotable->currentItem());//用于判断当前是否有行被选中
-    if(focus == true){
-    if(card.getlendedCount() == 10){QMessageBox::information(this,"Fail","借书本书已超过上限");return;}
-
-
-
+    bool focus = ui->orderInfotable->isItemSelected(ui->orderInfotable->currentItem());//用于判断当前是否有行被选中
+    if(focus==true)
+    {
+        QMessageBox mess(QMessageBox::Information,tr("借阅"),tr("确定要借阅吗？"));
+        QPushButton *okbutton = (mess.addButton(tr("确定"),QMessageBox::AcceptRole));
+        QPushButton *canclebutton=(mess.addButton(tr("取消"),QMessageBox::RejectRole));
+        mess.exec();
+        if(mess.clickedButton()==okbutton)//确认借阅
+        {
+            if(card.getlendedCount() == 10){QMessageBox::information(this,"Fail","借书本书已超过上限");return;}
+            else{
+                int selectrow = ui->orderInfotable->currentRow();//获取当前选中的行号
+                QString str = ui->orderInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容
+                int position = str.toInt() - 100000001;//QString转int
+                FILE *fp_book=NULL;
+                if ((fp_book = fopen("BOOKINFORMATION", "rb+")) == NULL)
+                {
+                    fprintf(stderr, "Can not open file");
+                     exit(1);
+                }
+                fseek(fp_book, position*sizeof(Book), SEEK_SET);//定位到某一本书
+                fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
+                //调用取消预约的函数
+                bookLendOrder();
+                fclose(fp_book);
+                on_orderInfoBtn_clicked();
+            }
+        }
+        if(mess.clickedButton()==canclebutton)return;//取消取消预约则返回
+    }
+    else
+    {
+        QMessageBox::warning(this,tr("提示"),tr("请先选中对应预约信息."));
     }
 
 }
