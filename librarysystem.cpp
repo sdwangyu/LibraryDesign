@@ -21,11 +21,12 @@ static int pageValue = 7; // 一页显示条数
 int tcflag=1; //用于表示找回密码的时候是用户还是管理员
 QRegExp hanzi("[\u4e00-\u9fa5]{1,3}");
 QRegExp passwordstype("[A-Za-z0-9]{6,16}");
-QRegExp sfztype("[0-9]{18}");
+QRegExp sfztype("^([0-9]{17}[x0-9]{1})$");
 QRegExp phonetype("[0-9]{11}");
 QRegExp shuming("[A-Za-z0-9\u4e00-\u9fa5]{1,30}");
 QRegExp zuozhe("[A-Za-z0-9\u4e00-\u9fa5]{1,15}");
 QRegExp isbntype("[A-Za-z0-9]{1,16}");
+QRegExp bookid("^[1-9]{1}[0-9]{8}$");
 
 LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
@@ -3634,6 +3635,14 @@ void LibrarySystem::on_addbookBtn_clicked()
     //ui->inputpublisher1warning->setText(tr("1到15个字符，汉字、字母、数字"));
     //ui->inputisbn1warning->setText(tr("1到16位数字或字母，区分大小写"));
     //ui->inputstorage1warning->setText(tr("库位1到20"));
+    //QRegExp rx("^[1-9][0-9]?[0-9]?[0-9]?$");
+    //QRegExpValidator *pRevalidotor = new QRegExpValidator(rx, this);
+    //ui->chargetext->setValidator(pRevalidotor);//限定输入内容为正则表达式^[1-9][0-9][0-9][0-9][0-9]$的形式
+    //ui->inputbookname1->setValidator(new QRegExpValidator(hanzi,this));
+    //ui->inputbookid1->setValidator(new QRegExpValidator(bookid,this));
+    //ui->inputauthor1->setValidator(new QRegExpValidator(zuozhe,this));
+    //ui->inputpublisher1->setValidator(new QRegExpValidator(p));
+
 }
 
 void LibrarySystem::on_addadminBtn_clicked()
@@ -3706,7 +3715,7 @@ void LibrarySystem::on_addadminokBtn_clicked()
         char* admincid_2 = const_cast<char*>(admincid_1.c_str());
         char* adminphone_2 = const_cast<char*>(adminphone_1.c_str());
         //int Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone)
-        int adminid = allbook + 2001;
+        int adminid = alladmin + 2001;
         QString s = QString::number(adminid, 10);
         s.append("添加成功");
         if(admin.addadmin(adminpass_2,adminname_2,admincid_2,adminphone_2) == 1)QMessageBox::information(this, "Success", s);
