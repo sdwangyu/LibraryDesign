@@ -1463,7 +1463,10 @@ void Record::bookRenewRecord()
     while (!feof(fp_buffer))
     {
         if(fread(&record_temp, sizeof(Record), 1, fp_buffer)){
-        if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
+        if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder()){
+            fwrite(this,sizeof(Record),1,fp_new_buffer_lend);
+            continue;
+        }
         fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_lend);
         }
         else break;
@@ -1895,6 +1898,10 @@ void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
     }
     if(card.getbookedCount()==10){
         QMessageBox::information(this,tr("提示"),tr("借阅本书到达上限，借阅失败！"));
+        return;
+    }
+    if(book.gettStorage()==0){
+        QMessageBox::information(this,tr("提示"),tr("该书暂不可借！"));
         return;
     }
     time_t timer;
@@ -2498,7 +2505,7 @@ void LibrarySystem::update_book()         //函数用于在登录后判断用户
                 if (!(compareDate(record_temp.getyear(), record_temp.getmonth(), record_temp.getday(), year, month, day) > 0))
                 {
                     //如果当前日期超过还书日期，那么就进行违约金处理；
-                    record_temp.setflag2('1');//1对借书记录表示超期
+                    record_temp.setflag2('2');//2对借书记录表示超期
                     int size = sizeof(Record);
                     fseek(fp_lendbuffer, -size, SEEK_CUR);//由于fread函数使用后会使指针后移，所以在重写当前位置时要将指针向前移动一个单位，SEEK_CUR表示从当前位置
                     if (fwrite(&record_temp, sizeof(Record), 1, fp_lendbuffer) != 1)printf("file write error3\n");//更新预约缓冲文件
@@ -2915,7 +2922,8 @@ void LibrarySystem::on_lendInfoBtn_clicked()
                 day=QString::number(record_temp.getday());
                // date=year+interval+month+interval+day;
                 bookorder=QString::number(record_temp.getorder());
-                if(record_temp.getflag2()=='1')state="超期";
+                if(record_temp.getflag2()=='2')state="超期";
+                if(record_temp.getflag2()=='1')state="已续借";
                 lendstate=QString::fromStdString(state);
                 //写入表格,将日期分开写方便还书时使用日期
                 ui->lendInfotable->setItem(lendInforow,0,new QTableWidgetItem(record_temp.getBookid()));
@@ -4400,6 +4408,13 @@ void LibrarySystem::on_bookrenewBtn_clicked()
               int recordd = strday.toInt();//记录中日期的日
               QString strorder = ui->lendInfotable->item(selectrow,5)->text();//获取某行某列单元格的文本内容,
               int recordo = strorder.toInt();//记录中书的序号
+              QString strflag2 = ui->lendInfotable->item(selectrow,6)->text();//获取某行某列单元格的文本内容,
+              string recordf = strflag2.toStdString();//记录中flag2的含义
+              if(strcmp(recordf,"已续借")==0){
+                  QMessageBox::information(this,tr("提示"),tr("该书已经续借一次！"));
+                  return;
+              }
+
               bookRenew(recordy,recordm,recordd,recordo);
               on_lendInfoBtn_clicked();
           }
