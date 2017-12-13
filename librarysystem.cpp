@@ -4426,6 +4426,10 @@ void LibrarySystem::on_orderokBtn_clicked()
                 fseek(fp_book, position*sizeof(Book), SEEK_SET);//定位到某一本书
                 fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
                 //调用取消预约的函数
+                if(book.gettStorage()==0){
+                    QMessageBox::information(this,tr("提示"),tr("该书暂不可借！"));
+                    return;
+                }
                 bookLendOrder();
                 fclose(fp_book);
                 on_orderInfoBtn_clicked();
