@@ -3552,11 +3552,9 @@ void LibrarySystem::on_addbookokBtn_clicked()
     int bookid = allbook + 100000001;
     QString s = QString::number(bookid, 10);
     char* bookid_2 = const_cast<char*>(s.toStdString().data());//int转char*
-    QMessageBox::information(this, "Warning", "3");
     Book temp(bookid_2,bookname_2,author_2,publisher_2,isbn_2,storage_2);
-
-    QMessageBox::information(this, "Warning", "6");
-    if(admin.addBook(temp) == 1)QMessageBox::information(this, "Warning", "添加成功");
+    s.append("号书籍添加成功");
+    if(admin.addBook(temp) == 1)QMessageBox::information(this, "Success", s);
     else QMessageBox::warning(this, "ERROR", "该书已存在，添加失败");
     ui->inputbookname1->clear();
     ui->inputauthor1->clear();
@@ -3652,7 +3650,10 @@ void LibrarySystem::on_addadminokBtn_clicked()
         char* admincid_2 = const_cast<char*>(admincid_1.c_str());
         char* adminphone_2 = const_cast<char*>(adminphone_1.c_str());
         //int Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone)
-        if(admin.addadmin(adminpass_2,adminname_2,admincid_2,adminphone_2) == 1)QMessageBox::information(this, "Warning", "添加成功");
+        int adminid = allbook + 2001;
+        QString s = QString::number(adminid, 10);
+        s.append("添加成功");
+        if(admin.addadmin(adminpass_2,adminname_2,admincid_2,adminphone_2) == 1)QMessageBox::information(this, "Success", s);
         else QMessageBox::warning(this, "ERROR", "管理员已存在，添加失败");
         ui->inputadminname1->clear();
         ui->inputadminpass1->clear();

@@ -419,6 +419,8 @@ private slots:
 
     void on_bookrenewBtn_clicked();
 
+    void on_orderokBtn_clicked();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;
