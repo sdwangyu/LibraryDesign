@@ -1900,6 +1900,10 @@ void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
         QMessageBox::information(this,tr("提示"),tr("借阅本书到达上限，借阅失败！"));
         return;
     }
+    if(book.gettStorage()==0){
+        QMessageBox::information(this,tr("提示"),tr("该书暂不可借！"));
+        return;
+    }
     time_t timer;
     time(&timer);
     tm* t_tm = localtime(&timer);    //获取了当前时间，并且转换为int类型的year，month，day
