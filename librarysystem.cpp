@@ -1834,9 +1834,9 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
     }
 }
 void LibrarySystem::bookLend() { //借书 1.直接借书
-    if (card.getlendedCount() == 10) {//已借本数超过上限
-        //cout << "可借本书已达到上限，无法再进行借阅！" << endl;
-        QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");
+    if(card.getcardState() == '0'){QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");return;}
+    else if (card.getlendedCount() == 10) {//已借本数超过上限
+        QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");return;
     }
     else{//可借本数没有超过上限
         if (book.getstorage() > 1) { //库存允许
@@ -1897,7 +1897,6 @@ void LibrarySystem::bookLendOrder() {//2.通过预约成功借书
     card.setlendedCount(card.getlendedCount() + 1);//已借本数+1
     card.setlendingCount(card.getlendingCount() - 1);//可借本数-1
     card.setbookedCount(card.getbookedCount() - 1);//人的预约本数-1
-
     book.setbookMan(book.getbookMan() - 1);//书的预约人数-1
     book.settStorage(book.gettStorage() - 1);//书的临时库存-1
     int order = 1;//标识第几本书
@@ -1986,13 +1985,15 @@ void LibrarySystem::bookOrder(){//预约
     int month = t_tm->tm_mon + 1;
     int day = t_tm->tm_mday;
     Record record(book.getbookID(), card.getcardID(), year, month, day, 'c', '0');
-    if(book.getstorage() > 1)QMessageBox::information(this, "Fail", "该书可以直接借阅！");
+    if(card.getcardState() == '0'){QMessageBox::information(this, "Fail", "你的借书卡已被冻结");return;}
+    else if(book.getstorage() > 1){QMessageBox::information(this, "Fail", "该书可以直接借阅！");return;}
     else if (card.getbookedCount() == 5) {//预约本数已达上限
         //cout << "您的预约本数已达上限，无法进行预约！" << endl;
         QMessageBox::information(this, "Warning", "您的预约本数已达上限，无法进行预约！");
+        return;
     }
     else if(record.bookOrderRecord() == 0)
-        QMessageBox::information(this, "Warning", "不能重复预约！");
+    {QMessageBox::information(this, "Warning", "不能重复预约！");return;}
     else
     {
         //cout << "预约成功！" << endl;//提示预约成功
@@ -3551,11 +3552,9 @@ void LibrarySystem::on_addbookokBtn_clicked()
     int bookid = allbook + 100000001;
     QString s = QString::number(bookid, 10);
     char* bookid_2 = const_cast<char*>(s.toStdString().data());//int转char*
-    QMessageBox::information(this, "Warning", "3");
     Book temp(bookid_2,bookname_2,author_2,publisher_2,isbn_2,storage_2);
-
-    QMessageBox::information(this, "Warning", "6");
-    if(admin.addBook(temp) == 1)QMessageBox::information(this, "Warning", "添加成功");
+    s.append("号书籍添加成功");
+    if(admin.addBook(temp) == 1)QMessageBox::information(this, "Success", s);
     else QMessageBox::warning(this, "ERROR", "该书已存在，添加失败");
     ui->inputbookname1->clear();
     ui->inputauthor1->clear();
@@ -3651,7 +3650,10 @@ void LibrarySystem::on_addadminokBtn_clicked()
         char* admincid_2 = const_cast<char*>(admincid_1.c_str());
         char* adminphone_2 = const_cast<char*>(adminphone_1.c_str());
         //int Administrator::addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone)
-        if(admin.addadmin(adminpass_2,adminname_2,admincid_2,adminphone_2) == 1)QMessageBox::information(this, "Warning", "添加成功");
+        int adminid = allbook + 2001;
+        QString s = QString::number(adminid, 10);
+        s.append("添加成功");
+        if(admin.addadmin(adminpass_2,adminname_2,admincid_2,adminphone_2) == 1)QMessageBox::information(this, "Success", s);
         else QMessageBox::warning(this, "ERROR", "管理员已存在，添加失败");
         ui->inputadminname1->clear();
         ui->inputadminpass1->clear();
@@ -4329,4 +4331,16 @@ void LibrarySystem::on_bookrenewBtn_clicked()
       {
           QMessageBox::warning(this,tr("提示"),tr("请先选中对应借书信息."));
       }
+}
+
+void LibrarySystem::on_orderokBtn_clicked()
+{
+    bool focus = ui->lendInfotable->isItemSelected(ui->orderInfotable->currentItem());//用于判断当前是否有行被选中
+    if(focus == true){
+    if(card.getlendedCount() == 10){QMessageBox::information(this,"Fail","借书本书已超过上限");return;}
+
+
+
+    }
+
 }
