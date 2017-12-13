@@ -43,7 +43,7 @@ public:
     void setbookisbn(char BOOKISBN[20]);
     short getstorage();
     void setstorage(short newstorage);
-    void addstorage(short newstorage);
+    int addstorage(short newstorage);
     short getbookMan();
     void setbookMan(short newbookMan);
     short gettStorage();
@@ -129,7 +129,7 @@ public:
 
     void bookLendRecord(int flag);//借书记录
     void bookReturnRecord();//还书记录
-    void bookOrderRecord();//预约记录
+    int bookOrderRecord();//预约记录
     void bookRenewRecord();//续借记录
     void bookOrderCancelRecord();//取消预约记录
     void bookOrderNoRecord_new();//失效情况下取消预约记录，专门用于update_order函数里
@@ -193,7 +193,7 @@ public:
     //void deleteBook(Book book);老师说不要删书
     //void operateCard(Card card);老师说不要删卡 听老师的
     //void findbook(char*bookid);        //为了在修改库存之前给类中的私有成员book赋值
-    void newStorage(short storage);//新设库存
+    int newStorage(char* bookid,short storage);//新设库存
     int addadmin(char*aPassword, char*accountHolder, char*aID, char*aPhone);
 
     //11.9管理员所有查看行为函数
@@ -290,7 +290,7 @@ public:
     void bookReturn(int recordyear,int recordmonth,int recordday,int recordorder);//还书
     void bookOrder();//预约
     void bookOrderCancel();//未到期的取消预约
-    void bookRenew(Record record1);//续借
+    void bookRenew(int recordyear,int recordmonth,int recordday,int recordorder);//续借
 
     Administrator getAdmin();
     void closeEvent(QCloseEvent *event);
@@ -402,6 +402,22 @@ private slots:
     void on_inputadminphone1_editingFinished();
 
     void on_changeinforBtn_clicked();
+
+    void on_changepassokBtn_clicked();
+
+    void on_adminaddstoBtn_clicked();
+
+    void on_addstorageokBtn_clicked();
+
+    void on_loglastpageBtn_clicked();
+
+    void on_lognextpageBtn_clicked();
+
+    void on_logofbookBtn_clicked();
+
+    void on_logofuserBtn_clicked();
+
+    void on_bookrenewBtn_clicked();
 
 private:
     Ui::LibrarySystem *ui;
