@@ -2498,7 +2498,7 @@ void LibrarySystem::update_book()         //函数用于在登录后判断用户
                 if (!(compareDate(record_temp.getyear(), record_temp.getmonth(), record_temp.getday(), year, month, day) > 0))
                 {
                     //如果当前日期超过还书日期，那么就进行违约金处理；
-                    record_temp.setflag2('1');//1对借书记录表示超期
+                    record_temp.setflag2('2');//2对借书记录表示超期
                     int size = sizeof(Record);
                     fseek(fp_lendbuffer, -size, SEEK_CUR);//由于fread函数使用后会使指针后移，所以在重写当前位置时要将指针向前移动一个单位，SEEK_CUR表示从当前位置
                     if (fwrite(&record_temp, sizeof(Record), 1, fp_lendbuffer) != 1)printf("file write error3\n");//更新预约缓冲文件
@@ -2914,7 +2914,7 @@ void LibrarySystem::on_lendInfoBtn_clicked()
                 day=QString::number(record_temp.getday());
                // date=year+interval+month+interval+day;
                 bookorder=QString::number(record_temp.getorder());
-                if(record_temp.getflag2()=='1')state="超期";
+                if(record_temp.getflag2()=='2')state="超期";
                 lendstate=QString::fromStdString(state);
                 //写入表格,将日期分开写方便还书时使用日期
                 ui->lendInfotable->setItem(lendInforow,0,new QTableWidgetItem(record_temp.getBookid()));
