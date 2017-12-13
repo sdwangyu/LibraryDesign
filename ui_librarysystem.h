@@ -986,9 +986,9 @@ public:
 
         retranslateUi(LibrarySystem);
 
-        mainwidget->setCurrentIndex(5);
-        userwidget->setCurrentIndex(5);
-        adminwidget->setCurrentIndex(4);
+        mainwidget->setCurrentIndex(4);
+        userwidget->setCurrentIndex(2);
+        adminwidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(LibrarySystem);
