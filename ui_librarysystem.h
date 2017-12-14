@@ -986,8 +986,8 @@ public:
 
         retranslateUi(LibrarySystem);
 
-        mainwidget->setCurrentIndex(4);
-        userwidget->setCurrentIndex(2);
+        mainwidget->setCurrentIndex(5);
+        userwidget->setCurrentIndex(1);
         adminwidget->setCurrentIndex(3);
 
 

@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>5</number>
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -1158,6 +1158,32 @@
         <string>确认</string>
        </property>
       </widget>
+      <widget class="QLabel" name="inputnewpass1warning">
+       <property name="geometry">
+        <rect>
+         <x>650</x>
+         <y>305</y>
+         <width>331</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputnewpasstwice1warning">
+       <property name="geometry">
+        <rect>
+         <x>650</x>
+         <y>365</y>
+         <width>331</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </widget>
      <widget class="QWidget" name="searchwindow">
       <widget class="QPushButton" name="searchokbutton">
@@ -2081,6 +2107,19 @@
        </property>
        <property name="text">
         <string>确认</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputnewstorage1warning">
+       <property name="geometry">
+        <rect>
+         <x>670</x>
+         <y>320</y>
+         <width>291</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
