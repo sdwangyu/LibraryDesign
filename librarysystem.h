@@ -425,6 +425,8 @@ private slots:
 
     void on_inputnewstorage1_editingFinished();
 
+    void on_orderokBtn_clicked();
+
 private:
     Ui::LibrarySystem *ui;
     Book book;

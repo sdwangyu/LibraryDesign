@@ -1398,11 +1398,16 @@
          <string>预约日期</string>
         </property>
        </column>
+       <column>
+        <property name="text">
+         <string>状态</string>
+        </property>
+       </column>
       </widget>
       <widget class="QPushButton" name="ordercancleBtn">
        <property name="geometry">
         <rect>
-         <x>520</x>
+         <x>660</x>
          <y>550</y>
          <width>121</width>
          <height>61</height>
@@ -1429,6 +1434,22 @@
        </property>
        <property name="text">
         <string>预约信息</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="orderokBtn">
+       <property name="geometry">
+        <rect>
+         <x>440</x>
+         <y>550</y>
+         <width>121</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
+       </property>
+       <property name="text">
+        <string>借阅</string>
        </property>
       </widget>
      </widget>
@@ -1491,6 +1512,11 @@
          <string>书的序号</string>
         </property>
        </column>
+       <column>
+        <property name="text">
+         <string>状态</string>
+        </property>
+       </column>
       </widget>
       <widget class="QPushButton" name="returnbookBtn">
        <property name="geometry">
@@ -1516,6 +1542,9 @@
          <width>111</width>
          <height>61</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;微软雅黑&quot;;</string>
        </property>
        <property name="text">
         <string>续借</string>
@@ -1588,9 +1617,9 @@
        <property name="geometry">
         <rect>
          <x>640</x>
-         <y>350</y>
+         <y>339</y>
          <width>54</width>
-         <height>20</height>
+         <height>31</height>
         </rect>
        </property>
        <property name="styleSheet">
