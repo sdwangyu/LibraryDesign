@@ -2985,14 +2985,16 @@ void LibrarySystem::on_returnbookBtn_clicked()
         mess.exec();
         if(mess.clickedButton()==okbutton)//确认还书
         {
+            QMessageBox::information(this,tr("test"),tr("test"));
             int selectrow = ui->lendInfotable->currentRow();//获取当前选中的行号
             QString strid = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
             int position = strid.toInt() - 100000001;//QString转int
+            QMessageBox::information(this,tr("test1"),tr("test1"));
             FILE *fp_book=NULL;
             if ((fp_book = fopen("BOOKINFORMATION", "rb+")) == NULL)
             {
                 fprintf(stderr, "Can not open file");
-                 exit(1);
+                exit(1);
             }
             fseek(fp_book, position*sizeof(Book), SEEK_SET);//定位到某一本书
             fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
@@ -3726,7 +3728,7 @@ void LibrarySystem::on_addadminokBtn_clicked()
         QString s = QString::number(adminid, 10);
         s.append("添加成功");
         if(admin.addadmin(adminpass_2,adminname_2,admincid_2,adminphone_2) == 1)QMessageBox::information(this, "Success", s);
-        else QMessageBox::warning(this, "ERROR", "管理员已存在，添加失败");
+        else QMessageBox::warning(this, "ERROR", "该身份证已录入系统，添加失败");
         ui->inputadminname1->clear();
         ui->inputadminpass1->clear();
         ui->inputadminpasstwice1->clear();
@@ -4155,29 +4157,27 @@ void LibrarySystem::on_changepassokBtn_clicked()
     else if(ui->inputnewpasstwice1->text().isEmpty()){QMessageBox::information(this,"Warning","请确认新密码");return;}
     else if(ui->inputnewpass1->text() != ui->inputnewpasstwice1->text()){QMessageBox::information(this,"Warning","两次输入密码不一致");return;}
     else{
-    QString oldpass = ui->inputoldpass1->text();
-    QString newpass = ui->inputnewpass1->text();
-    QString newpasstwice = ui->inputnewpasstwice1->text();
-    std::string oldpass_1= oldpass.toStdString();
-    std::string newpass_1= newpass.toStdString();
-    std::string newpasstwice_1 = newpasstwice.toStdString();
-    char* oldpass_2 = const_cast<char*>(oldpass_1.c_str());
-    char* newpass_2 = const_cast<char*>(newpass_1.c_str());
-    char* newpasstwice_2 = const_cast<char*>(newpasstwice_1.c_str());
-    if(strcmp(card.getcPassword(),oldpass_2) == 0)
-    {
-    card.setcPassword(newpass_2);
-    QMessageBox::information(this,"Success","修改密码成功");
-    ui->inputoldpass1->clear();
-    ui->inputnewpass1->clear();
-    ui->inputnewpasstwice1->clear();
-    return;
-    }
-    else     {
-        QMessageBox::information(this,"Warning","旧密码不正确");
-        return;
-    }
-
+        QString oldpass = ui->inputoldpass1->text();
+        QString newpass = ui->inputnewpass1->text();
+        QString newpasstwice = ui->inputnewpasstwice1->text();
+        std::string oldpass_1= oldpass.toStdString();
+        std::string newpass_1= newpass.toStdString();
+        std::string newpasstwice_1 = newpasstwice.toStdString();
+        char* oldpass_2 = const_cast<char*>(oldpass_1.c_str());
+        char* newpass_2 = const_cast<char*>(newpass_1.c_str());
+        char* newpasstwice_2 = const_cast<char*>(newpasstwice_1.c_str());
+        if(strcmp(card.getcPassword(),oldpass_2) == 0)
+        {
+            card.setcPassword(newpass_2);
+            QMessageBox::information(this,"Success","修改密码成功");
+            ui->inputoldpass1->clear();
+            ui->inputnewpass1->clear();
+            ui->inputnewpasstwice1->clear();
+            return;
+        } else{
+            QMessageBox::information(this,"Warning","旧密码不正确");
+            return;
+        }
     }
 }
 
@@ -4395,12 +4395,6 @@ void LibrarySystem::on_bookrenewBtn_clicked()
                   fprintf(stderr, "Can not open file");
                    exit(1);
               }
-              FILE *fp_lendbuffer=NULL;
-              if ((fp_lendbuffer = fopen("BUFFERZONE_LEND", "rb+")) == NULL)
-              {
-                  fprintf(stderr, "Can not open file");
-                   exit(2);
-              }
               fseek(fp_book, position*sizeof(Book), SEEK_SET);//定位到某一本书
               fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
               //调用还书的函数
@@ -4413,34 +4407,16 @@ void LibrarySystem::on_bookrenewBtn_clicked()
               QString strorder = ui->lendInfotable->item(selectrow,5)->text();//获取某行某列单元格的文本内容,
               int recordo = strorder.toInt();//记录中书的序号
               QString strflag2 = ui->lendInfotable->item(selectrow,6)->text();//获取某行某列单元格的文本内容,
-              //string recordf = strflag2.toStdString();//记录中flag2的含义
-              //string recordf = strflag2.toLatin1().data();//记录中flag2的含义
-              //char* temp="已续借";
-              //if(strcmp(recordf,temp)==0){
-              //    QMessageBox::information(this,tr("提示"),tr("该书已经续借一次！"));
-              //    return;
-              //}
-              QString temp="已续借";
-              /*Record record_temp;
-              while(!feof(fp_lendbuffer)){
-                  if(fread(&record_temp,sizeof(Record),1,fp_lendbuffer)){
-                      if(book.getbookID()==record_temp.getBookid()&&card.getcardID()==record_temp.getCardid()&&record_temp.getyear()==recordy&&record_temp.getmonth()==recordm&&record_temp.getday()==recordd&&record_temp.getorder()==recordo){
-                          if(record_temp.getflag2()=='1'){
-                              QMessageBox::information(this,tr("提示"),tr("该书已经续借一次！"));
-                              return;
-                          }
-                          break;
-                      }
-                  }
-              }*/
-              fclose(fp_lendbuffer);
-              if(temp==strflag2){
+              QString temprenew="已续借",tempoverdate="超期";
+              if(temprenew==strflag2){
                   QMessageBox::information(this,tr("提示"),tr("该书已经续借一次！"));
                   return;
               }
-              //else{
-                  bookRenew(recordy,recordm,recordd,recordo);
-              //}
+              if(tempoverdate==strflag2){
+                  QMessageBox::information(this,tr("提示"),tr("该书已经超期，不可续借！请及时归还书籍并交纳违约金。"));
+                  return;
+              }
+              bookRenew(recordy,recordm,recordd,recordo);
               on_lendInfoBtn_clicked();
               fclose(fp_book);
           }
