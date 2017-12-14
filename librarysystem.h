@@ -419,6 +419,12 @@ private slots:
 
     void on_bookrenewBtn_clicked();
 
+    void on_inputnewpass1_editingFinished();
+
+    void on_inputnewpasstwice1_editingFinished();
+
+    void on_inputnewstorage1_editingFinished();
+
     void on_orderokBtn_clicked();
 
 private:
