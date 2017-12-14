@@ -1158,11 +1158,11 @@
         <string>确认</string>
        </property>
       </widget>
-      <widget class="QLabel" name="inputnewpass1warning">
+      <widget class="QLabel" name="inputnewpasstwice1warning">
        <property name="geometry">
         <rect>
          <x>650</x>
-         <y>305</y>
+         <y>365</y>
          <width>331</width>
          <height>21</height>
         </rect>
@@ -1171,11 +1171,11 @@
         <string/>
        </property>
       </widget>
-      <widget class="QLabel" name="inputnewpasstwice1warning">
+      <widget class="QLabel" name="inputnewpass1warning">
        <property name="geometry">
         <rect>
          <x>650</x>
-         <y>365</y>
+         <y>305</y>
          <width>331</width>
          <height>21</height>
         </rect>
@@ -1867,7 +1867,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="looklogwindow">
       <widget class="QLabel" name="label_14">

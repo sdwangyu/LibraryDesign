@@ -4155,6 +4155,7 @@ void LibrarySystem::on_changeinforBtn_clicked()
     ui->inputnewpasstwice1->clear();
     ui->userwidget->setCurrentIndex(1);
     ui->inputoldpass1->setFocus();
+    //ui->newpassworddm->setText(tr("6到16位数字或字母，区分大小写"));
     ui->inputnewpass1warning->setText(tr("6到16位数字或字母，区分大小写"));
     ui->inputnewpasstwice1warning->setText(tr("请再次填写密码"));
     ui->inputoldpass1->setEchoMode(QLineEdit::Password);
@@ -4477,7 +4478,7 @@ void LibrarySystem::on_bookrenewBtn_clicked()
 
 }
 
-/*void LibrarySystem::on_orderokBtn_clicked()
+void LibrarySystem::on_orderokBtn_clicked()
 {
     bool focus = ui->orderInfotable->isItemSelected(ui->orderInfotable->currentItem());//用于判断当前是否有行被选中
     if(focus==true)
@@ -4518,7 +4519,7 @@ void LibrarySystem::on_bookrenewBtn_clicked()
         QMessageBox::warning(this,tr("提示"),tr("请先选中对应预约信息."));
     }
 
-}*/
+}
 
 void LibrarySystem::on_inputnewpass1_editingFinished()
 {
