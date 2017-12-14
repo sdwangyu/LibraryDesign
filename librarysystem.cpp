@@ -2994,11 +2994,11 @@ void LibrarySystem::on_returnbookBtn_clicked()
         mess.exec();
         if(mess.clickedButton()==okbutton)//确认还书
         {
-            QMessageBox::information(this,tr("test"),tr("test"));
+            //QMessageBox::information(this,tr("test"),tr("test"));
             int selectrow = ui->lendInfotable->currentRow();//获取当前选中的行号
             QString strid = ui->lendInfotable->item(selectrow,0)->text();//获取某行某列单元格的文本内容,
             int position = strid.toInt() - 100000001;//QString转int
-            QMessageBox::information(this,tr("test1"),tr("test1"));
+            //QMessageBox::information(this,tr("test1"),tr("test1"));
             FILE *fp_book=NULL;
             if ((fp_book = fopen("BOOKINFORMATION", "rb+")) == NULL)
             {
