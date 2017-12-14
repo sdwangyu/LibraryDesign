@@ -1463,11 +1463,8 @@ void Record::bookRenewRecord()
     while (!feof(fp_buffer))
     {
         if(fread(&record_temp, sizeof(Record), 1, fp_buffer)){
-        if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder()){
-            fwrite(this,sizeof(Record),1,fp_new_buffer_lend);
-            continue;
-        }
-        fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_lend);
+            if ((std::string)record_temp.getBookid() == (std::string)this->getBookid() && (std::string)record_temp.getCardid() == (std::string)this->getCardid() && record_temp.getorder() == this->getorder())continue;
+            fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_lend);
         }
         else break;
     }
@@ -2804,6 +2801,7 @@ void LibrarySystem::on_orderInfoBtn_clicked()
     ui->userwidget->setCurrentIndex(3);
     ui->orderInfotable->setRowCount(0);
     ui->orderInfotable->clearContents();
+    update_Order();
     FILE*fp_orderbuffer=NULL,*fp_book=NULL;
     Book book_temp;//用于读取每条借书记录对应的书的信息
     Record record_temp;        //用于读取借书buffer中的每一条记录
@@ -2903,8 +2901,8 @@ void LibrarySystem::on_lendInfoBtn_clicked()
     }
     //向预约表格中写入数据
     int lendInforow=0;//对应写入某一行
-    QString year,month,day,bookorder,lendstate;//用于将int型的日期转换为QString类型.以及10本书中第几本书的序号转换为QString类型
-    string state="正常";
+    QString year,month,day,bookorder,lendstate="正常";//用于将int型的日期转换为QString类型.以及10本书中第几本书的序号转换为QString类型
+    //string state="正常";
     while (!feof(fp_lendbuffer))
     {
         if (fread(&record_temp, sizeof(Record), 1, fp_lendbuffer))
@@ -2922,9 +2920,9 @@ void LibrarySystem::on_lendInfoBtn_clicked()
                 day=QString::number(record_temp.getday());
                // date=year+interval+month+interval+day;
                 bookorder=QString::number(record_temp.getorder());
-                if(record_temp.getflag2()=='2')state="超期";
-                if(record_temp.getflag2()=='1')state="已续借";
-                lendstate=QString::fromStdString(state);
+                if(record_temp.getflag2()=='2')lendstate="超期";
+                if(record_temp.getflag2()=='1')lendstate="已续借";
+                if(record_temp.getflag2()=='0')lendstate="正常";
                 //写入表格,将日期分开写方便还书时使用日期
                 ui->lendInfotable->setItem(lendInforow,0,new QTableWidgetItem(record_temp.getBookid()));
                 ui->lendInfotable->setItem(lendInforow,1,new QTableWidgetItem(book_temp.getbookName()));
@@ -4397,6 +4395,12 @@ void LibrarySystem::on_bookrenewBtn_clicked()
                   fprintf(stderr, "Can not open file");
                    exit(1);
               }
+              FILE *fp_lendbuffer=NULL;
+              if ((fp_lendbuffer = fopen("BUFFERZONE_LEND", "rb+")) == NULL)
+              {
+                  fprintf(stderr, "Can not open file");
+                   exit(2);
+              }
               fseek(fp_book, position*sizeof(Book), SEEK_SET);//定位到某一本书
               fread(&book, sizeof(Book), 1, fp_book);//读取这本书到公用的book
               //调用还书的函数
@@ -4409,14 +4413,36 @@ void LibrarySystem::on_bookrenewBtn_clicked()
               QString strorder = ui->lendInfotable->item(selectrow,5)->text();//获取某行某列单元格的文本内容,
               int recordo = strorder.toInt();//记录中书的序号
               QString strflag2 = ui->lendInfotable->item(selectrow,6)->text();//获取某行某列单元格的文本内容,
-              string recordf = strflag2.toStdString();//记录中flag2的含义
-              if(strcmp(recordf,"已续借")==0){
+              //string recordf = strflag2.toStdString();//记录中flag2的含义
+              //string recordf = strflag2.toLatin1().data();//记录中flag2的含义
+              //char* temp="已续借";
+              //if(strcmp(recordf,temp)==0){
+              //    QMessageBox::information(this,tr("提示"),tr("该书已经续借一次！"));
+              //    return;
+              //}
+              QString temp="已续借";
+              /*Record record_temp;
+              while(!feof(fp_lendbuffer)){
+                  if(fread(&record_temp,sizeof(Record),1,fp_lendbuffer)){
+                      if(book.getbookID()==record_temp.getBookid()&&card.getcardID()==record_temp.getCardid()&&record_temp.getyear()==recordy&&record_temp.getmonth()==recordm&&record_temp.getday()==recordd&&record_temp.getorder()==recordo){
+                          if(record_temp.getflag2()=='1'){
+                              QMessageBox::information(this,tr("提示"),tr("该书已经续借一次！"));
+                              return;
+                          }
+                          break;
+                      }
+                  }
+              }*/
+              fclose(fp_lendbuffer);
+              if(temp==strflag2){
                   QMessageBox::information(this,tr("提示"),tr("该书已经续借一次！"));
                   return;
               }
-
-              bookRenew(recordy,recordm,recordd,recordo);
+              //else{
+                  bookRenew(recordy,recordm,recordd,recordo);
+              //}
               on_lendInfoBtn_clicked();
+              fclose(fp_book);
           }
           if(mess.clickedButton()==canclebutton)return;//取消还书则返回
       }
@@ -4424,6 +4450,7 @@ void LibrarySystem::on_bookrenewBtn_clicked()
       {
           QMessageBox::warning(this,tr("提示"),tr("请先选中对应借书信息."));
       }
+
 }
 
 void LibrarySystem::on_orderokBtn_clicked()
