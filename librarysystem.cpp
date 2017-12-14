@@ -33,7 +33,7 @@ LibrarySystem::LibrarySystem(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LibrarySystem)
 {
-    setFixedSize(1400, 900);
+    //setFixedSize(1200, 700);
     update_Order();
     dmend=0;
     FILE *fp1;
@@ -1661,9 +1661,10 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
                     // 范围选择170 - 254是为了去掉中文标点及其他字符，范围请参考汉字ASCII对照表
                     if(itemp >= 170 && itemp <= 254)
                     {
-                        arraytarget[arraytargetlength]=target[i]*256+target[i+1];
+                        arraytarget[arraytargetlength]=target[i]*256*256+target[i+1]*256+target[i+2];
                     }
-                    // 此时（ch < 0）两个char表示一个汉字，所以跳过第二个char
+                    // 此时（ch < 0）两个char表示一个汉字，所以跳过第二个char//跳过后两个
+                    ++i;
                     ++i;
                     ++arraytargetlength;
                 }
@@ -1687,9 +1688,10 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
                     // 范围选择170 - 254是为了去掉中文标点及其他字符，范围请参考汉字ASCII对照表
                     if(itemp >= 170 && itemp <= 254)
                     {
-                        arraysource[arraysourcelength]=source[i]*256+source[i+1];
+                        arraysource[arraysourcelength]=source[i]*256*256+source[i+1]*256+source[i+2];
                     }
-                    // 此时（ch < 0）两个char表示一个汉字，所以跳过第二个char
+                    // 此时（ch < 0）两个char表示一个汉字，所以跳过第二个cha//跳过后两个
+                    ++i;
                     ++i;
                     ++arraysourcelength;
                 }
