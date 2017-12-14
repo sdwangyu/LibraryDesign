@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>5</number>
    </property>
    <widget class="QWidget" name="signinwindow">
     <widget class="QLabel" name="label">
@@ -748,7 +748,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="userinforwindow">
       <widget class="QLabel" name="username">
@@ -1156,6 +1156,32 @@
        </property>
        <property name="text">
         <string>确认</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputnewpass1warning">
+       <property name="geometry">
+        <rect>
+         <x>650</x>
+         <y>305</y>
+         <width>331</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputnewpasstwice1warning">
+       <property name="geometry">
+        <rect>
+         <x>650</x>
+         <y>365</y>
+         <width>331</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
@@ -1812,7 +1838,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="looklogwindow">
       <widget class="QLabel" name="label_14">
@@ -2052,6 +2078,19 @@
        </property>
        <property name="text">
         <string>确认</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="inputnewstorage1warning">
+       <property name="geometry">
+        <rect>
+         <x>670</x>
+         <y>320</y>
+         <width>291</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
