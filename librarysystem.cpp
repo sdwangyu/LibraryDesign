@@ -1174,7 +1174,7 @@ void Record::bookLendRecord(int flag)        //借书记录
             fprintf(stderr, "Can not open BUFFERZONE_ORDER");
             exit(1);
         }
-        if (NULL == (fp_new_order = fopen("BUFFERZONE_ORDERNEW", "rb+")))
+        if (NULL == (fp_new_order = fopen("bufferzone_ordernew", "wb+")))
         {
             fprintf(stderr, "Can not open BUFFERZONE_ORDERNEW");
             exit(1);
@@ -2069,6 +2069,12 @@ void LibrarySystem::bookRenew(int recordyear,int recordmonth,int recordday,int r
 void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的记录删除
     FILE *fp_buffer;
     FILE *fp_new_buffer_order;
+    FILE *fp_book;
+    if (NULL == (fp_book = fopen("BOOKINFORMATION", "rb+")))
+    {
+        fprintf(stderr, "Can not open file");
+        exit(1);
+    }
     if (NULL == (fp_buffer = fopen("BUFFERZONE_ORDER", "rb+")))
     {
         fprintf(stderr, "Can not open file");
@@ -2080,10 +2086,17 @@ void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的�
         exit(1);
     }
     Record record_temp;
+    Book book_temp;
     while (!feof(fp_buffer))
     {
         if(fread(&record_temp, sizeof(Record), 1, fp_buffer)){
         if (record_temp.getflag2()=='1' && (std::string)record_temp.getCardid() == (std::string)card.getcardID()) {        //只能删除当前用户失效的预约记录，所以应该判断这条记录的cardID和当前用户的cardID是否一致
+            int position3=atoi(record_temp.getBookid())-100000000-1;
+            fseek(fp_book,position3*sizeof(Book),SEEK_SET);
+            fread(&book_temp,sizeof(Book),1,fp_book);
+            string bookname=book_temp.getbookName();
+            QString bookn=QString::fromStdString(bookname);
+            //QMessageBox::information(this, tr("提示"),tr("您对《%1》的预约已失效！").arg(bookn));
             continue;
         }
         fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_order);
@@ -2140,6 +2153,7 @@ int LibrarySystem::signInUser(char*username_PutIn, char*password_PutIn)         
         Record record(card.getcardID(), year, month, day, 'i');
         record.signInRecord();
         fclose(fp);
+        deleteOrderFail();
         return 1;
     }
     else
@@ -2427,6 +2441,25 @@ void LibrarySystem::update_Order()             //函数用于用户进入系统�
         }
         i++;
 
+    }
+    i = 0;
+    fseek(fp_buffer_order, i*sizeof(Record), SEEK_SET);
+    while (!feof(fp_buffer_order)) //feof()函数可以用来判断文件是否到达文件尾，若到达文件尾，函数返回值为1
+    {
+        //cout << "------------------------" << endl;
+        fseek(fp_buffer_order, i*sizeof(Record), SEEK_SET);
+        if (fread(&record_temp, sizeof(Record), 1, fp_buffer_order)){
+            int position = atoi(record_temp.getBookid()) - 100000000 - 1;
+            fseek(fp_bookInfo, position*sizeof(Book), SEEK_SET);
+            fread(&book_temp, sizeof(Book), 1, fp_bookInfo);
+            if (record_temp.getflag2() == '0'&&book_temp.gettStorage() > 0){	//该书可借并且预约未过期
+                record_temp.setflag2('2');
+            }
+            int size3 = sizeof(Record);
+            fseek(fp_buffer_order, -size3, SEEK_CUR);
+            if (fwrite(&record_temp, sizeof(Record), 1, fp_buffer_order) != 1)printf("file write error3\n");
+        }
+        i++;
     }
     fclose(fp_bookInfo);
     fclose(fp_cardInfo);
@@ -2798,6 +2831,7 @@ void LibrarySystem::on_orderInfoBtn_clicked()
                 day=QString::number(record_temp.getday());
                 date=year+interval+month+interval+day;
                 if(record_temp.getflag2()=='1')state="失效";
+                if(record_temp.getflag2()=='2')state="可借";
                 orderstate=QString::fromStdString(state);
                 //写入表格
                 ui->orderInfotable->setItem(orderInforow,0,new QTableWidgetItem(record_temp.getBookid()));
