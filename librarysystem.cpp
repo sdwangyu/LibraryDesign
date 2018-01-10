@@ -2096,7 +2096,7 @@ void LibrarySystem::deleteOrderFail() {//将预约缓冲区里已标记为1的�
             fread(&book_temp,sizeof(Book),1,fp_book);
             string bookname=book_temp.getbookName();
             QString bookn=QString::fromStdString(bookname);
-            //QMessageBox::information(this, tr("提示"),tr("您对《%1》的预约已失效！").arg(bookn));
+            QMessageBox::information(this, tr("提示"),tr("您对《%1》的预约已失效！").arg(bookn));
             continue;
         }
         fwrite(&record_temp, sizeof(Record), 1, fp_new_buffer_order);
@@ -2401,7 +2401,7 @@ void LibrarySystem::update_Order()             //函数用于用户进入系统�
         fseek(fp_buffer_order, i*sizeof(Record), SEEK_SET);
         if (fread(&record_temp, sizeof(Record), 1, fp_buffer_order)){
             //cout <<"***"<< record_temp.getCardid() << " " << record_temp.getBookid() << endl;
-            if (compareDate(year, month, day, record_temp.getyear(), record_temp.getmonth(), record_temp.getday()) > 10)
+            if (compareDate(year, month, day, record_temp.getyear(), record_temp.getmonth(), record_temp.getday()) > 10&&record_temp.getflag2()!='1')
             {
                 //修改各个需要修改的变量,书的预约人数-1，比较书的临时库存和预约人数的大小，再对库存和临时库存做相应操作。用户的预约本数-1
                 int position = atoi(record_temp.getBookid()) - 100000000 - 1;
