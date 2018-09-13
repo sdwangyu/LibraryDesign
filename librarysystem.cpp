@@ -1835,7 +1835,7 @@ void LibrarySystem::Search(int select) //select 1表示前方一致（书名） 
     }
 }
 void LibrarySystem::bookLend() { //借书 1.直接借书
-    if(card.getcardState() == '0'){QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");return;}
+    if(card.getcardState() == '0'){QMessageBox::information(this, "Warning", "你的卡已被冻结，借书失败");return;}
     else if (card.getlendedCount() == 10) {//已借本数超过上限
         QMessageBox::information(this, "Warning", "可借本书已达到上限，无法再进行借阅！");return;
     }
@@ -2359,7 +2359,7 @@ void LibrarySystem::ResetPassword(char*oldpassword, char*newpassword1, char*newp
 {
     if ((std::string)oldpassword == (std::string)card.getcPassword())
     {
-        if ((std::string)newpassword1 == (std::string)newpassword2)
+        //if ((std::string)newpassword1 == (std::string)newpassword2)
             card.setcPassword(newpassword1);
     }
     return;
@@ -2593,6 +2593,7 @@ void LibrarySystem::on_userLogin_clicked()
                 ui->useraccount->setFocus();
                 ui->userpassword->clear();
                 //隐藏登录对话框
+                update_book();
                 on_userwindowinformation_clicked();
                 ui->mainwidget->setCurrentIndex(4);;//显示用户主窗口
             }
@@ -2636,7 +2637,7 @@ void LibrarySystem::on_userLogin_clicked()
         ui->inputadminphone1warning->setText(tr("方便我们联系您"));
         ui->inputadminpass1->setEchoMode(QLineEdit::Password);
         ui->inputadminpasstwice1->setEchoMode(QLineEdit::Password);
-        update_book();
+
 
 }
 
@@ -4157,11 +4158,20 @@ void LibrarySystem::on_changepassokBtn_clicked()
     char* oldpass_2 = const_cast<char*>(oldpass_1.c_str());
     char* newpass_2 = const_cast<char*>(newpass_1.c_str());
     char* newpasstwice_2 = const_cast<char*>(newpasstwice_1.c_str());
-    ResetPassword(oldpass_2,newpass_2,newpasstwice_2);
+    if(strcmp(card.getcPassword(),oldpass_2) == 0)
+    {
+    card.setcPassword(newpass_2);
     QMessageBox::information(this,"Success","修改密码成功");
     ui->inputoldpass1->clear();
     ui->inputnewpass1->clear();
     ui->inputnewpasstwice1->clear();
+    return;
+    }
+    else     {
+        QMessageBox::information(this,"Warning","旧密码不正确");
+        return;
+    }
+
     }
 }
 
